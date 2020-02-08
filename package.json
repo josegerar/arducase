@@ -21,8 +21,7 @@
     "start": "ncp src/images public/images && react-scripts start",
     "build": "ncp src/images build/images && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "ncp": "ncp src/images public/images"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
