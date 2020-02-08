@@ -1,0 +1,10 @@
+.projects__list-item {
+    min-width: 250px;
+    max-width: 250px;
+    width: calc(100% / 3);
+    display: flex;
+    flex: 1 0 auto;
+
+    display: -webkit-flex;
+    -webkit-flex: 1 0 auto;
+}

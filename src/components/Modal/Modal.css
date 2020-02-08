@@ -1,0 +1,92 @@
+.modall {
+    width: 60%;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    position: fixed;
+    top: 20vh;
+    left: 20%;
+    border-radius: 25px;
+    z-index: 3;
+}
+
+.modal__header {
+    padding: 1rem;
+    background: #00979C;
+    color: white;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+.modal__header h1 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modal__content {
+    padding: 1rem;
+    max-height: 300px;
+    overflow: auto;
+    white-space: pre-line;
+}
+
+.modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+}
+.modal__actionsVertical {
+    display: inline-grid;
+    justify-content: center;
+    padding: 1rem;
+    width: calc(100% - 2rem);
+    text-align: center;
+}
+.modal__actionsVertical .div-goBack {
+    padding-top: 30px;
+}
+.modal__actionsVertical button,
+.modal__actions button {
+    border-style: none;
+    padding: 0 20px;
+    margin: 0 7px;
+    width: auto;
+    height: 30px;
+    background-color: #00979C;
+    border-radius: 25px;
+    font-size: 15px;
+    color: white;
+    line-height: 1.2;
+    text-transform: uppercase;
+    transition: all 0.4s;
+
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+}
+.modal__actionsVertical button {
+    margin: 5px;
+    height: 40px;
+}
+.modal__actionsVertical button:hover,
+.modal__actions button:hover {
+    background-color: #046466;
+    cursor: pointer;
+}
+.modal__actionsVertical .btn-exit,
+.modal__actions .btn-cancel {
+    background-color: #E74C41;
+}
+.modal__actionsVertical .btn-exit:hover,
+.modal__actions .btn-cancel:hover {
+    background-color: #D7493E;
+}
+
+@media (min-width: 768px) {
+    .modal {
+        width: 30rem;
+        left: calc((100% - 30rem) / 2);
+    }
+}

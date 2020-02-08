@@ -1,0 +1,3 @@
+npm i path-to-regexp --save
+npm i ncp --save
+npm install react-bootstrap bootstrap

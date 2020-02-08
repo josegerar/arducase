@@ -1,0 +1,28 @@
+{
+    "title": "Arduino Uno",
+    "overview": [
+        "The Arduino Uno is a microcontroller board based on the ATmega328. ",
+        "It has 14 digital input/output pins (of which 6 can be used as PWM outputs), ",
+        "6 analog inputs, a 16 MHzceramic resonator, a USB connection, a power jack, ",
+        "an ICSP header, and a reset button.  It contains everything needed to ",
+        "support the microcontroller; simply connect it to a computer with a USB ",
+        "cable or powerit with a AC-to-DC adapter or battery to get started."
+    ],
+    "characteristics": [
+        "- Microcontroller:             ATmega328\n",
+        "- Operating Voltage:           5V\n",
+        "- Input Voltage (recommended)  7-12V\n",
+        "- Input Voltage (limits)       6-20V\n",
+        "- Digital I/O Pins             14 (of which 6 provide PWM output)\n",
+        "- Analog Input Pins            6\n",
+        "- DC Current per I/O Pin       40 mA\n",
+        "- DC Current for 3.3V Pin      50 mA\n",
+        "- Flash Memory                 32 KB (ATmega328) of which 0.5 KB used by bootloader\n",
+        "- SRAM                         2 KB (ATmega328)\n",
+        "- EEPROM                       1 KB (ATmega328)\n",
+        "- Clock Speed                  16 MHz\n"
+    ],
+    "links": [
+	
+    ]
+}
