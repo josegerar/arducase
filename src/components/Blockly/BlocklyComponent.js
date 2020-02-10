@@ -9,17 +9,25 @@ import '../Arducode/ArduCode';
 Blockly.setLocale(locale);
 
 class BlocklyComponent extends React.Component {
+
     componentDidMount() {
-        const {initialXml, children, ...rest} = this.props;
+        const { initialXml, children, ...rest } = this.props;
         this.primaryWorkspace = Blockly.inject(
             this.blocklyDiv, {
-                toolbox: this.toolbox,
-                ...rest
-            },
+            toolbox: this.toolbox,
+            ...rest
+        },
         );
         if (initialXml) {
             Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(initialXml), this.primaryWorkspace);
         }
+        this.primaryWorkspace.addChangeListener(this.changeBloking);
+    }
+
+    changeBloking(){
+        let codeTextarea = document.getElementById("content_arduino");
+        let code = Blockly.Arduino.workspaceToCode(Blockly.mainWorkspace);
+        codeTextarea.value = code;
     }
 
     get workspace() {
@@ -31,11 +39,11 @@ class BlocklyComponent extends React.Component {
     }
 
     render() {
-        const {children} = this.props;
+        const { children } = this.props;
 
         return <React.Fragment>
             <div ref={e => this.blocklyDiv = e} id="blocklyDiv" />
-            <xml xmlns="https://developers.google.com/blockly/xml" is="blockly" style={{display: 'none'}} ref={(toolbox) => {this.toolbox = toolbox;}}>
+            <xml xmlns="https://developers.google.com/blockly/xml" is="blockly" style={{ display: 'none' }} ref={(toolbox) => { this.toolbox = toolbox; }}>
                 {children}
             </xml>
         </React.Fragment>;

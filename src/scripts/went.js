@@ -1,6 +1,5 @@
 import * as go from 'gojs';
 import * as Blockly from 'blockly/core';
-import BlocklyComponent from '../components/Blockly';
 
 const componentsList = require("../json/componentsList.json");
 
@@ -288,11 +287,4 @@ function switchCanvas() {
         bs.innerHTML = "Code";
         cw = 1;
     }
-}
-
-function generateCode() {
-    let codeTextarea = document.getElementById("content_arduino");
-    let code = Blockly.Arduino.workspaceToCode(BlocklyComponent.workspace);
-    codeTextarea.value = code;
-    codeTextarea.focus();
 }
