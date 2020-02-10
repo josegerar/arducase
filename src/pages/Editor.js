@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import BlocklyComponent, {
-  Block,
-  Category
-} from "../components/Blockly";
+import BlocklyComponent, {  Block,  Category} from "../components/Blockly";
+import Blockly from "blockly/core";
 
 import Modal from "../components/Modal/Modal";
 import Backdrop from "../components/Backdrop/Backdrop";
