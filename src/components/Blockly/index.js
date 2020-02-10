@@ -1,5 +1,6 @@
 import React from 'react';
 import BlocklyComponent from './BlocklyComponent';
+import Blockly from 'blockly/core';
 
 export default BlocklyComponent;
 
@@ -33,4 +34,11 @@ const Shadow = (p) => {
     return React.createElement("shadow", props, children);
 };
 
-export { Block, Category, Value, Field, Shadow }
+const downloadCode = () => {
+    Blockly.Arduino.saveTextFileAs(
+        "Code.ino",
+        Blockly.Arduino.generateArduino()
+    );
+}
+
+export { Block, Category, Value, Field, Shadow, downloadCode }

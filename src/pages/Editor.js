@@ -11,14 +11,7 @@ import AuthContext from "../context/auth-context";
 import "./Editor.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../components/blocks/customblocks";
-import {
-  initDiagram,
-  getModelJson,
-  getImage_B64,
-  onMoreInfo,
-  makeBlob,
-  saveDiagram
-} from "../scripts/went";
+import {  initDiagram,  getModelJson,  getImage_B64,  onMoreInfo,  makeBlob,  saveDiagram} from "../scripts/went";
 
 class EditorPage extends Component {
   constructor(props) {
@@ -62,50 +55,43 @@ class EditorPage extends Component {
     this.setState({ menuOptions: false, moreInfo: false });
   };
 
-  modalConfirmHandler = () => {
-    this.setState({ menuOptions: false });
-    const newCanvasJSON = getModelJson();
-    const lastAccessDate = new Date().toISOString();
-    const lastUpdateDate = new Date().toISOString();
-    const image = getImage_B64();
-
-    const requestBody = {
-      query: `
+   modalConfirmHandler = () => {
+        this.setState({ menuOptions: false });
+        const newCanvasJSON = getModelJson();
+        const newEspecJSON = Blockly.Arduino.generateXml();
+        const lastAccessDate = new Date().toISOString();
+        const lastUpdateDate = new Date().toISOString();
+        const image = getImage_B64();
+        const requestBody = {
+            query: `
                 mutation {
-                    saveProject(projectSave:{ projectId: "${
-                      this.state.projectId
-                    }", canvasJSON: ${JSON.stringify(
-        newCanvasJSON
-      )}, lastAccessDate: "${lastAccessDate}", lastUpdateDate: "${lastUpdateDate}", image: "${image}"}) {
+                    saveProject(projectSave:{ projectId: "${this.state.projectId}", canvasJSON: ${JSON.stringify(newCanvasJSON)}, especJSON: "${newEspecJSON}", lastAccessDate: "${lastAccessDate}", lastUpdateDate: "${lastUpdateDate}", image: "${image}"}) {
                         _id
                         title
                     }
                 }
             `
-    };
+        };
 
-    fetch(`${this.context.webservice}graphql`, {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + this.context.token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Failed!");
-        }
-        return res.json();
-      })
-      .then(resData => {
-        saveDiagram();
-        alert("Project saved.");
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+        fetch(`${this.context.webservice}graphql`, {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.context.token
+            }
+        }).then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error('Failed!');
+            }
+            return res.json();
+        }).then(resData => {
+            saveDiagram();
+            alert("Project saved.");
+        }).catch(err => {
+            console.log(err);
+        });
+    };
 
   modalExitHandler = () => {
     //this.setState({ menuOptions: false });

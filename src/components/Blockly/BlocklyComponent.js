@@ -24,7 +24,11 @@ class BlocklyComponent extends React.Component {
         this.primaryWorkspace.addChangeListener(this.changeBloking);
     }
 
-    changeBloking(){
+    changeBloking(evt){
+        // console.log(evt);
+        //     if (evt.type ===Blockly.Events.DELETE) {
+        //         console.log(evt);
+        //     }
         let codeTextarea = document.getElementById("content_arduino");
         let code = Blockly.Arduino.workspaceToCode(Blockly.mainWorkspace);
         codeTextarea.value = code;

@@ -1,19 +1,39 @@
 import * as Blockly from 'blockly/core';
+import { saveAs } from '../Blockly/FileSaver.js';
 
 Blockly.Arduino = new Blockly.Generator('Arduino');
-Blockly.Arduino.definitions_ = Object.create(Array);
-Blockly.Arduino.setups_ = Object.create(Array);
-Blockly.Arduino.setupsfin_ = Object.create(Array);
+Blockly.Arduino.saveTextFileAs = function (fileName, content) {
+    let blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, fileName);
+};
+
+Blockly.Arduino.generateArduino = function () {
+    return Blockly.Arduino.workspaceToCode(Blockly.mainWorkspace);
+};
+
+Blockly.Arduino.generateXml = function () {
+    let xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    return Blockly.Xml.domToPrettyText(xmlDom);
+};
+
+Blockly.Arduino.init = function (workspace) {
+    Blockly.Arduino.definitions_ = Object.create(null);
+    Blockly.Arduino.setups_ = Object.create(null);
+    Blockly.Arduino.setupsfin_ = Object.create(null);
+    Blockly.Arduino.declarehttp_ = Object.create(null);
+    Blockly.Arduino.functionNames_ = Object.create(null);
+};
+
 
 Blockly.Arduino.finish = function (code) {
+    let gener_arduino = "/////////////////////////////////\n";
+    gener_arduino += "// ArduCase (Beta)            //\n";
+    gener_arduino += "/////////////////////////////////\n";
+
     let declarehttp = [];
     for (let name in Blockly.Arduino.declarehttp_) {
         declarehttp.push(Blockly.Arduino.declarehttp_[name]);
     }
-//console.log(code);
-//console.log(Blockly.Arduino.setups_);
-//console.log(Blockly.Arduino.setupsfin_);
-
 
     code = '  ' + code.replace(/\n/g, '\n  ');
     code = code.replace(/\n\s+$/, '\n');
@@ -23,7 +43,11 @@ Blockly.Arduino.finish = function (code) {
     let definitions = [];
     for (let name in Blockly.Arduino.definitions_) {
         let def = Blockly.Arduino.definitions_[name];
-        def.match(/^#include/) ? imports.push(def) : definitions.push(def);
+        if (def.match(/^#include/)) {
+            imports.push(def);
+        } else {
+            definitions.push(def);
+        }
     }
 
     let setups = [];
@@ -35,9 +59,9 @@ Blockly.Arduino.finish = function (code) {
         setups.push(Blockly.Arduino.setupsfin_[name]);
     }
 
-    let allDefs = imports.join('\n') + '\n\n' + definitions.join('\n') + '\nvoid setup() \n{\n' + setups.join('\n  ') + setupsfin.join('\n  ') + '\n}\n\n';
-    return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
-}
+    let allDefs = imports.join('\n') + '\n\n' + definitions.join('\n') + '\nvoid setup() \n{\n' + setups.join('\n  ') + setupsfin.join('\n  ') + '\n}' + '\n\n';
+    return gener_arduino + allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
+};
 
 
 Blockly.Arduino.scrubNakedValue = function (line) {
@@ -49,7 +73,7 @@ Blockly.Arduino.quote_ = function (string) {
         .replace(/\n/g, '\\\n')
         .replace(/\$/g, '\\$')
         .replace(/'/g, '\\\'');
-    return '"' + string + '"';
+    return '\"' + string + '\"';
 };
 
 Blockly.Arduino.simplequote_ = function (string) {
@@ -72,7 +96,7 @@ Blockly.Arduino.scrub_ = function (block, code) {
             commentCode += this.prefixLines(comment, '// ') + '\n';
         }
         for (let x = 0; x < block.inputList.length; x++) {
-            if (block.inputList[x].type === Blockly.INPUT_VALUE) {
+            if (block.inputList[x].type == Blockly.INPUT_VALUE) {
                 let childBlock = block.inputList[x].connection.targetBlock();
                 if (childBlock) {
                     let comment = this.allNestedComments(childBlock);
@@ -96,27 +120,21 @@ Blockly.Arduino.scrub_ = function (block, code) {
 //Digital
 
 Blockly.Arduino['inout_highlow'] = function (block) {
-    let code = (this.getFieldValue('BOOL') === 'HIGH') ? 'HIGH' : 'LOW';
+    let code = (this.getFieldValue('BOOL') == 'HIGH') ? 'HIGH' : 'LOW';
     return [code, 0];
 };
 
 Blockly.Arduino['inout_digital_read'] = function (block) {
-    if (!this.setup_pos) {
-        this.setup_pos = Blockly.Arduino.setups_.length;
-    } 
     let dropdown_pin = this.getFieldValue('PIN');
-    Blockly.Arduino.setups_['setup_input_' + this.setup_pos] = 'pinMode(' + dropdown_pin + ', INPUT);';
+    Blockly.Arduino.setups_['setup_input_' + dropdown_pin] = 'pinMode(' + dropdown_pin + ', INPUT);';
     let code = 'digitalRead(' + dropdown_pin + ')';
     return [code, 0];
 };
 
 Blockly.Arduino['inout_digital_write'] = function (block) {
-    if (!this.setup_pos) {
-        this.setup_pos = Blockly.Arduino.setups_.length;
-    } 
     let dropdown_pin = this.getFieldValue('PIN');
     let dropdown_stat = this.getFieldValue('STAT');
-    Blockly.Arduino.setups_['setup_output_' + this.setup_pos] = 'pinMode(' + dropdown_pin + ', OUTPUT);';
+    Blockly.Arduino.setups_['setup_output_' + dropdown_pin] = 'pinMode(' + dropdown_pin + ', OUTPUT);';
     let code = 'digitalWrite(' + dropdown_pin + ', ' + dropdown_stat + ');\n';
     return code;
 };
@@ -131,22 +149,16 @@ Blockly.Arduino['inout_buildin_led'] = function (block) {
 //Analog
 
 Blockly.Arduino['inout_analog_read'] = function (block) {
-    if (!this.setup_pos) {
-        this.setup_pos = Blockly.Arduino.setups_.length;
-    } 
     let dropdown_pin = this.getFieldValue('PIN');
-    Blockly.Arduino.setups_['setup_input_' + this.setup_pos] = 'pinMode(' + dropdown_pin + ', INPUT);';
+    Blockly.Arduino.setups_['setup_input_' + dropdown_pin] = 'pinMode(' + dropdown_pin + ', INPUT);';
     let code = 'analogRead(' + dropdown_pin + ')';
     return [code, 0];
 };
 
 Blockly.Arduino['inout_analog_write'] = function (block) {
-    if (!this.setup_pos) {
-        this.setup_pos = Blockly.Arduino.setups_.length;
-    } 
     let dropdown_pin = block.getFieldValue('PIN');
     let value = Blockly.Arduino.valueToCode(this, 'Value', 0);
-    Blockly.Arduino.setups_['setup_output_' + this.setup_pos] = 'pinMode(' + dropdown_pin + ', OUTPUT);';
+    Blockly.Arduino.setups_['setup_output_' + dropdown_pin] = 'pinMode(' + dropdown_pin + ', OUTPUT);';
     let code = 'analogWrite(' + dropdown_pin + ', ' + value + ');\n';
     return code;
 };
