@@ -6,11 +6,6 @@ Blockly.Arduino.setups_ = Object.create(null);
 Blockly.Arduino.setupsfin_ = Object.create(null);
 
 Blockly.Arduino.finish = function (code) {
-    let gener_arduino = "/////////////////////////////////\n";
-    gener_arduino += "// ArduCase                    //\n";
-    gener_arduino += "// El mejor proyecto :v        //\n";
-    gener_arduino += "/////////////////////////////////\n";
-
     let declarehttp = [];
     for (let name in Blockly.Arduino.declarehttp_) {
         declarehttp.push(Blockly.Arduino.declarehttp_[name]);
@@ -37,8 +32,7 @@ Blockly.Arduino.finish = function (code) {
     }
 
     let allDefs = imports.join('\n') + '\n\n' + definitions.join('\n') + '\nvoid setup() \n{\n' + setups.join('\n  ') + setupsfin.join('\n  ') + '\n}\n\n';
-   // 
-   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
+    return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 }
 
 
@@ -51,7 +45,7 @@ Blockly.Arduino.quote_ = function (string) {
         .replace(/\n/g, '\\\n')
         .replace(/\$/g, '\\$')
         .replace(/'/g, '\\\'');
-    return '\"' + string + '\"';
+    return '"' + string + '"';
 };
 
 Blockly.Arduino.simplequote_ = function (string) {
@@ -74,7 +68,7 @@ Blockly.Arduino.scrub_ = function (block, code) {
             commentCode += this.prefixLines(comment, '// ') + '\n';
         }
         for (let x = 0; x < block.inputList.length; x++) {
-            if (block.inputList[x].type == Blockly.INPUT_VALUE) {
+            if (block.inputList[x].type === Blockly.INPUT_VALUE) {
                 let childBlock = block.inputList[x].connection.targetBlock();
                 if (childBlock) {
                     let comment = this.allNestedComments(childBlock);
@@ -98,7 +92,7 @@ Blockly.Arduino.scrub_ = function (block, code) {
 //Digital
 
 Blockly.Arduino['inout_highlow'] = function (block) {
-    let code = (this.getFieldValue('BOOL') == 'HIGH') ? 'HIGH' : 'LOW';
+    let code = (this.getFieldValue('BOOL') === 'HIGH') ? 'HIGH' : 'LOW';
     return [code, 0];
 };
 

@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import BlocklyComponent, {
   Block,
-  Category,
-  Value,
-  Field,
-  Shadow
+  Category
 } from "../components/Blockly";
 
 import Modal from "../components/Modal/Modal";
@@ -47,11 +44,12 @@ class EditorPage extends Component {
   }
 
   fetchEvents() {
-    this.state.projectId = this.props.location.state.projectId;
-    this.state.projectTitle = this.props.location.state.title;
-    this.state.projectCanvasJSON = this.props.location.state.canvasJSON;
-
-    initDiagram(this.state.projectCanvasJSON);
+    this.setState({
+      projectId: this.props.location.state.projectId,
+      projectTitle: this.props.location.state.title,
+      projectCanvasJSON: this.props.location.state.canvasJSON
+    });
+    initDiagram(this.props.location.state.canvasJSON);
   }
 
   optionsEventHandler = () => {
@@ -207,7 +205,7 @@ class EditorPage extends Component {
               <textarea
                 id="content_arduino"
                 className="txta-contentCode"
-                readOnly="true"
+                readOnly
               ></textarea>
               <button id="btnGenerateCode">Generate</button>
             </div>

@@ -187,7 +187,7 @@ export const initDiagram = (savedModel) => {
     /* 
                         OVERVIEW
      */
-    let overview = WENT(go.Overview, "div-overview", {
+    WENT(go.Overview, "div-overview", {
         observed: diagram
     });
 
@@ -266,7 +266,7 @@ function myCallback(blob) {
 }
 
 export const makeBlob = () => {
-    var blob = diagram.makeImageData({ background: "white", returnType: "blob", callback: myCallback });
+    return diagram.makeImageData({ background: "white", returnType: "blob", callback: myCallback });
 }
 
 function switchCanvas() {

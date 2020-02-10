@@ -8,8 +8,8 @@ const projectItem = props => (
         <div className="div-cardContent">
             <div className="div-imgContainer">
                 {props.image !== " " ?
-                    (<img className="imgParameter" src={`${props.getImgSrc(props.image)}`} />) :
-                    (<img className="imgParameter" />)
+                    (<img alt="" className="imgParameter" src={`${props.getImgSrc(props.image)}`} />) :
+                    (<img alt="" className="imgParameter" />)
                 }
             </div>
             <button className="btn-titleProject" onClick={props.onDetail.bind(this, props.projectId)}>{props.title}</button>
