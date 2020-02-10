@@ -89,7 +89,6 @@ class CreateAccountPage extends Component {
                     <input type="text" id="username" placeholder="Username" ref={this.usernameEl} required />
                     <span className="focus-input"></span>
                 </div>
-                <br />
                 <div className="form-controll" data-validate="Password is required.">
                     <input type="password" id="password" placeholder="Password" ref={this.passwordEl} required />
                     <span className="focus-input"></span>

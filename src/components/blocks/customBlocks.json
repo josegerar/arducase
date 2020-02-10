@@ -1,0 +1,133 @@
+[
+    {
+        "type": "inout_highlow",
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_dropdown",
+				"name": "BOOL",
+                "options": [["HIGH","HIGH"],["LOW","LOW"]]
+            }
+        ],
+        "output": "Boolean",
+        "tooltip": "Will return 1 you choose High or 0 if you choose Low."
+    },
+    {
+        "type": "inout_digital_read",
+        "message0": "Digital read PIN# %1",
+        "args0": [
+            {
+                "type": "field_dropdown",
+				"name": "PIN",
+                "options": [["0","0"],["1","1"],["2","2"],["3","3"],["4","4"],["5","5"],["6","6"],["7","7"],["8","8"],["9","9"],["10","10"],["11","11"],["12","12"],["13","13"],["A0","A0"],["A1","A1"],["A2","A2"],["A3","A3"],["A4","A4"],["A5","A5"]]
+            }
+        ],
+        "output": "Number",
+        "tooltip": "Reads the value from a specified digital pin, either HIGH or LOW."
+    },
+    {
+        "type": "inout_digital_write",
+        "message0": "Digital write PIN# %1 STAT %2",
+        "args0": [
+            {
+                "type": "field_dropdown",
+				"name": "PIN",
+                "options": [["0","0"],["1","1"],["2","2"],["3","3"],["4","4"],["5","5"],["6","6"],["7","7"],["8","8"],["9","9"],["10","10"],["11","11"],["12","12"],["13","13"],["A0","A0"],["A1","A1"],["A2","A2"],["A3","A3"],["A4","A4"],["A5","A5"]]
+            },
+			{
+				"type": "field_dropdown",
+				"name": "STAT",
+				"options": [["HIGH","HIGH"],["LOW","LOW"]]
+			}
+        ],
+        "previousStatement": null,
+		"nextStatement": null,
+        "tooltip": "Write a HIGH or a LOW value to a digital pin"
+    },
+	{
+        "type": "inout_buildin_led",
+        "message0": "Integrated LED Stat %1",
+        "args0": [
+			{
+				"type": "field_dropdown",
+				"name": "STAT",
+				"options": [["HIGH","HIGH"],["LOW","LOW"]]
+			}
+        ],
+        "previousStatement": null,
+		"nextStatement": null,
+        "tooltip": "This block will control the internal LED of the NODEMCU"
+    },
+	{
+		"type": "inout_analog_read",
+        "message0": "Analog read PIN# %1",
+        "args0": [
+			{
+				"type": "field_dropdown",
+				"name": "PIN",
+				"options": [["A0","A0"],["A1","A1"],["A2","A2"],["A3","A3"],["A4","A4"],["A5","A5"]]
+			}
+        ],
+		"output": "Number",
+        "tooltip": "Reads the value from the specified analog pin"
+	},
+	{
+		"type": "inout_analog_write",
+        "message0": "Analog write (PWM) PIN# %1 Value %2",
+        "args0": [
+			{
+				"type": "field_dropdown",
+				"name": "PIN",
+				"options": [["3","3"],["5","5"],["6","6"],["9","9"],["10","10"],["11","11"]]
+			},
+			{
+				"type": "input_value",
+				"name": "Value",
+				"check": "Number"
+			}
+        ],
+		"inputsInline": true,
+        "tooltip": "Write analog value between 0 and 255 to a specific Port",
+		"previousStatement": null,
+		"nextStatement": null
+		
+	},
+	{
+		"type": "serial_printfor", "color": "20",
+		"message0": "Print Format %1 %2",
+		"args0": [
+			{
+				"type": "field_dropdown",
+				"name": "TYPE",
+				"options": [["decimal","DEC"],["hexadecimal","HEX"],["binary","BIN"],["octal","OCT"]]
+			},
+			{
+				"type": "input_value",
+				"name": "CONTENT",
+				"check": "Number"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": null,
+		"nextStatement": null,
+		"tooltip": "Prints data to the console/serial port with a specific format."
+	},
+	{
+		"type": "arduino_setup",
+        "message0": "Setup %1",
+        "args0": [
+			{
+				"type": "input_statement",
+				"name": "MySetup"
+			}
+        ],
+		"message1": "Main loop %1",
+		"args1": [
+			{
+				"type": "input_statement",
+				"name": "MyLoop"
+			}
+		],
+        "tooltip": ""
+	}
+]

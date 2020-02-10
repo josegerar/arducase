@@ -1,0 +1,27 @@
+{
+    "summary": [
+        " An LCD screen are devices designed to display information graphically."
+
+    ],
+    "title": "Dispaly LCD 1602\n",
+    "overview": [
+        " An LCD screen are devices designed to display information graphically.\n",
+        " LCD stands for Liquid Crystal Display. Most LCD screens are attached to\n",
+        " a circuit board and have data input / output pins. As you can imagine,\n",
+        " Arduino is able to use LCD screens to display data."
+    ],
+    "characteristics": [
+        "-16 characters x 2 lines\n",
+        "-Characters of 5x8 points\n",
+        "-Character size: 5.23 x 3 mm\n",
+        "-You can display letters, numbers, special characters, and up to 8 characters created by the user\n",
+        "-Backlight of blue LED\n",
+        "-White characters\n",
+        "- Parallel interface. It can operate in 8-bit mode, or 4-bit mode to save microcontroller pins,\n",
+        "-It has a KS0066U controller or equivalent on-board (Hitachi HD44780 compatible)\n",
+        "- Supply voltage: 5 V"
+    ],
+    "images": [
+
+    ]
+}

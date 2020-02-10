@@ -1,0 +1,34 @@
+{
+    "summary": [
+        " Bluetooth is an industrial specification for Wireless Personal Area Networks (WPAN) "
+    ],
+    "title": "Switch",
+    "overview": [
+        "Bluetooth is an industrial specification for Wireless Personal Area",
+        " Networks (WPAN) that enables the transmission of voice and data between ",
+        "different devices through a radio frequency link in the 2.4 GHz ISM band."
+    ],
+    "characteristics": [
+        "-Specification bluetooth v2.0 + EDR (Enhanced Data Rate)\n",
+        "-Slave mode (Can only operate in this mode)\n",
+        "-It can be configured using AT commands (They must be written in uppercase) \n",
+        "-Radio chip: CSR BC417143 \n",
+        "-Frequency: 2.4 GHz, ISM band \n",
+        "-Modulation: GFSK (Gaussian Frequency Shift Keying) \n",
+        "-Built-in PCB antenna \n",
+        "-Emission power: ≤ 6 dBm, Class 2 \n",
+        "-Reach 5m to 10m \n",
+        "-Sensitivity: ≤ -80 dBm at 0.1% BER \n",
+        "-Speed: Asynchronous: 2 Mbps (max.) / 160 kbps, synchronous: 1 Mbps / 1 Mbps \n",
+        "-Security: Authentication and encryption (Default password: 1234) \n",
+        "-Profiles: Bluetooth serial port \n",
+        "-Card-mounted module with voltage regulator and 4 pins providing access to VCC, GND, TXD, and RXD \n",
+        "-Current consumption: 30 mA to 40 mA \n",
+        "-Operating voltage: 3.6V to 6V \n",
+        "-Overall dimensions: 1.7 cm x 4 cm approx. \n",
+        "-Operating temperature: -25 ºC to +75 ºC \n"
+    ],
+    "images": [
+
+    ]
+}

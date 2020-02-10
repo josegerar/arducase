@@ -1,4 +1,6 @@
 import * as go from 'gojs';
+import * as Blockly from 'blockly/core';
+import BlocklyComponent from '../components/Blockly';
 
 const componentsList = require("../json/componentsList.json");
 
@@ -10,22 +12,17 @@ export let onMoreInfo = {
     links: []
 };
 
-let GO, diagram, diagramCode, cw = 1;
+let WENT, diagram, cw = 1;
 export const initDiagram = (savedModel) => {
-    GO = go.GraphObject.make;
+    WENT = go.GraphObject.make;
 
-    diagram = GO(go.Diagram, "divDiagram", {
+    diagram = WENT(go.Diagram, "divDiagram", {
         "undoManager.isEnabled": true,
         "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
         initialAutoScale: go.Diagram.Uniform,
         initialContentAlignment: go.Spot.Center
     });
-    diagramCode = GO(go.Diagram, "divDiagramCode", {
-        "undoManager.isEnabled": true,
-        "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
-        initialAutoScale: go.Diagram.Uniform,
-        initialContentAlignment: go.Spot.Center
-    });
+
 
     /* 
                         LISTENERS
@@ -48,9 +45,9 @@ export const initDiagram = (savedModel) => {
                         TOOLTIPS
      */
     //Nombre del componente - tooltip
-    let sharedToolTip = GO("ToolTip", {
+    let sharedToolTip = WENT("ToolTip", {
         "Border.figure": "RoundedRectangle"
-    }, GO(go.TextBlock, { margin: 2 },
+    }, WENT(go.TextBlock, { margin: 2 },
         new go.Binding("text", "", function (d) { return d.text; }))
     );
 
@@ -77,29 +74,29 @@ export const initDiagram = (savedModel) => {
                         CONTEXTMENU
      */
     function makeButton(text, action, visiblePredicate) {
-        return GO("ContextMenuButton",
-            GO(go.TextBlock, text),
+        return WENT("ContextMenuButton",
+            WENT(go.TextBlock, text),
             { click: action },
             visiblePredicate ? new go.Binding("visible", "", function (o, e) { return o.diagram ? visiblePredicate(o, e) : false; }).ofObject() : {});
     };
     var nodeMenu =
-        GO("ContextMenu",
+        WENT("ContextMenu",
             makeButton("Copy",
                 function (e, obj) { e.diagram.commandHandler.copySelection(); }),
             makeButton("Delete",
                 function (e, obj) { e.diagram.commandHandler.deleteSelection(); }),
-            GO(go.Shape, "LineH", { strokeWidth: 2, height: 1, stretch: go.GraphObject.Horizontal }),
+            WENT(go.Shape, "LineH", { strokeWidth: 2, height: 1, stretch: go.GraphObject.Horizontal }),
             makeButton("More Info...",
                 function (e, obj) { loadInfo(e, obj) })
         );
     let lineMenu =
-        GO("ContextMenu",
+        WENT("ContextMenu",
             makeButton("Delete",
                 function (e, obj) { e.diagram.commandHandler.deleteSelection(); }),
             makeButton("Change Color",
                 function (e, obj) { changeColor(e, obj) })
         );
-    diagram.contextMenu = GO("ContextMenu",
+    diagram.contextMenu = WENT("ContextMenu",
         makeButton("Paste",
             function (e, obj) { e.diagram.commandHandler.pasteSelection(e.diagram.toolManager.contextMenuTool.mouseDownPoint); },
             function (o) { return o.diagram.commandHandler.canPasteSelection(o.diagram.toolManager.contextMenuTool.mouseDownPoint); }),
@@ -116,28 +113,27 @@ export const initDiagram = (savedModel) => {
                         TEMPLATES
      */
     //Template de la paleta
-    let paletteTemplate = GO(go.Node, "Table", nodeStyle(),
-        GO(go.Panel, "Vertical",
-            GO(go.Picture, new go.Binding("source", "image"), {
+    let paletteTemplate = WENT(go.Node, "Table", nodeStyle(),
+        WENT(go.Panel, "Vertical",
+            WENT(go.Picture, new go.Binding("source", "image"), {
                 width: 110, height: 110,
                 imageStretch: go.GraphObject.Uniform
             }),
-            GO(go.TextBlock,
+            WENT(go.TextBlock,
                 new go.Binding("text", "", function (d) { return d.text; }))
         ));
-        let paletteCodeTemplate = GO(go.Node, "Table",)
 
     //Template de los componentes
-    let componentsTemplate = GO(go.Node, "Spot", nodeStyle(),
-        GO(go.Picture, new go.Binding("source", "image"), {
+    let componentsTemplate = WENT(go.Node, "Spot", nodeStyle(),
+        WENT(go.Picture, new go.Binding("source", "image"), {
             imageStretch: go.GraphObject.Fill
         }, new go.Binding("width", "width"), new go.Binding("height", "height")),
         {
             contextMenu: nodeMenu
         },
         new go.Binding("itemArray", "items"), {
-        itemTemplate: GO(go.Panel, "Position", { stretch: go.GraphObject.Fill },
-            GO(go.Shape, "Rectangle",
+        itemTemplate: WENT(go.Panel, "Position", { stretch: go.GraphObject.Fill },
+            WENT(go.Shape, "Rectangle",
                 {
                     desiredSize: new go.Size(11, 11),
                     fill: "transparent", stroke: null,
@@ -152,7 +148,7 @@ export const initDiagram = (savedModel) => {
     });
 
     //Template de las líneas
-    let linesTemplate = GO(go.Link, {
+    let linesTemplate = WENT(go.Link, {
         routing: go.Link.Orthogonal,
         corner: 4,
         curve: go.Link.JumpGap,
@@ -166,16 +162,14 @@ export const initDiagram = (savedModel) => {
         mouseLeave: function (e, link) { link.elt(0).stroke = "transparent"; },
         contextMenu: lineMenu
     }, new go.Binding("points").makeTwoWay(),
-        GO(go.Shape, { isPanelMain: true, stroke: "transparent", strokeWidth: 8 }),
-        GO(go.Shape, { isPanelMain: true, stroke: "rgb(0, 151, 156)", strokeWidth: 5 })
+        WENT(go.Shape, { isPanelMain: true, stroke: "transparent", strokeWidth: 8 }),
+        WENT(go.Shape, { isPanelMain: true, stroke: "rgb(0, 151, 156)", strokeWidth: 5 })
     );
 
     //Asignación del template (nodos) al diagrama
     for (let i = 0; i < components.length; i++) {
         diagram.nodeTemplateMap.add(components[i].category, componentsTemplate);
     }
-    //diagram.nodeTemplateMap.add("c1", componentsTemplate);
-    //diagram.nodeTemplateMap.add("c2", componentsTemplate);
     //Asignación del template (líneas) al diagrama
     diagram.linkTemplate = linesTemplate;
 
@@ -185,8 +179,6 @@ export const initDiagram = (savedModel) => {
      */
     //Creación de la paleta
     let palette = new go.Palette("listComponents");
-    let pIO = new go.Palette("pIO");
-    let pSRL = new go.Palette("pSRL");
     palette.nodeTemplate = paletteTemplate;
     //Llenado de la paleta
     palette.model = new go.GraphLinksModel(components);
@@ -195,17 +187,9 @@ export const initDiagram = (savedModel) => {
     /* 
                         OVERVIEW
      */
-    let overview = GO(go.Overview, "div-overview", {
+    let overview = WENT(go.Overview, "div-overview", {
         observed: diagram
     });
-    let overviewCode = GO(go.Overview, "div-overviewCode", {
-        observed: diagramCode
-    });
-
-
-    /* 
-                        INFO MODAL
-     */
 
 
     //Carga diagrama
@@ -213,9 +197,9 @@ export const initDiagram = (savedModel) => {
     layout();
 
     document.getElementById("divDiagramCode").style.visibility = "hidden";
-    document.getElementById("listSentences").style.visibility = "hidden";
-    document.getElementById("div-overviewCode").style.visibility = "hidden";
     document.getElementById("btnSwitch").addEventListener("click", switchCanvas);
+    document.getElementById("btnGenerateCode").addEventListener("click", generateCode);
+    document.getElementById("btnGenerateCode").click();
 }
 
 export const saveDiagram = () => {
@@ -287,39 +271,28 @@ export const makeBlob = () => {
 
 function switchCanvas() {
     let c1 = document.getElementById("divDiagram");
-    let c1p = document.getElementById("listComponents");
-    let c1o = document.getElementById("div-overview");
+    let tp = document.getElementById("toolP");
     let c2 = document.getElementById("divDiagramCode");
-    let c2p = document.getElementById("listSentences");
-    let c2o = document.getElementById("div-overviewCode");
     let bs = document.getElementById("btnSwitch");
-    let dt = document.getElementById("divTitle");
-    let ds = document.getElementById("divSearchC");
-    
     if (cw === 1) {
         c1.style.visibility = "hidden";
-        c1p.style.visibility = "hidden";
-        c1o.style.visibility = "hidden";
-        ds.style.visibility = "hidden";
+        tp.style.visibility = "hidden";
         c2.style.visibility = "visible";
-        c2p.style.visibility = "visible";
-        c2o.style.visibility = "visible";
         bs.innerHTML = "Diagram";
-        dt.innerHTML = "Blocks";
-
         cw = 2;
     }
     else if (cw === 2) {
         c1.style.visibility = "visible";
-        c1p.style.visibility = "visible";
-        c1o.style.visibility = "visible";
-        ds.style.visibility = "visible";
+        tp.style.visibility = "visible";
         c2.style.visibility = "hidden";
-        c2p.style.visibility = "hidden";
-        c2o.style.visibility = "hidden";
         bs.innerHTML = "Code";
-        dt.innerHTML = "Components";
-        
         cw = 1;
     }
+}
+
+function generateCode() {
+    let codeTextarea = document.getElementById("content_arduino");
+    let code = Blockly.Arduino.workspaceToCode(BlocklyComponent.workspace);
+    codeTextarea.value = code;
+    codeTextarea.focus();
 }

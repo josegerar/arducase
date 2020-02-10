@@ -1,12 +1,31 @@
 {
-    "title": "Sensor Ultrasónico",
+    "summary": [
+        "The HC-SR04 uses sound instead of light as the GP2D12 module does. ",
+        "The HC-SR04 sends a ping as a submarine does and measure the time between",
+        " sending and receiving anything back when an object is in front of the sensor."],
+    "title": "Hc-sr04 UltraSonic",
     "overview": [
-        ""
+        "The HC-SR04 uses sound instead of light as the GP2D12 module does. ",
+        "The HC-SR04 sends a ping as a submarine does and measure the time between",
+        " sending and receiving anything back when an object is in front of the sensor.",
+        " Because using sound for its measurements we can reach up to 4 meters. The module ",
+        "is about 45x20x15 mm in size and has a 4 pin connection. Two pins are needed to power ",
+        "the module with 5 Volts. The working current is about 15 mA. One pin is the trigger ping ",
+        "and the last one is used to read the result of the measurements, the echo pin. The measuring",
+        " angle from the HC-SR04 is 15 degree. At 4 meter distance this should be a beam of about 1 meter.",
+        " At 1 meter this is 26 cm so we have to keep this in mind when using this information."
     ],
     "characteristics": [
-        ""
+        "-5 volt power \n",
+        "-Simple interface: Only 4 wires Vcc, Trigger, Echo, GND \n",
+        "-Measuring range: 2 cm to 400 cm \n",
+        "-Supply current: 15 mA \n",
+        "-Pulse Rate: 40 Khz \n",
+        "-Opening of the ultrasonic pulse: 15º \n",
+        "-Trigger signal: 10uS \n",
+        "-Module dimensions: 45x20x15 mm \n"
     ],
-    "links": [
-        
+    "images": [
+
     ]
 }

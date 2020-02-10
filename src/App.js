@@ -39,7 +39,7 @@ class App extends Component {
             token: resData.token,
             userId: payload.userId
           });
-        } else{
+        } else {
           this.logout();
         }
       }).catch(err => {
