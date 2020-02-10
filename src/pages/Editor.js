@@ -207,7 +207,6 @@ class EditorPage extends Component {
                 className="txta-contentCode"
                 readOnly
               ></textarea>
-              <button id="btnGenerateCode">Generate</button>
             </div>
           </div>
           <div id="toolP" className="div-toolPanel">

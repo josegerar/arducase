@@ -224,7 +224,7 @@
 .txta-contentCode {
     padding: 10px;
     height: 100%;
-    width: calc(100% - 100px);
+    width: 100%;
 }
 
 .div-contentCode button {

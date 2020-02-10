@@ -1,5 +1,4 @@
 import * as go from 'gojs';
-import * as Blockly from 'blockly/core';
 
 const componentsList = require("../json/componentsList.json");
 
@@ -197,8 +196,6 @@ export const initDiagram = (savedModel) => {
 
     document.getElementById("divDiagramCode").style.visibility = "hidden";
     document.getElementById("btnSwitch").addEventListener("click", switchCanvas);
-    document.getElementById("btnGenerateCode").addEventListener("click", generateCode);
-    document.getElementById("btnGenerateCode").click();
 }
 
 export const saveDiagram = () => {
