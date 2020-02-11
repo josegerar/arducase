@@ -8,11 +8,9 @@ Blockly.Arduino.saveTextFileAs = function (fileName, content) {
 };
 
 Blockly.Arduino.load = function (xml_text) {
-        console.log(xml_text);
     if (xml_text && xml_text !== "{}") {
         let xml = Blockly.Xml.textToDom(xml_text);
         Blockly.Xml.domToWorkspace(xml, Blockly.mainWorkspace);
-        //Blockly.Xml.domToWorkspace(xml, Blockly.mainWorkspace);
     }
 }
 
@@ -27,8 +25,6 @@ Blockly.Arduino.generateArduino = function () {
 };
 
 Blockly.Arduino.generateXml = function () {
-    //let xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    //return Blockly.Xml.domToPrettyText(xmlDom);
     let xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     return Blockly.Xml.domToText(xml);
 };
@@ -43,10 +39,6 @@ Blockly.Arduino.init = function (workspace) {
 
 
 Blockly.Arduino.finish = function (code) {
-    let gener_arduino = "/////////////////////////////////\n";
-    gener_arduino += "// ArduCase (Beta)            //\n";
-    gener_arduino += "/////////////////////////////////\n";
-
     let declarehttp = [];
     for (let name in Blockly.Arduino.declarehttp_) {
         declarehttp.push(Blockly.Arduino.declarehttp_[name]);
@@ -77,7 +69,7 @@ Blockly.Arduino.finish = function (code) {
     }
 
     let allDefs = imports.join('\n') + '\n\n' + definitions.join('\n') + '\nvoid setup() \n{\n' + setups.join('\n  ') + setupsfin.join('\n  ') + '\n}\n\n';
-    return gener_arduino + allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
+    return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
 
 

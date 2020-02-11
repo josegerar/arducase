@@ -42,8 +42,6 @@ class EditorPage extends Component {
       projectCanvasJSON: this.props.location.state.canvasJSON,
       proyectEspecJSON: this.props.location.state.xmlJSON
     });
-    console.log(this.props.location.state.xmlJSON);
-    
     Blockly.Arduino.load(this.props.location.state.xmlJSON);
     initDiagram(this.props.location.state.canvasJSON);
   }
@@ -64,9 +62,6 @@ class EditorPage extends Component {
     const newEspecJSON = Blockly.Arduino.generateXml();
     const lastAccessDate = new Date().toISOString();
     const lastUpdateDate = new Date().toISOString();
-    console.log(newEspecJSON)
-    console.log(JSON.stringify(newEspecJSON));
-    
     const image = getImage_B64();
     const requestBody = {
       query: `
@@ -87,8 +82,6 @@ class EditorPage extends Component {
         'Authorization': 'Bearer ' + this.context.token
       }
     }).then(res => {
-      
-     
       return res.json();
     }).then(resData => {
       saveDiagram();
@@ -149,7 +142,7 @@ class EditorPage extends Component {
         )}
         <div className="editor-content">
           <div id="divDiagram" className="div-drawPanel"></div>
-          <div id="divDiagramCode" className="div-drawPanel">
+          <div id="divDiagramCode" className="div-drawPanelCode">
             <BlocklyComponent ref={e => this.simpleWorkspace = e} readOnly={false} move={{
               scrollbars: true,
               drag: true,
@@ -193,13 +186,7 @@ class EditorPage extends Component {
           </div>
           <div id="toolP" className="div-toolPanel">
             <div className="div-componentPanel">
-              <div className="div-title">
-                Components
-                        </div>
-              <div className="div-searchPanel">
-                <img width="27" height="27" alt="" />
-                <input id="txtSearchC" type="text" placeholder="Search" />
-              </div>
+              <div className="div-title"> Components </div>
               <div id="listComponents" className="div-list"></div>
             </div>
             <div className="div-infoPanel">

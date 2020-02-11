@@ -262,7 +262,7 @@ function myCallback(blob) {
 }
 
 export const makeBlob = () => {
-    return diagram.makeImageData({ background: "white", returnType: "blob", callback: myCallback });
+    diagram.makeImageData({ background: "white", returnType: "blob", callback: myCallback });
 }
 
 function switchCanvas() {

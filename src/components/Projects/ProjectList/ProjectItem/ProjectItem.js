@@ -26,7 +26,7 @@ const projectItem = props => (
             <div className="div-actionsProject">
                 <button className="btn-openProject" title="Open Project" onClick={props.onOpen.bind(this, props.projectId)}></button>
                 <button className="btn-properties" title="Properties" onClick={props.onUpdate.bind(this, props.projectId)}></button>
-                <button className="btn-download" title="Download"></button>
+                <button className="btn-download" title="Download" ></button>
                 <button className="btn-delete" title="Delete Project" onClick={props.onDelete.bind(this, props.projectId)}></button>
             </div>
         </div>

@@ -171,8 +171,6 @@ class ProjectsPage extends Component {
             return res.json();
         }).then(resData => {
             if(resData && resData.data && resData.data.projects){
-                console.log(resData.data.projects);
-                
                 const projects = resData.data.projects;
                 this.setState({ projects: projects, isLoading: false });
             }
@@ -229,8 +227,7 @@ class ProjectsPage extends Component {
         }
         const pa = this.state.projects.find(e => e._id === id);
         this.setState({ selectedProject: null });
-        console.log(pa);
-        
+
         this.props.history.replace({
             pathname: '/editor',
             state: {
@@ -406,11 +403,6 @@ class ProjectsPage extends Component {
                         </div>
                     )}
                     <div className="div-listProjects">
-                        <div className="div-actionPanel">
-                            <div className="div-searchFilter">
-                                <input className="input-searchFilter" placeholder="Search" />
-                            </div>
-                        </div>
                         <div className="div-chartPanel">
                             <div className="div-chartContainer">
                                 <div className="div-tableFix">
