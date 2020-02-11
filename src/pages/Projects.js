@@ -148,6 +148,7 @@ class ProjectsPage extends Component {
                         lastUpdateDate
                         image
                         canvasJSON
+                        especJSON
                         creator {
                             _id
                             username
@@ -170,6 +171,8 @@ class ProjectsPage extends Component {
             return res.json();
         }).then(resData => {
             if(resData && resData.data && resData.data.projects){
+                console.log(resData.data.projects);
+                
                 const projects = resData.data.projects;
                 this.setState({ projects: projects, isLoading: false });
             }
@@ -226,12 +229,15 @@ class ProjectsPage extends Component {
         }
         const pa = this.state.projects.find(e => e._id === id);
         this.setState({ selectedProject: null });
+        console.log(pa);
+        
         this.props.history.replace({
             pathname: '/editor',
             state: {
                 projectId: pa._id,
                 title: pa.title,
-                canvasJSON: pa.canvasJSON
+                canvasJSON: pa.canvasJSON,
+                xmlJSON: pa.especJSON
             }
         });
     };

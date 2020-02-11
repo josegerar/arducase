@@ -20,6 +20,9 @@ const modal = props => (
                         props.canDownload && <button onClick={props.onDownload}>Download Image</button>
                     }
                     {
+                        props.canDownloadC && <button onClick={props.onDownloadC}>Download Code</button>
+                    }
+                    {
                         props.canExit && <button className="btn-exit" onClick={props.onExit}>Exit</button>
                     }
                     {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import BlocklyComponent, {  Block,  Category} from "../components/Blockly";
+import BlocklyComponent, { Block, Category, downloadCode } from "../components/Blockly";
 import Blockly from "blockly/core";
 
 import Modal from "../components/Modal/Modal";
@@ -9,7 +9,7 @@ import AuthContext from "../context/auth-context";
 import "./Editor.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../components/blocks/customblocks";
-import {  initDiagram,  getModelJson,  getImage_B64,  onMoreInfo,  makeBlob,  saveDiagram} from "../scripts/went";
+import { initDiagram, getModelJson, getImage_B64, onMoreInfo, makeBlob, saveDiagram } from "../scripts/went";
 
 class EditorPage extends Component {
   constructor(props) {
@@ -18,6 +18,7 @@ class EditorPage extends Component {
       projectId: null,
       projectTitle: null,
       projectCanvasJSON: null,
+      proyectEspecJSON: null,
       menuOptions: false,
       moreInfo: false
     };
@@ -38,8 +39,12 @@ class EditorPage extends Component {
     this.setState({
       projectId: this.props.location.state.projectId,
       projectTitle: this.props.location.state.title,
-      projectCanvasJSON: this.props.location.state.canvasJSON
+      projectCanvasJSON: this.props.location.state.canvasJSON,
+      proyectEspecJSON: this.props.location.state.xmlJSON
     });
+    console.log(this.props.location.state.xmlJSON);
+    
+    Blockly.Arduino.load(this.props.location.state.xmlJSON);
     initDiagram(this.props.location.state.canvasJSON);
   }
 
@@ -53,43 +58,45 @@ class EditorPage extends Component {
     this.setState({ menuOptions: false, moreInfo: false });
   };
 
-   modalConfirmHandler = () => {
-        this.setState({ menuOptions: false });
-        const newCanvasJSON = getModelJson();
-        const newEspecJSON = Blockly.Arduino.generateXml();
-        const lastAccessDate = new Date().toISOString();
-        const lastUpdateDate = new Date().toISOString();
-        const image = getImage_B64();
-        const requestBody = {
-            query: `
+  modalConfirmHandler = () => {
+    this.setState({ menuOptions: false });
+    const newCanvasJSON = getModelJson();
+    const newEspecJSON = Blockly.Arduino.generateXml();
+    const lastAccessDate = new Date().toISOString();
+    const lastUpdateDate = new Date().toISOString();
+    console.log(newEspecJSON)
+    console.log(JSON.stringify(newEspecJSON));
+    
+    const image = getImage_B64();
+    const requestBody = {
+      query: `
                 mutation {
-                    saveProject(projectSave:{ projectId: "${this.state.projectId}", canvasJSON: ${JSON.stringify(newCanvasJSON)}, especJSON: "${newEspecJSON}", lastAccessDate: "${lastAccessDate}", lastUpdateDate: "${lastUpdateDate}", image: "${image}"}) {
+                    saveProject(projectSave:{ projectId: "${this.state.projectId}", canvasJSON: ${JSON.stringify(newCanvasJSON)}, especJSON:${JSON.stringify(newEspecJSON)}, lastAccessDate: "${lastAccessDate}", lastUpdateDate: "${lastUpdateDate}", image: "${image}"}) {
                         _id
                         title
                     }
                 }
             `
-        };
-
-        fetch(`${this.context.webservice}graphql`, {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + this.context.token
-            }
-        }).then(res => {
-            if (res.status !== 200 && res.status !== 201) {
-                throw new Error('Failed!');
-            }
-            return res.json();
-        }).then(resData => {
-            saveDiagram();
-            alert("Project saved.");
-        }).catch(err => {
-            console.log(err);
-        });
     };
+
+    fetch(`${this.context.webservice}graphql`, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.context.token
+      }
+    }).then(res => {
+      
+     
+      return res.json();
+    }).then(resData => {
+      saveDiagram();
+      alert("Project saved.");
+    }).catch(err => {
+      console.log(err);
+    });
+  };
 
   modalExitHandler = () => {
     //this.setState({ menuOptions: false });
@@ -99,6 +106,10 @@ class EditorPage extends Component {
     this.setState({ menuOptions: false });
     makeBlob();
   };
+
+  modalDownloadCodeHandler = () => {
+    downloadCode();
+  }
 
   render() {
     return (
@@ -111,61 +122,54 @@ class EditorPage extends Component {
             canConfirm
             canExit
             canDownload
+            canDownloadC
             onCancel={this.modalCancelHandler}
             onConfirm={this.modalConfirmHandler}
             onExit={this.modalExitHandler}
             onDownload={this.modalDownloadHandler}
-            confirmText="Save Project"
-          ></Modal>
+            onDownloadC={this.modalDownloadCodeHandler}
+            confirmText="Save Project">
+
+          </Modal>
         )}
         {this.state.moreInfo && (
           <Modal
             title={onMoreInfo.title}
             canCancel
-            onCancel={this.modalCancelHandler}
-          >
-            <b>Overview</b>
-            <br />
+            onCancel={this.modalCancelHandler}>
+
+            <b>Overview</b><br />
             {onMoreInfo.overview.join("")}
-            <br />
-            <br />
-            <b>Characteristics</b>
-            <br />
+            <br /><br />
+            <b>Characteristics</b><br />
             {onMoreInfo.characteristics.join("")}
-            <br />
-            <br />
-            <b>Links</b>
-            <br />
+            <br /><br />
+            <b>Links</b><br />
           </Modal>
         )}
         <div className="editor-content">
           <div id="divDiagram" className="div-drawPanel"></div>
           <div id="divDiagramCode" className="div-drawPanel">
-            <BlocklyComponent
-              ref={e => (this.simpleWorkspace = e)}
-              readOnly={false}
-              move={{
-                scrollbars: true,
-                drag: true,
+            <BlocklyComponent ref={e => this.simpleWorkspace = e} readOnly={false} move={{
+              scrollbars: true,
+              drag: true,
+              wheel: true,
+              collapse: true,
+              comments: true,
+              trashcan: true,
+              zoom: {
+                controls: true,
                 wheel: true,
-                collapse: true,
-                comments: true,
-                trashcan: true,
-                zoom: {
-                  controls: true,
-                  wheel: true,
-                  startScale: 1.0,
-                  maxScale: 3,
-                  minScale: 0.3,
-                  scaleSpeed: 1.2
-                }
-              }}
-              initialXml={`
-                        <xml xmlns="http://www.w3.org/1999/xhtml">
-                        <block type="arduino_setup"></block>
-                        </xml>
-                        `}
-            >
+                startScale: 1.0,
+                maxScale: 3,
+                minScale: 0.3,
+                scaleSpeed: 1.2
+              }
+            }} initialXml={`
+                    <xml xmlns="http://www.w3.org/1999/xhtml">
+                    <block type="arduino_setup"></block>
+                    </xml>
+                    `}>
               <Category name="IN/OUT">
                 <Category name="Digital">
                   <Block type="inout_highlow" />
@@ -185,17 +189,13 @@ class EditorPage extends Component {
                 <Block type="arduino_setup" />
               </Category>
             </BlocklyComponent>
-            <div className="div-contentCode">
-              <textarea
-                id="content_arduino"
-                className="txta-contentCode"
-                readOnly
-              ></textarea>
-            </div>
+            <textarea id="content_arduino" className="txta-contentCode" readOnly={true}></textarea>
           </div>
           <div id="toolP" className="div-toolPanel">
             <div className="div-componentPanel">
-              <div className="div-title">Components</div>
+              <div className="div-title">
+                Components
+                        </div>
               <div className="div-searchPanel">
                 <img width="27" height="27" alt="" />
                 <input id="txtSearchC" type="text" placeholder="Search" />
@@ -203,12 +203,16 @@ class EditorPage extends Component {
               <div id="listComponents" className="div-list"></div>
             </div>
             <div className="div-infoPanel">
-              <div className="div-title">Overview</div>
+              <div className="div-title">
+                Overview
+                        </div>
               <div id="div-overview"></div>
             </div>
           </div>
           <div className="div-footPanel">
-            <div className="div-messagePanel"></div>
+            <div className="div-messagePanel">
+
+            </div>
             <div className="div-tabPanel">
               <button onClick={this.optionsEventHandler}>Options</button>
               <button id="btnSwitch">Code</button>

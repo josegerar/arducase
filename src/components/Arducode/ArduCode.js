@@ -7,13 +7,30 @@ Blockly.Arduino.saveTextFileAs = function (fileName, content) {
     saveAs(blob, fileName);
 };
 
+Blockly.Arduino.load = function (xml_text) {
+        console.log(xml_text);
+    if (xml_text && xml_text !== "{}") {
+        let xml = Blockly.Xml.textToDom(xml_text);
+        Blockly.Xml.domToWorkspace(xml, Blockly.mainWorkspace);
+        //Blockly.Xml.domToWorkspace(xml, Blockly.mainWorkspace);
+    }
+}
+
+Blockly.Arduino.changeBloking = function () {
+    let codeTextarea = document.getElementById("content_arduino");
+    let code = Blockly.Arduino.workspaceToCode(Blockly.mainWorkspace);
+    codeTextarea.value = code || "";
+}
+
 Blockly.Arduino.generateArduino = function () {
     return Blockly.Arduino.workspaceToCode(Blockly.mainWorkspace);
 };
 
 Blockly.Arduino.generateXml = function () {
-    let xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    return Blockly.Xml.domToPrettyText(xmlDom);
+    //let xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    //return Blockly.Xml.domToPrettyText(xmlDom);
+    let xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    return Blockly.Xml.domToText(xml);
 };
 
 Blockly.Arduino.init = function (workspace) {
