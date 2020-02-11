@@ -14,6 +14,7 @@ class App extends Component {
   state = {
     token: null,
     userId: null,
+    email: null,
     webservice: "http://localhost:8000/"
   };
 
@@ -31,14 +32,8 @@ class App extends Component {
         return res.json();
       }).then(resData => {
         if (resData && resData.token) {
-          let payload;
-          payload = resData.token.split('.')[1];
-          payload = window.atob(payload);
-          payload = JSON.parse(payload);
-          this.setState({
-            token: resData.token,
-            userId: payload.userId
-          });
+          const data = this.substrapToken(resData.token);
+          this.setState({ token: resData.token, userId: data.userId, email: data.email });
         } else {
           this.logout();
         }
@@ -49,9 +44,18 @@ class App extends Component {
     }
   }
 
-  login = (token, userId, tokenExpiration) => {
+  substrapToken(token) {
+    let payload;
+    payload = token.split('.')[1];
+    payload = window.atob(payload);
+    return JSON.parse(payload);
+  }
+
+  login = (token) => {
     localStorage.setItem("TOKEN", token);
-    this.setState({ token: token, userId: userId });
+    const data = this.substrapToken(token);
+    console.log(data);
+    this.setState({ token: token, userId: data.userId, email: data.email });
   };
 
   logout = () => {
@@ -67,6 +71,7 @@ class App extends Component {
             value={{
               token: this.state.token,
               userId: this.state.userId,
+              email: this.state.email,
               login: this.login,
               logout: this.logout,
               webservice: this.state.webservice

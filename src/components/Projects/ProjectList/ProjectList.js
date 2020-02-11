@@ -9,7 +9,8 @@ const projectList = props => {
         <ProjectItem 
         key={project._id} 
         projectId={project._id} 
-        title={project.title} 
+        title={project.title}
+        index={project.sharedUsers.indexOf(props.authUserEmail)} 
         createdDate={project.createdDate} 
         lastAccessDate={project.lastAccessDate} 
         lastUpdateDate={project.lastUpdateDate} 
@@ -22,6 +23,7 @@ const projectList = props => {
         onOpen={props.onOpenProject}
         onUpdate={props.onUpdateProject}
         onDelete={props.onDeleteProject}
+        onShared={props.onSharedProyed}
         />
         );
     });

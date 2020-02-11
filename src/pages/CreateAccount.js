@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import AuthContext from '../context/auth-context';
+
 import './CreateAccount.css';
 
 class CreateAccountPage extends Component {
@@ -9,12 +11,18 @@ class CreateAccountPage extends Component {
         successMessage: null
     };
 
+    static contextType = AuthContext;
+
     constructor(props) {
         super(props);
         this.nameEl = React.createRef();
         this.usernameEl = React.createRef();
         this.passwordEl = React.createRef();
         this.emailEl = React.createRef();
+    }
+    componentDidMount() {
+        console.log(this.context.webservice);
+
     }
 
     submitHandler = (event) => {
@@ -52,9 +60,6 @@ class CreateAccountPage extends Component {
                 'Content-Type': 'application/json'
             }
         }).then(res => {
-            if (res.status !== 200 && res.status !== 201) {
-                throw new Error('Failed!');
-            }
             return res.json();
         }).then(resData => {
             if (resData.errors) {
@@ -65,6 +70,7 @@ class CreateAccountPage extends Component {
             }
         }).catch(err => {
             console.log(err);
+            this.setState({ errMessage: err.message, successMessage: null });
         });
     };
 

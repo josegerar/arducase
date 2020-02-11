@@ -123,3 +123,7 @@
 .btn-delete {
     background-image: url('../../../images/icon-deleteProject.png');
 }
+
+.btn-share {
+    background-image: url('../../../images/icon-share.png');
+}

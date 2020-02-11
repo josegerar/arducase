@@ -6,6 +6,7 @@ import Backdrop from '../components/Backdrop/Backdrop';
 import ProjectList from '../components/Projects/ProjectList/ProjectList';
 import Spinner from '../components/Spinner/Spinner';
 import AuthContext from '../context/auth-context';
+import EmailsList from "../components/Emails/EmailsList";
 import './Projects.css';
 
 class ProjectsPage extends Component {
@@ -14,7 +15,9 @@ class ProjectsPage extends Component {
         projects: [],
         isLoading: false,
         selectedProject: null,
-        updating: false
+        updating: false,
+        sharing: false ,
+        emails: []
     };
 
     static contextType = AuthContext;
@@ -131,7 +134,7 @@ class ProjectsPage extends Component {
     };
 
     modalCancelHandler = () => {
-        this.setState({ creating: false, updating: false, selectedProject: null });
+        this.setState({ creating: false, updating: false, selectedProject: null, sharing: false, emails: []});
     };
 
     fetchEvents() {
@@ -153,6 +156,7 @@ class ProjectsPage extends Component {
                             _id
                             username
                         }
+                        sharedUsers
                     }
                 }
             `
@@ -170,8 +174,10 @@ class ProjectsPage extends Component {
             }
             return res.json();
         }).then(resData => {
-            if(resData && resData.data && resData.data.projects){
+            if (resData && resData.data && resData.data.projects) {
                 const projects = resData.data.projects;
+                console.log(projects);
+                
                 this.setState({ projects: projects, isLoading: false });
             }
         }).catch(err => {
@@ -328,10 +334,88 @@ class ProjectsPage extends Component {
         });
     };
 
+    sharedProyedHandler = (projectId) => {
+        this.setState({ sharing: true });
+        this.setState(prevState => {
+            const selectedProject = prevState.projects.find(e => e._id === projectId);
+            console.log(selectedProject);
+            if (selectedProject.sharedUsers) {
+                return { selectedProject: selectedProject, emails: selectedProject.sharedUsers };
+            }
+            return { selectedProject: selectedProject };
+        });
+    }
+
+    addEmail = (evt) =>{
+        evt.preventDefault();
+        const email = this.titleElRef.current.value;
+        this.setState(prevState => {
+            const selectedemails = prevState.emails;
+            selectedemails.push(email);
+            console.log(selectedemails);
+            return { emails: selectedemails };
+        });
+    }
+
+    deleteEmailHandler = (email, index, evt)=>{
+        evt.preventDefault();
+        this.setState(prevState => {
+            const emails = prevState.emails;
+            emails.splice(index, 1);
+            return { emails: emails };
+        });
+    }
+
+    modalAddEmailsConfirmHandler = () =>{
+        this.modalCancelHandler();
+        this.setState({ isLoading: true, sharing: false, emails: [] });
+        console.log(this.state.emails);
+        
+        let emailsString = ``;
+        for (let i = 0; i < this.state.emails.length; i++) {
+            const email = this.state.emails[i];
+            emailsString += `"${email}"`;
+            if (i+1 < this.state.emails.length) {
+                emailsString += `, `;
+            }
+        }
+        console.log(emailsString);
+        const requestBody = {
+            query: `
+                mutation {
+                    addEmailsProyect(emails:[
+                        ${emailsString}
+                    ], projectId: "${this.state.selectedProject._id}") {
+                        _id
+                        title
+                    }
+                }
+            `
+        };
+        fetch(`${this.context.webservice}graphql`, {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + this.context.token
+            }
+        }).then(res => {
+            return res.json();
+        }).then(resData => {
+            if (resData.errors) {
+                console.log(resData.errors);
+            }
+            this.fetchEvents();
+        }).catch(err => {
+            console.log(err);
+            this.setState({ isLoading: false });
+        });
+    }
+
     render() {
         return (
             <React.Fragment>
-                {(this.state.creating || this.state.updating || this.state.selectedProject) && <Backdrop />}
+                {(this.state.creating || this.state.updating || this.state.selectedProject || this.state.sharing) && <Backdrop />}
                 {this.state.creating && (
                     <Modal
                         title="Create New Project"
@@ -351,28 +435,6 @@ class ProjectsPage extends Component {
                                 <textarea id="description" rows="4" ref={this.descriptionElRef} />
                             </div>
                         </form>
-                    </Modal>
-                )}
-                {this.state.selectedProject && !this.state.updating && (
-                    <Modal
-                        title={this.state.selectedProject.title}
-                        canCancel
-                        canConfirm
-                        onCancel={this.modalCancelHandler}
-                        onConfirm={this.openProjectHandler}
-                        confirmText="Open in Editor">
-
-                        <div className="div-imgContainer">
-                            {this.state.selectedProject.image !== " " ?
-                                (<img alt="" className="imgDetailProject" src={`${this.getImageSrc(this.state.selectedProject.image)}`} />) :
-                                (<img alt="" className="imgDetailProject" />)
-                            }
-                        </div>
-                        <br />
-                        <b>Created Date:</b> {new Date(this.state.selectedProject.createdDate).toLocaleString()}
-                        <br />
-                        <p>{this.state.selectedProject.description}</p>
-
                     </Modal>
                 )}
                 {this.state.updating && this.state.selectedProject && (
@@ -396,6 +458,30 @@ class ProjectsPage extends Component {
                         </form>
                     </Modal>
                 )}
+                {this.state.selectedProject && this.state.sharing && (
+                    <Modal
+                        title={"Share Project - " + this.state.selectedProject.title}
+                        canCancel
+                        canConfirm
+                        onCancel={this.modalCancelHandler}
+                        onConfirm={this.modalAddEmailsConfirmHandler}
+                        confirmText="Share">
+                        <form>
+                            <div className="div-control">
+                                <input type="text" id="newEmail" ref={this.titleElRef}/>
+                                <button onClick={this.addEmail}>Add email</button>
+                            </div>
+                            <div className="div-control">
+                                <label htmlFor="description">Emails: </label>
+                                <EmailsList
+                                    emails={this.state.emails}
+                                    _idProyect={this.state.selectedProject._id}
+                                    onDeleteEmail={this.deleteEmailHandler}
+                                />
+                            </div>
+                        </form>
+                    </Modal>
+                )}
                 <div className="projects-content">
                     {this.context.token && (
                         <div className="div-createProject">
@@ -411,11 +497,13 @@ class ProjectsPage extends Component {
                                             <ProjectList
                                                 projects={this.state.projects}
                                                 authUserId={this.context.userId}
+                                                authUserEmail={this.context.email}
                                                 onGetImgSrc={this.getImageSrc}
                                                 onViewDetail={this.showDetailHandler}
                                                 onOpenProject={this.openProjectHandler}
                                                 onUpdateProject={this.updateProjectHandler}
                                                 onDeleteProject={this.deleteProjectHandler}
+                                                onSharedProyed={this.sharedProyedHandler}
                                             />
                                         )}
                                     </div>

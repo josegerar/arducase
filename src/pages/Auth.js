@@ -30,9 +30,7 @@ class AuthPage extends Component {
             query: `
                 query Login($username: String!, $password: String!) {
                     login(username: $username, password: $password) {
-                        userId
                         token
-                        tokenExpiration
                     }
                 }
             `,
@@ -49,15 +47,20 @@ class AuthPage extends Component {
                 'Content-Type': 'application/json'
             }
         }).then(res => {
-            if (res.status !== 200 && res.status !== 201) {
-                throw new Error('Incorrect username or password.');
-            }
             return res.json();
         }).then(resData => {
-            if (resData.data.login.token) {
-                this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.tokenExpiration);
+            console.log(resData);
+            if (resData.errors) {
+                throw new Error("Ha ocurrido un error");
+            }
+            if (resData && resData.data && resData.data.login && resData.data.login.token) {
+                this.context.login(resData.data.login.token);
             }
         }).catch(err => {
+            console.log(
+                err
+            );
+            
             this.setState({ errMessage: err.message });
         });
     };

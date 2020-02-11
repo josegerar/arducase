@@ -4,6 +4,7 @@ export default React.createContext({
     token: null,
     userId: null,
     webservice: null,
-    login: (token, userId, tokenExpiration) => {},
+    email: null,
+    login: (token) => {},
     logout: () => {}
 });
