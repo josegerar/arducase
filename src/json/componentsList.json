@@ -4,7 +4,7 @@
             "text": "Arduino Uno",
             "image": "./images/comp/c1.png",
             "width": 500, "height": 354,
-            "items": [{"name":"SCL","pos":{"x":164,"y":12,"s":false}},{"name":"SDA","pos":{"x":180.7,"y":12,"s":false}},{"name":"AREF","pos":{"x":197.4,"y":12,"s":false}},{"name":"GND","pos":{"x":214.1,"y":12,"s":false}},{"name":"D13","pos":{"x":230.8,"y":12,"s":false}},{"name":"D12","pos":{"x":247.5,"y":12,"s":false}},{"name":"D11","pos":{"x":264.2,"y":12,"s":false}},{"name":"D10","pos":{"x":280.9,"y":12,"s":false}},{"name":"D9","pos":{"x":297.6,"y":12,"s":false}},{"name":"D8","pos":{"x":314.29999999999995,"y":12,"s":false}},{"name":"D7","pos":{"x":343,"y":12,"s":false}},{"name":"D6","pos":{"x":359.7,"y":12,"s":false}},{"name":"D5","pos":{"x":376.4,"y":12,"s":false}},{"name":"D4","pos":{"x":393.1,"y":12,"s":false}},{"name":"D3","pos":{"x":409.8,"y":12,"s":false}},{"name":"D2","pos":{"x":426.5,"y":12,"s":false}},{"name":"D1","pos":{"x":443.2,"y":12,"s":false}},{"name":"D0","pos":{"x":459.9,"y":12,"s":false}},{"name":"empty","pos":{"x":224.5,"y":331.5,"s":false}},{"name":"IOREF","pos":{"x":241.2,"y":331.5,"s":false}},{"name":"Reset","pos":{"x":257.9,"y":331.5,"s":false}},{"name":"3,3 V","pos":{"x":274.6,"y":331.5,"s":false}},{"name":"5 V","pos":{"x":291.3,"y":331.5,"s":false}},{"name":"GND","pos":{"x":308,"y":331.5,"s":false}},{"name":"GND","pos":{"x":324.7,"y":331.5,"s":false}},{"name":"Vin","pos":{"x":341.4,"y":331.5,"s":false}},{"name":"A0","pos":{"x":375.5,"y":331.5,"s":false}},{"name":"A1","pos":{"x":392.2,"y":331.5,"s":false}},{"name":"A2","pos":{"x":408.9,"y":331.5,"s":false}},{"name":"A3","pos":{"x":425.6,"y":331.5,"s":false}},{"name":"A4","pos":{"x":442.3,"y":331.5,"s":false}},{"name":"A5","pos":{"x":459,"y":331.5,"s":false}}]
+            "items": [{"name":"SCL","pos":{"x":164,"y":12,"s":false}},{"name":"SDA","pos":{"x":180.7,"y":12,"s":false}},{"name":"AREF","pos":{"x":197.4,"y":12,"s":false}},{"name":"GND","pos":{"x":214.1,"y":12,"s":false}},{"name":"D13","pos":{"x":230.8,"y":12,"s":false}},{"name":"D12","pos":{"x":247.5,"y":12,"s":false}},{"name":"D11","pos":{"x":264.2,"y":12,"s":false}},{"name":"D10","pos":{"x":280.9,"y":12,"s":false}},{"name":"D9","pos":{"x":297.6,"y":12,"s":false}},{"name":"D8","pos":{"x":314.29999999999995,"y":12,"s":false}},{"name":"D7","pos":{"x":343,"y":12,"s":false}},{"name":"D6","pos":{"x":359.7,"y":12,"s":false}},{"name":"D5","pos":{"x":376.4,"y":12,"s":false}},{"name":"D4","pos":{"x":393.1,"y":12,"s":false}},{"name":"D3","pos":{"x":409.8,"y":12,"s":false}},{"name":"D2","pos":{"x":426.5,"y":12,"s":false}},{"name":"D1","pos":{"x":443.2,"y":12,"s":false}},{"name":"D0","pos":{"x":459.9,"y":12,"s":false}},{"name":"empty","pos":{"x":224.5,"y":331.5,"s":false}},{"name":"IOREF","pos":{"x":241.2,"y":331.5,"s":false}},{"name":"Reset","pos":{"x":257.9,"y":331.5,"s":false}},{"name":"3,3 V","pos":{"x":274.6,"y":331.5,"s":false}},{"name":"5 V","pos":{"x":291.3,"y":331.5,"s":false}},{"name":"GND1","pos":{"x":308,"y":331.5,"s":false}},{"name":"GND2","pos":{"x":324.7,"y":331.5,"s":false}},{"name":"Vin","pos":{"x":341.4,"y":331.5,"s":false}},{"name":"A0","pos":{"x":375.5,"y":331.5,"s":false}},{"name":"A1","pos":{"x":392.2,"y":331.5,"s":false}},{"name":"A2","pos":{"x":408.9,"y":331.5,"s":false}},{"name":"A3","pos":{"x":425.6,"y":331.5,"s":false}},{"name":"A4","pos":{"x":442.3,"y":331.5,"s":false}},{"name":"A5","pos":{"x":459,"y":331.5,"s":false}}]
         },
         {
             "category": "c2",
@@ -125,7 +125,7 @@
         ,
         {
             "category": "c11",
-            "text": "RHT03 Humidity and Temperature Sensor",
+            "text": "RHT03 Humidity Sensor",
             "image": "./images/comp/c11.png",
             "width": 90, "height": 140,
             "items": [
@@ -142,7 +142,73 @@
             "items": [
             {"name":"Positive","pos":{"x":8,"y":129,"s":false}},
             {"name":"Negative","pos":{"x":28,"y":129,"s":false}}]
-        }
+        } ,
+        {
+            "category": "c13",
+            "text": "Giroscopy",
+            "image": "./images/comp/c13.png",
+            "width": 90, "height": 140,
+            "items": [
+            {"name":"VCC","pos":{"x":7,"y":2,"s":false}},
+            {"name":"GND","pos":{"x":7,"y":20,"s":false}},
+            {"name":"SCL","pos":{"x":7,"y":38,"s":false}},
+            {"name":"SDA","pos":{"x":7,"y":56,"s":false}},
+            {"name":"XDA","pos":{"x":7,"y":71,"s":false}},
+            {"name":"XCL","pos":{"x":7,"y":89,"s":false}},
+            {"name":"ADO","pos":{"x":7,"y":107,"s":false}},
+            {"name":"INT","pos":{"x":7,"y":125,"s":false}}
+        ]
+        },
+        {
+            "category": "c14",
+            "text": "Potenciometer",
+            "image": "./images/comp/c14.png",
+            "width": 100, "height": 140,
+            "items": [
+            {"name":"T1","pos":{"x":25,"y":129,"s":false}},
+            {"name":"t2","pos":{"x":45,"y":129,"s":false}},{"name":"t3","pos":{"x":67,"y":129,"s":false}}]
+        } ,
+        {
+            "category": "c15",
+            "text": "PushButton",
+            "image": "./images/comp/c15.png",
+            "width": 100, "height": 140,
+            "items": [
+            {"name":"Positive","pos":{"x":36,"y":129,"s":false}},
+            {"name":"Negative","pos":{"x":51,"y":129,"s":false}}
+         ]},
+         {
+             "category": "c16",
+             "text": "LUX Sensor",
+             "image": "./images/comp/c16.png",
+             "width": 150, "height": 140,
+             "items": [
+             {"name":"VIN","pos":{"x":20,"y":115,"s":false}},
+             {"name":"GND","pos":{"x":40,"y":115,"s":false}},
+             {"name":"3VO","pos":{"x":58,"y":115,"s":false}},
+             {"name":"IND","pos":{"x":78,"y":115,"s":false}},
+             {"name":"SDA","pos":{"x":98,"y":115,"s":false}},
+             {"name":"SCL","pos":{"x":118,"y":115,"s":false}}
+          ]},
+          {
+              "category": "c17",
+              "text": "LM 390 ",
+              "image": "./images/comp/c17.png",
+              "width": 140, "height": 50,
+              "items": [
+              {"name":"Positive","pos":{"x":36,"y":25,"s":false}},
+              {"name":"Negative","pos":{"x":51,"y":25,"s":false}}
+           ]}
+           ,
+          {
+              "category": "c18",
+              "text": "Resistor",
+              "image": "./images/comp/c18.png",
+              "width": 95, "height": 40,
+              "items": [
+              {"name":"Positive","pos":{"x":0,"y":11,"s":false}},
+              {"name":"Negative","pos":{"x":80,"y":11,"s":false}}
+           ]}
 ]
     
         
