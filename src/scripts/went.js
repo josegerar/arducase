@@ -1,5 +1,5 @@
 import * as go from 'gojs';
-
+import { generateCode } from "../components/Blockly/index";
 const componentsList = require("../json/componentsList.json");
 
 export let onMoreInfo = {

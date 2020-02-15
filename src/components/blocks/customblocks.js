@@ -176,7 +176,7 @@ for (let i = 0; i < customBlocks.length; i++) {
         this.appendDummyInput()
           .appendField("type");
         var dropdown = new Blockly.FieldDropdown(PROPERTIES, function (option) {
-          var divisorInput = (option == 'stringa');
+          var divisorInput = (option === 'stringa');
           this.sourceBlock_.updateShape_(divisorInput);
         });
         this.appendDummyInput()
@@ -203,7 +203,7 @@ for (let i = 0; i < customBlocks.length; i++) {
        */
       mutationToDom: function () {
         var container = document.createElement('mutation');
-        var divisorInput = (this.getFieldValue('PROPERTY') == 'CHARTAB');
+        var divisorInput = (this.getFieldValue('PROPERTY') === 'CHARTAB');
         container.setAttribute('divisor_input', divisorInput);
         return container;
       },
@@ -213,7 +213,7 @@ for (let i = 0; i < customBlocks.length; i++) {
        * @this Blockly.Block
        */
       domToMutation: function (xmlElement) {
-        var divisorInput = (xmlElement.getAttribute('divisor_input') == 'true');
+        var divisorInput = (xmlElement.getAttribute('divisor_input') === 'true');
         this.updateShape_(divisorInput);
       },
       /**

@@ -40,7 +40,7 @@ Blockly.Variables.allVariables = function(root) {
   } else if (root.getAllBlocks) {
     blocks = root.getAllBlocks();
   } else {
-    throw "Not Block or Workspace: " + root;
+    throw new Error("Not Block or Workspace: " + root);
   }
   var variableHash = Object.create(null);
   for (var x = 0; x < blocks.length; x++) {
@@ -77,8 +77,6 @@ Blockly.Arduino.init = function(workspace) {
     } else {
       Blockly.Arduino.variableDB_.reset();
     }
-
-    var defvars = [];
     var variables = Blockly.Variables.allVariables(workspace);
     for (var x = 0; x < variables.length; x++) {}
   }
@@ -373,7 +371,7 @@ Blockly.Arduino["infrared_read"] = function(block) {
 //IN/OUT
 
 Blockly.Arduino["inout_highlow"] = function(block) {
-  let code = this.getFieldValue("BOOL") == "HIGH" ? "HIGH" : "LOW";
+  let code = this.getFieldValue("BOOL") === "HIGH" ? "HIGH" : "LOW";
   return [code, 0];
 };
 
@@ -461,7 +459,7 @@ Blockly.Arduino["controls_if"] = function() {
 Blockly.Arduino.logic_compare = function() {
   var mode = this.getFieldValue("OP");
   var operator = Blockly.Arduino.logic_compare.OPERATORS[mode];
-  var order = operator == "==" || operator == "!=" ? 7 : 6;
+  var order = operator === "==" || operator === "!=" ? 7 : 6;
   var argument0 = Blockly.Arduino.valueToCode(this, "A", order) || "0";
   var argument1 = Blockly.Arduino.valueToCode(this, "B", order) || "0";
   var code = argument0 + " " + operator + " " + argument1;
@@ -477,8 +475,8 @@ Blockly.Arduino.logic_compare.OPERATORS = {
 };
 
 Blockly.Arduino["logic_operation"] = function() {
-  var operator = this.getFieldValue("OP") == "AND" ? "&&" : "||";
-  var order = operator == "&&" ? 11 : 12;
+  var operator = this.getFieldValue("OP") === "AND" ? "&&" : "||";
+  var order = operator === "&&" ? 11 : 12;
   var argument0 = Blockly.Arduino.valueToCode(this, "A", order) || "false";
   var argument1 = Blockly.Arduino.valueToCode(this, "B", order) || "false";
   var code = argument0 + " " + operator + " " + argument1;
@@ -486,7 +484,7 @@ Blockly.Arduino["logic_operation"] = function() {
 };
 
 Blockly.Arduino["logic_boolean"] = function() {
-  var code = this.getFieldValue("BOOL") == "TRUE" ? "true" : "false";
+  var code = this.getFieldValue("BOOL") === "TRUE" ? "true" : "false";
   return [code, 0];
 };
 
@@ -530,7 +528,7 @@ Blockly.Arduino["variables_declare"] = function() {
   ).name;
   //console.log(Blockly.mainWorkspace.variableMap_.getVariableById(this.getFieldValue('VAR')).name);
 
-  if (dropdown_type == "stringa") {
+  if (dropdown_type === "stringa") {
     Blockly.Arduino.definitions_["variables" + varName] =
       "char " + varName + "[" + argumenttab + "]=" + argument0 + ";";
   } else {
@@ -560,12 +558,12 @@ Blockly.Arduino["variables_set"] = function() {
 //Functions
 Blockly.Arduino["function_void"] = function(block) {
   let name_function = block.getFieldValue("NAME");
-  let statements_fv = Blockly.Arduino.statementToCode(block, "myFunctionVoid");
+  //let statements_fv = Blockly.Arduino.statementToCode(block, "myFunctionVoid");
   let text = "void " + name_function + "(){";
   this.childBlocks_.forEach((element, index) => {});
   text += "\n}\n";
   Blockly.Arduino.definitions_["fv_" + name_function] = text;
-  let code = statements_fv;
+  //let code = statements_fv;
   return "";
 };
 
