@@ -14,7 +14,7 @@ const emailList = props => {
             />
         );
     });
-    return (<ul className="emails__list"> {emails} </ul>)
+    return (<ul > {emails} </ul>)
 };
 
 export default emailList;

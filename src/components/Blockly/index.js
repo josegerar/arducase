@@ -1,6 +1,7 @@
 import React from 'react';
 import BlocklyComponent from './BlocklyComponent';
 import Blockly from 'blockly/core';
+import GenArduino from "./AutogenerateCode/GenArduino";
 
 export default BlocklyComponent;
 
@@ -35,10 +36,16 @@ const Shadow = (p) => {
 };
 
 const downloadCode = () => {
-    Blockly.Arduino.saveTextFileAs(
-        "Code.ino",
-        Blockly.Arduino.generateArduino()
-    );
+    Blockly.Arduino.saveTextFileAs("Code.ino", Blockly.Arduino.generateArduino());
 }
 
-export { Block, Category, Value, Field, Shadow, downloadCode }
+const generateCode = (nodeDataArray, linkDataArray) => {
+    nodeDataArray.forEach((comp, Icomp) => {
+        if (comp.category === "c1") {
+            new GenArduino(comp,linkDataArray).execute();
+        }
+    });
+};
+
+
+export { Block, Category, Value, Field, Shadow, downloadCode, generateCode }

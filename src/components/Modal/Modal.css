@@ -43,6 +43,10 @@
 .modal__actionsVertical .div-goBack {
     padding-top: 30px;
 }
+.imputemail
+{
+    width: 70px;
+}
 .modal__actionsVertical button,
 .modal__actions button {
     border-style: none;

@@ -1,6 +1,6 @@
 [
     {
-        "type": "inout_highlow",
+        "type": "inout_highlow", "colour": "190",
         "message0": "%1",
         "args0": [
             {
@@ -13,7 +13,7 @@
         "tooltip": "Will return 1 you choose High or 0 if you choose Low."
     },
     {
-        "type": "inout_digital_read",
+        "type": "inout_digital_read", "colour": "190",
         "message0": "Digital read PIN# %1",
         "args0": [
             {
@@ -26,7 +26,7 @@
         "tooltip": "Reads the value from a specified digital pin, either HIGH or LOW."
     },
     {
-        "type": "inout_digital_write",
+        "type": "inout_digital_write", "colour": "190",
         "message0": "Digital write PIN# %1 STAT %2",
         "args0": [
             {
@@ -45,7 +45,7 @@
         "tooltip": "Write a HIGH or a LOW value to a digital pin"
     },
 	{
-        "type": "inout_buildin_led",
+        "type": "inout_buildin_led", "colour": "190",
         "message0": "Integrated LED Stat %1",
         "args0": [
 			{
@@ -59,7 +59,7 @@
         "tooltip": "This block will control the internal LED of the NODEMCU"
     },
 	{
-		"type": "inout_analog_read",
+		"type": "inout_analog_read", "colour": "190",
         "message0": "Analog read PIN# %1",
         "args0": [
 			{
@@ -72,7 +72,7 @@
         "tooltip": "Reads the value from the specified analog pin"
 	},
 	{
-		"type": "inout_analog_write",
+		"type": "inout_analog_write", "colour": "190",
         "message0": "Analog write (PWM) PIN# %1 Value %2",
         "args0": [
 			{
@@ -93,7 +93,7 @@
 		
 	},
 	{
-		"type": "serial_printfor", "color": "20",
+		"type": "serial_printfor", "colour": "20",
 		"message0": "Print Format %1 %2",
 		"args0": [
 			{
@@ -111,6 +111,207 @@
 		"previousStatement": null,
 		"nextStatement": null,
 		"tooltip": "Prints data to the console/serial port with a specific format."
+	},
+	{
+		"type": "serial_read", "colour": "20",
+        "message0": "Serial read",
+        "args0": [],
+		"inputsInline": true,
+		"output": "Number",
+        "tooltip": "Reads incoming serial data."
+	},
+	{
+		"type": "serial_available", "colour": "20",
+        "message0": "Serial available?",
+        "args0": [],
+		"inputsInline": true,
+		"output": "Number",
+        "tooltip": "Get the number of bytes (characters) available for reading from the serial port. This is data that s already arrived and stored in the serial receive buffer (which holds 64 bytes)."
+	},
+	{
+		"type": "serial_print", "colour": "20",
+        "message0": "Print on new line %1",
+        "args0": [
+			{
+				"type": "input_value",
+				"name": "CONTENT"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+        "tooltip": "Prints data to the console/serial port as human-readable ASCII text."
+	},
+	{
+		"type": "serial_printL", "colour": "20",
+        "message0": "Print on same line %1",
+        "args0": [
+			{
+				"type": "input_value",
+				"name": "CONTENT"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+        "tooltip": "Prints data to the console/serial port as human-readable ASCII text."
+	},
+	{
+		"type": "serial_write", "colour": "20",
+        "message0": "Serial write %1",
+        "args0": [
+			{
+				"type": "input_value",
+				"name": "CONTENT"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+        "tooltip": "Writes binary data to the serial port. This data is sent as a byte or series of bytes to send the characters representing the digits of a number use the print() function instead."
+	},
+	{
+		"type": "serial_write_out", "colour": "20",
+        "message0": "Write %1",
+        "args0": [
+			{
+				"type": "input_value",
+				"name": "CONTENT"
+			}
+		],
+		"inputsInline": true,
+		"output": "Number",
+        "tooltip": "Writes binary data to the serial port. This data is sent as a byte or series of bytes; to send the characters representing the digits of a number use the print() function instead."
+	},
+	{
+		"type": "serial_flush", "colour": "20",
+        "message0": "Serial flush",
+        "args0": [],
+		"previousStatement": null,
+		"nextStatement": null,
+        "tooltip": "Waits for the transmission of outgoing serial data to complete."
+	},
+	{
+		"type": "text", "colour": "126",
+        "message0": "%1",
+        "args0": [
+			{
+                "type": "field_input",
+				"name": "TEXT"
+            }
+		],
+		"output": "String",
+        "tooltip": "A letter, word, or line of text."
+	},
+	{
+		"type": "math_number", "colour": "76",
+        "message0": "%1",
+        "args0": [
+			{
+                "type": "field_input",
+				"name": "NUM",
+				"check": "Number"
+            }
+		],
+		"output": "Number",
+        "tooltip": "A number."
+	},
+	{
+		"type": "controls_if", "colour": "44",
+        "message0": "if %1",
+        "args0": [
+			{
+                "type": "input_value",
+				"name": "IF",
+				"check": "Boolean"
+            }
+		],
+		"message1": "do %1",
+		"args1": [
+			{
+				"type": "input_statement",
+				"name": "DO"
+			}
+		],
+		"message2": "else %1",
+		"args2": [
+			{
+				"type": "input_statement",
+				"name": "ELSE"
+			}
+		],
+		"contextMenu": false,
+		"previousStatement": null,
+		"nextStatement": null,
+        "tooltip": ""
+	},
+	{
+		"type": "while_do", "colour": "44",
+		"message0": "do %1",
+		"args0": [
+			{
+				"type": "input_statement",
+				"name": "STATNAME"
+			}
+		],
+		"message1": "repeat while %1",
+		"args1": [
+			{
+				"type": "input_value",
+				"name": "CONDI",
+				"check": "Boolean"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+        "tooltip": ""
+	},
+	{
+		"type": "do_while", "colour": "44",
+		"message0": "repeat while %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "CONDI",
+				"check": "Boolean"
+			}
+		],
+		"message1": "do %1",
+		"args1": [
+			{
+				"type": "input_statement",
+				"name": "STATNAME"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+        "tooltip": ""
+	},
+	{
+		"type": "ipt_pingip",
+        "message0": "Ping IP %1 . %2 . %3 . %4",
+        "args0": [
+			{
+				"type": "input_value",
+				"name": "ip_a",
+				"check": "Number"
+			},
+			{
+				"type": "input_value",
+				"name": "ip_b",
+				"check": "Number"
+			},
+			{
+				"type": "input_value",
+				"name": "ip_c",
+				"check": "Number"
+			},
+			{
+				"type": "input_value",
+				"name": "ip_d",
+				"check": "Number"
+			}
+		],
+		"inputsInline": true,
+		"output": "Boolean",
+        "tooltip": "Ping a remote machine and know if it’s reachable. Require the ESP8266 Ping Library."
 	},
 	{
 		"type": "arduino_setup",

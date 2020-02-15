@@ -5,12 +5,16 @@ import './ProjectList.css';
 
 const projectList = props => {
     const projects = props.projects.map(project => {
+        let index = -1;
+        if (project.sharedUsers) {
+            index = project.sharedUsers.indexOf(props.authUserEmail);
+        }
         return (
         <ProjectItem 
         key={project._id} 
         projectId={project._id} 
         title={project.title}
-        index={project.sharedUsers.indexOf(props.authUserEmail)} 
+        index={index} 
         createdDate={project.createdDate} 
         lastAccessDate={project.lastAccessDate} 
         lastUpdateDate={project.lastUpdateDate} 

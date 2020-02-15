@@ -1,5 +1,5 @@
 import * as go from 'gojs';
-
+import { generateCode } from "../components/Blockly/index";
 const componentsList = require("../json/componentsList.json");
 
 export let onMoreInfo = {
@@ -33,6 +33,28 @@ export const initDiagram = (savedModel) => {
         } else {
             if (idx >= 0) document.title = document.title.substr(0, idx);
         }
+    });
+
+    diagram.addModelChangedListener(function (evt) {
+        if (!evt.isTransactionFinished){
+            //console.log(evt.model);
+            return;
+        }
+        const txn = evt.object;  // a Transaction
+        if (txn === null) return;
+        txn.changes.each(function(e) {
+            // ignore any kind of change other than adding/removing a node
+            if (["nodeDataArray", "linkFromPortId", "linkDataArray", "linkToPortId"].indexOf(e.modelChange) === -1) return;
+            generateCode(evt.model.nodeDataArray,evt.model.linkDataArray);
+            // record node insertions and removals
+            if (e.change === go.ChangedEvent.Insert) {
+              console.log(evt.propertyName + " added node with key: " + e.newValue);
+            } else if (e.change === go.ChangedEvent.Remove) {
+              console.log(evt.propertyName + " removed node with key: " + e.oldValue);
+            } else if (e.change === go.ChangedEvent.Property) {
+                
+            }
+          });
     });
 
     //Listado de componentes

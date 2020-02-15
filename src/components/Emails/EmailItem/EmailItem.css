@@ -1,0 +1,9 @@
+.email-items{
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 100%;
+}
+
+.email-items label{
+    text-align: left;
+}

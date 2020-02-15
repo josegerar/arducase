@@ -9,7 +9,7 @@ for (let i = 0; i < customBlocks.length; i++) {
   Blockly.Blocks[customBlocks[i].type] = {
     init: function() {
       this.jsonInit(customBlocks[i]);
-      this.setStyle('loop_blocks');
+      //this.setStyle('loop_blocks');
     }
   } 
 }

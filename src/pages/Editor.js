@@ -160,27 +160,49 @@ class EditorPage extends Component {
               }
             }} initialXml={`
                     <xml xmlns="http://www.w3.org/1999/xhtml">
-                    <block type="arduino_setup"></block>
                     </xml>
                     `}>
               <Category name="IN/OUT">
-                <Category name="Digital">
-                  <Block type="inout_highlow" />
-                  <Block type="inout_buildin_led" />
-                  <Block type="inout_digital_write" />
-                  <Block type="inout_digital_read" />
-                </Category>
-                <Category name="Analog">
-                  <Block type="inout_analog_read" />
-                  <Block type="inout_analog_write" />
-                </Category>
-              </Category>
-              <Category name="Serial">
-                <Block type="serial_printfor" />
-              </Category>
-              <Category name="Advanced">
-                <Block type="arduino_setup" />
-              </Category>
+                                <Category name="Digital">
+                                    <Block type="inout_highlow" />
+                                    <Block type="inout_buildin_led" />
+                                    <Block type="inout_digital_write" />
+                                    <Block type="inout_digital_read" />
+                                </Category>
+                                <Category name="Analog">
+                                    <Block type="inout_analog_read" />
+                                    <Block type="inout_analog_write" />
+                                </Category>
+                            </Category>
+                            <Category name="Serial">
+                                <Block type="serial_printfor" />
+                                <Block type="serial_read" />
+                                <Block type="serial_available" />
+                                <Block type="serial_print" />
+                                <Block type="serial_printL" />
+                                <Block type="serial_write" />
+                                <Block type="serial_write_out" />
+                                <Block type="serial_flush" />
+                            </Category>
+                            <Category name="Text">
+                                <Block type="text" />
+                            </Category>
+                            <Category name="Math">
+                                <Block type="math_number" />
+                            </Category>
+                            <Category name="Logic">
+                                <Block type="controls_if" />
+                            </Category>
+                            <Category name="Loops">
+                                <Block type="while_do" />
+                                <Block type="do_while" />
+                            </Category>
+                            <Category name="IOT">
+                                <Block type="ipt_pingip" />
+                            </Category>
+                            <Category name="Advanced">
+                                <Block type="arduino_setup" />
+                            </Category>
             </BlocklyComponent>
             <textarea id="content_arduino" className="txta-contentCode" readOnly={true}></textarea>
           </div>

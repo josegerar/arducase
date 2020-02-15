@@ -15,6 +15,19 @@
     -webkit-user-select: none;
     -o-user-select: none;
 }
+.buttonAdd{
+    border-style: none;
+    padding: 0 20px;
+    margin: 0 7px;
+    width: auto;
+    height: 30px;
+    background-color: #00979C;
+    border-radius: 25px;
+    font-size: 15px;
+    color: white;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
 
 .div-createProject {
     grid-area: 1 / 1 / 2 / 2;
@@ -153,4 +166,32 @@
     min-width: 100%;
     object-fit: fill;
     max-width: -moz-available;
+}
+
+.form-grid{
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 50px calc(100vh - 60px - 2rem);
+}
+
+.main-input {
+    grid-area: 1 / 1 / 2 / 2;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 100%;
+}
+
+.content-share{
+    grid-area: 2 / 1 / 3 / 3;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 7% 93%;
+    text-align: center;
+}
+.email-name{
+    grid-area: 1 / 1 / 2 / 1;
+}
+
+.conten-emails{
+    grid-area: 2 / 1 / 2 / 3;
 }

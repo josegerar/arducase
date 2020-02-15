@@ -16,7 +16,7 @@ class ProjectsPage extends Component {
         isLoading: false,
         selectedProject: null,
         updating: false,
-        sharing: false ,
+        sharing: false,
         emails: []
     };
 
@@ -134,7 +134,7 @@ class ProjectsPage extends Component {
     };
 
     modalCancelHandler = () => {
-        this.setState({ creating: false, updating: false, selectedProject: null, sharing: false, emails: []});
+        this.setState({ creating: false, updating: false, selectedProject: null, sharing: false, emails: [] });
     };
 
     fetchEvents() {
@@ -176,8 +176,6 @@ class ProjectsPage extends Component {
         }).then(resData => {
             if (resData && resData.data && resData.data.projects) {
                 const projects = resData.data.projects;
-                console.log(projects);
-                
                 this.setState({ projects: projects, isLoading: false });
             }
         }).catch(err => {
@@ -346,7 +344,7 @@ class ProjectsPage extends Component {
         });
     }
 
-    addEmail = (evt) =>{
+    addEmail = (evt) => {
         evt.preventDefault();
         const email = this.titleElRef.current.value;
         this.setState(prevState => {
@@ -357,7 +355,7 @@ class ProjectsPage extends Component {
         });
     }
 
-    deleteEmailHandler = (email, index, evt)=>{
+    deleteEmailHandler = (email, index, evt) => {
         evt.preventDefault();
         this.setState(prevState => {
             const emails = prevState.emails;
@@ -366,16 +364,16 @@ class ProjectsPage extends Component {
         });
     }
 
-    modalAddEmailsConfirmHandler = () =>{
+    modalAddEmailsConfirmHandler = () => {
         this.modalCancelHandler();
         this.setState({ isLoading: true, sharing: false, emails: [] });
         console.log(this.state.emails);
-        
+
         let emailsString = ``;
         for (let i = 0; i < this.state.emails.length; i++) {
             const email = this.state.emails[i];
             emailsString += `"${email}"`;
-            if (i+1 < this.state.emails.length) {
+            if (i + 1 < this.state.emails.length) {
                 emailsString += `, `;
             }
         }
@@ -466,18 +464,22 @@ class ProjectsPage extends Component {
                         onCancel={this.modalCancelHandler}
                         onConfirm={this.modalAddEmailsConfirmHandler}
                         confirmText="Share">
-                        <form>
-                            <div className="div-control">
-                                <input type="text" id="newEmail" ref={this.titleElRef}/>
+                        <form className=" form-grid">
+                            <div className="main-input">
+                                <input pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" required={true} ref={this.titleElRef} />
                                 <button onClick={this.addEmail}>Add email</button>
                             </div>
-                            <div className="div-control">
-                                <label htmlFor="description">Emails: </label>
-                                <EmailsList
-                                    emails={this.state.emails}
-                                    _idProyect={this.state.selectedProject._id}
-                                    onDeleteEmail={this.deleteEmailHandler}
-                                />
+                            <div className="content-share">
+                                <div className="email-name">
+                                    <label htmlFor="description">Emails: </label>
+                                </div>
+                                <div className="conten-emails">
+                                    <EmailsList
+                                        emails={this.state.emails}
+                                        _idProyect={this.state.selectedProject._id}
+                                        onDeleteEmail={this.deleteEmailHandler}
+                                    />
+                                </div>
                             </div>
                         </form>
                     </Modal>

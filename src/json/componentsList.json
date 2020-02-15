@@ -1,215 +1,216 @@
 [
-        {
-            "category": "c1",
-            "text": "Arduino Uno",
-            "image": "./images/comp/c1.png",
-            "width": 500, "height": 354,
-            "items": [{"name":"SCL","pos":{"x":164,"y":12,"s":false}},{"name":"SDA","pos":{"x":180.7,"y":12,"s":false}},{"name":"AREF","pos":{"x":197.4,"y":12,"s":false}},{"name":"GND","pos":{"x":214.1,"y":12,"s":false}},{"name":"D13","pos":{"x":230.8,"y":12,"s":false}},{"name":"D12","pos":{"x":247.5,"y":12,"s":false}},{"name":"D11","pos":{"x":264.2,"y":12,"s":false}},{"name":"D10","pos":{"x":280.9,"y":12,"s":false}},{"name":"D9","pos":{"x":297.6,"y":12,"s":false}},{"name":"D8","pos":{"x":314.29999999999995,"y":12,"s":false}},{"name":"D7","pos":{"x":343,"y":12,"s":false}},{"name":"D6","pos":{"x":359.7,"y":12,"s":false}},{"name":"D5","pos":{"x":376.4,"y":12,"s":false}},{"name":"D4","pos":{"x":393.1,"y":12,"s":false}},{"name":"D3","pos":{"x":409.8,"y":12,"s":false}},{"name":"D2","pos":{"x":426.5,"y":12,"s":false}},{"name":"D1","pos":{"x":443.2,"y":12,"s":false}},{"name":"D0","pos":{"x":459.9,"y":12,"s":false}},{"name":"empty","pos":{"x":224.5,"y":331.5,"s":false}},{"name":"IOREF","pos":{"x":241.2,"y":331.5,"s":false}},{"name":"Reset","pos":{"x":257.9,"y":331.5,"s":false}},{"name":"3,3 V","pos":{"x":274.6,"y":331.5,"s":false}},{"name":"5 V","pos":{"x":291.3,"y":331.5,"s":false}},{"name":"GND1","pos":{"x":308,"y":331.5,"s":false}},{"name":"GND2","pos":{"x":324.7,"y":331.5,"s":false}},{"name":"Vin","pos":{"x":341.4,"y":331.5,"s":false}},{"name":"A0","pos":{"x":375.5,"y":331.5,"s":false}},{"name":"A1","pos":{"x":392.2,"y":331.5,"s":false}},{"name":"A2","pos":{"x":408.9,"y":331.5,"s":false}},{"name":"A3","pos":{"x":425.6,"y":331.5,"s":false}},{"name":"A4","pos":{"x":442.3,"y":331.5,"s":false}},{"name":"A5","pos":{"x":459,"y":331.5,"s":false}}]
-        },
-        {
-            "category": "c2",
-            "text": "Protoboard",
-            "image": "./images/comp/c2.png",
-            "width": 530, "height": 335,
-            "items": [{"name":"nU1","pos":{"x":26,"y":17,"s":false}},{"name":"nU2","pos":{"x":42,"y":17,"s":false}},{"name":"nU3","pos":{"x":58,"y":17,"s":false}},{"name":"nU4","pos":{"x":74,"y":17,"s":false}},{"name":"nU5","pos":{"x":90,"y":17,"s":false}},{"name":"nU6","pos":{"x":124,"y":17,"s":false}},{"name":"nU7","pos":{"x":140,"y":17,"s":false}},{"name":"nU8","pos":{"x":156,"y":17,"s":false}},{"name":"nU9","pos":{"x":172,"y":17,"s":false}},{"name":"nU10","pos":{"x":188,"y":17,"s":false}},{"name":"nU11","pos":{"x":222,"y":17,"s":false}},{"name":"nU12","pos":{"x":238,"y":17,"s":false}},{"name":"nU13","pos":{"x":254,"y":17,"s":false}},{"name":"nU14","pos":{"x":270,"y":17,"s":false}},{"name":"nU15","pos":{"x":286,"y":17,"s":false}},{"name":"nU16","pos":{"x":320,"y":17,"s":false}},{"name":"nU17","pos":{"x":336,"y":17,"s":false}},{"name":"nU18","pos":{"x":352,"y":17,"s":false}},{"name":"nU19","pos":{"x":368,"y":17,"s":false}},{"name":"nU20","pos":{"x":384,"y":17,"s":false}},{"name":"nU21","pos":{"x":418,"y":17,"s":false}},{"name":"nU22","pos":{"x":434,"y":17,"s":false}},{"name":"nU23","pos":{"x":450,"y":17,"s":false}},{"name":"nU24","pos":{"x":466,"y":17,"s":false}},{"name":"nU25","pos":{"x":482,"y":17,"s":false}},{"name":"pU1","pos":{"x":26,"y":33,"s":false}},{"name":"pU2","pos":{"x":42,"y":33,"s":false}},{"name":"pU3","pos":{"x":58,"y":33,"s":false}},{"name":"pU4","pos":{"x":74,"y":33,"s":false}},{"name":"pU5","pos":{"x":90,"y":33,"s":false}},{"name":"pU6","pos":{"x":124,"y":33,"s":false}},{"name":"pU7","pos":{"x":140,"y":33,"s":false}},{"name":"pU8","pos":{"x":156,"y":33,"s":false}},{"name":"pU9","pos":{"x":172,"y":33,"s":false}},{"name":"pU10","pos":{"x":188,"y":33,"s":false}},{"name":"pU11","pos":{"x":222,"y":33,"s":false}},{"name":"pU12","pos":{"x":238,"y":33,"s":false}},{"name":"pU13","pos":{"x":254,"y":33,"s":false}},{"name":"pU14","pos":{"x":270,"y":33,"s":false}},{"name":"pU15","pos":{"x":286,"y":33,"s":false}},{"name":"pU16","pos":{"x":320,"y":33,"s":false}},{"name":"pU17","pos":{"x":336,"y":33,"s":false}},{"name":"pU18","pos":{"x":352,"y":33,"s":false}},{"name":"pU19","pos":{"x":368,"y":33,"s":false}},{"name":"pU20","pos":{"x":384,"y":33,"s":false}},{"name":"pU21","pos":{"x":418,"y":33,"s":false}},{"name":"pU22","pos":{"x":434,"y":33,"s":false}},{"name":"pU23","pos":{"x":450,"y":33,"s":false}},{"name":"pU24","pos":{"x":466,"y":33,"s":false}},{"name":"pU25","pos":{"x":482,"y":33,"s":false}},{"name":"nD1","pos":{"x":26,"y":294,"s":false}},{"name":"nD2","pos":{"x":42,"y":294,"s":false}},{"name":"nD3","pos":{"x":58,"y":294,"s":false}},{"name":"nD4","pos":{"x":74,"y":294,"s":false}},{"name":"nD5","pos":{"x":90,"y":294,"s":false}},{"name":"nD6","pos":{"x":124,"y":294,"s":false}},{"name":"nD7","pos":{"x":140,"y":294,"s":false}},{"name":"nD8","pos":{"x":156,"y":294,"s":false}},{"name":"nD9","pos":{"x":172,"y":294,"s":false}},{"name":"nD10","pos":{"x":188,"y":294,"s":false}},{"name":"nD11","pos":{"x":222,"y":294,"s":false}},{"name":"nD12","pos":{"x":238,"y":294,"s":false}},{"name":"nD13","pos":{"x":254,"y":294,"s":false}},{"name":"nD14","pos":{"x":270,"y":294,"s":false}},{"name":"nD15","pos":{"x":286,"y":294,"s":false}},{"name":"nD16","pos":{"x":320,"y":294,"s":false}},{"name":"nD17","pos":{"x":336,"y":294,"s":false}},{"name":"nD18","pos":{"x":352,"y":294,"s":false}},{"name":"nD19","pos":{"x":368,"y":294,"s":false}},{"name":"nD20","pos":{"x":384,"y":294,"s":false}},{"name":"nD21","pos":{"x":418,"y":294,"s":false}},{"name":"nD22","pos":{"x":434,"y":294,"s":false}},{"name":"nD23","pos":{"x":450,"y":294,"s":false}},{"name":"nD24","pos":{"x":466,"y":294,"s":false}},{"name":"nD25","pos":{"x":482,"y":294,"s":false}},{"name":"pD1","pos":{"x":26,"y":310,"s":false}},{"name":"pD2","pos":{"x":42,"y":310,"s":false}},{"name":"pD3","pos":{"x":58,"y":310,"s":false}},{"name":"pD4","pos":{"x":74,"y":310,"s":false}},{"name":"pD5","pos":{"x":90,"y":310,"s":false}},{"name":"pD6","pos":{"x":124,"y":310,"s":false}},{"name":"pD7","pos":{"x":140,"y":310,"s":false}},{"name":"pD8","pos":{"x":156,"y":310,"s":false}},{"name":"pD9","pos":{"x":172,"y":310,"s":false}},{"name":"pD10","pos":{"x":188,"y":310,"s":false}},{"name":"pD11","pos":{"x":222,"y":310,"s":false}},{"name":"pD12","pos":{"x":238,"y":310,"s":false}},{"name":"pD13","pos":{"x":254,"y":310,"s":false}},{"name":"pD14","pos":{"x":270,"y":310,"s":false}},{"name":"pD15","pos":{"x":286,"y":310,"s":false}},{"name":"pD16","pos":{"x":320,"y":310,"s":false}},{"name":"pD17","pos":{"x":336,"y":310,"s":false}},{"name":"pD18","pos":{"x":352,"y":310,"s":false}},{"name":"pD19","pos":{"x":368,"y":310,"s":false}},{"name":"pD20","pos":{"x":384,"y":310,"s":false}},{"name":"pD21","pos":{"x":418,"y":310,"s":false}},{"name":"pD22","pos":{"x":434,"y":310,"s":false}},{"name":"pD23","pos":{"x":450,"y":310,"s":false}},{"name":"pD24","pos":{"x":466,"y":310,"s":false}},{"name":"pD25","pos":{"x":482,"y":310,"s":false}},{"name":"J1","pos":{"x":20,"y":75,"s":false}},{"name":"J2","pos":{"x":36,"y":75,"s":false}},{"name":"J3","pos":{"x":52,"y":75,"s":false}},{"name":"J4","pos":{"x":68,"y":75,"s":false}},{"name":"J5","pos":{"x":84,"y":75,"s":false}},{"name":"J6","pos":{"x":101,"y":75,"s":false}},{"name":"J7","pos":{"x":117,"y":75,"s":false}},{"name":"J8","pos":{"x":133,"y":75,"s":false}},{"name":"J9","pos":{"x":149,"y":75,"s":false}},{"name":"J10","pos":{"x":165,"y":75,"s":false}},{"name":"J11","pos":{"x":183,"y":75,"s":false}},{"name":"J12","pos":{"x":199,"y":75,"s":false}},{"name":"J13","pos":{"x":215,"y":75,"s":false}},{"name":"J14","pos":{"x":231,"y":75,"s":false}},{"name":"J15","pos":{"x":247,"y":75,"s":false}},{"name":"J16","pos":{"x":264,"y":75,"s":false}},{"name":"J17","pos":{"x":280,"y":75,"s":false}},{"name":"J18","pos":{"x":296,"y":75,"s":false}},{"name":"J19","pos":{"x":312,"y":75,"s":false}},{"name":"J20","pos":{"x":328,"y":75,"s":false}},{"name":"J21","pos":{"x":346,"y":75,"s":false}},{"name":"J22","pos":{"x":362,"y":75,"s":false}},{"name":"J23","pos":{"x":378,"y":75,"s":false}},{"name":"J24","pos":{"x":394,"y":75,"s":false}},{"name":"J25","pos":{"x":410,"y":75,"s":false}},{"name":"J26","pos":{"x":427,"y":75,"s":false}},{"name":"J27","pos":{"x":443,"y":75,"s":false}},{"name":"J28","pos":{"x":459,"y":75,"s":false}},{"name":"J29","pos":{"x":475,"y":75,"s":false}},{"name":"J30","pos":{"x":491,"y":75,"s":false}},{"name":"I1","pos":{"x":20,"y":91,"s":false}},{"name":"I2","pos":{"x":36,"y":91,"s":false}},{"name":"I3","pos":{"x":52,"y":91,"s":false}},{"name":"I4","pos":{"x":68,"y":91,"s":false}},{"name":"I5","pos":{"x":84,"y":91,"s":false}},{"name":"I6","pos":{"x":101,"y":91,"s":false}},{"name":"I7","pos":{"x":117,"y":91,"s":false}},{"name":"I8","pos":{"x":133,"y":91,"s":false}},{"name":"I9","pos":{"x":149,"y":91,"s":false}},{"name":"I10","pos":{"x":165,"y":91,"s":false}},{"name":"I11","pos":{"x":183,"y":91,"s":false}},{"name":"I12","pos":{"x":199,"y":91,"s":false}},{"name":"I13","pos":{"x":215,"y":91,"s":false}},{"name":"I14","pos":{"x":231,"y":91,"s":false}},{"name":"I15","pos":{"x":247,"y":91,"s":false}},{"name":"I16","pos":{"x":264,"y":91,"s":false}},{"name":"I17","pos":{"x":280,"y":91,"s":false}},{"name":"I18","pos":{"x":296,"y":91,"s":false}},{"name":"I19","pos":{"x":312,"y":91,"s":false}},{"name":"I20","pos":{"x":328,"y":91,"s":false}},{"name":"I21","pos":{"x":346,"y":91,"s":false}},{"name":"I22","pos":{"x":362,"y":91,"s":false}},{"name":"I23","pos":{"x":378,"y":91,"s":false}},{"name":"I24","pos":{"x":394,"y":91,"s":false}},{"name":"I25","pos":{"x":410,"y":91,"s":false}},{"name":"I26","pos":{"x":427,"y":91,"s":false}},{"name":"I27","pos":{"x":443,"y":91,"s":false}},{"name":"I28","pos":{"x":459,"y":91,"s":false}},{"name":"I29","pos":{"x":475,"y":91,"s":false}},{"name":"I30","pos":{"x":491,"y":91,"s":false}},{"name":"H1","pos":{"x":20,"y":107,"s":false}},{"name":"H2","pos":{"x":36,"y":107,"s":false}},{"name":"H3","pos":{"x":52,"y":107,"s":false}},{"name":"H4","pos":{"x":68,"y":107,"s":false}},{"name":"H5","pos":{"x":84,"y":107,"s":false}},{"name":"H6","pos":{"x":101,"y":107,"s":false}},{"name":"H7","pos":{"x":117,"y":107,"s":false}},{"name":"H8","pos":{"x":133,"y":107,"s":false}},{"name":"H9","pos":{"x":149,"y":107,"s":false}},{"name":"H10","pos":{"x":165,"y":107,"s":false}},{"name":"H11","pos":{"x":183,"y":107,"s":false}},{"name":"H12","pos":{"x":199,"y":107,"s":false}},{"name":"H13","pos":{"x":215,"y":107,"s":false}},{"name":"H14","pos":{"x":231,"y":107,"s":false}},{"name":"H15","pos":{"x":247,"y":107,"s":false}},{"name":"H16","pos":{"x":264,"y":107,"s":false}},{"name":"H17","pos":{"x":280,"y":107,"s":false}},{"name":"H18","pos":{"x":296,"y":107,"s":false}},{"name":"H19","pos":{"x":312,"y":107,"s":false}},{"name":"H20","pos":{"x":328,"y":107,"s":false}},{"name":"H21","pos":{"x":346,"y":107,"s":false}},{"name":"H22","pos":{"x":362,"y":107,"s":false}},{"name":"H23","pos":{"x":378,"y":107,"s":false}},{"name":"H24","pos":{"x":394,"y":107,"s":false}},{"name":"H25","pos":{"x":410,"y":107,"s":false}},{"name":"H26","pos":{"x":427,"y":107,"s":false}},{"name":"H27","pos":{"x":443,"y":107,"s":false}},{"name":"H28","pos":{"x":459,"y":107,"s":false}},{"name":"H29","pos":{"x":475,"y":107,"s":false}},{"name":"H30","pos":{"x":491,"y":107,"s":false}},{"name":"G1","pos":{"x":20,"y":123,"s":false}},{"name":"G2","pos":{"x":36,"y":123,"s":false}},{"name":"G3","pos":{"x":52,"y":123,"s":false}},{"name":"G4","pos":{"x":68,"y":123,"s":false}},{"name":"G5","pos":{"x":84,"y":123,"s":false}},{"name":"G6","pos":{"x":101,"y":123,"s":false}},{"name":"G7","pos":{"x":117,"y":123,"s":false}},{"name":"G8","pos":{"x":133,"y":123,"s":false}},{"name":"G9","pos":{"x":149,"y":123,"s":false}},{"name":"G10","pos":{"x":165,"y":123,"s":false}},{"name":"G11","pos":{"x":183,"y":123,"s":false}},{"name":"G12","pos":{"x":199,"y":123,"s":false}},{"name":"G13","pos":{"x":215,"y":123,"s":false}},{"name":"G14","pos":{"x":231,"y":123,"s":false}},{"name":"G15","pos":{"x":247,"y":123,"s":false}},{"name":"G16","pos":{"x":264,"y":123,"s":false}},{"name":"G17","pos":{"x":280,"y":123,"s":false}},{"name":"G18","pos":{"x":296,"y":123,"s":false}},{"name":"G19","pos":{"x":312,"y":123,"s":false}},{"name":"G20","pos":{"x":328,"y":123,"s":false}},{"name":"G21","pos":{"x":346,"y":123,"s":false}},{"name":"G22","pos":{"x":362,"y":123,"s":false}},{"name":"G23","pos":{"x":378,"y":123,"s":false}},{"name":"G24","pos":{"x":394,"y":123,"s":false}},{"name":"G25","pos":{"x":410,"y":123,"s":false}},{"name":"G26","pos":{"x":427,"y":123,"s":false}},{"name":"G27","pos":{"x":443,"y":123,"s":false}},{"name":"G28","pos":{"x":459,"y":123,"s":false}},{"name":"G29","pos":{"x":475,"y":123,"s":false}},{"name":"G30","pos":{"x":491,"y":123,"s":false}},{"name":"F1","pos":{"x":20,"y":139,"s":false}},{"name":"F2","pos":{"x":36,"y":139,"s":false}},{"name":"F3","pos":{"x":52,"y":139,"s":false}},{"name":"F4","pos":{"x":68,"y":139,"s":false}},{"name":"F5","pos":{"x":84,"y":139,"s":false}},{"name":"F6","pos":{"x":101,"y":139,"s":false}},{"name":"F7","pos":{"x":117,"y":139,"s":false}},{"name":"F8","pos":{"x":133,"y":139,"s":false}},{"name":"F9","pos":{"x":149,"y":139,"s":false}},{"name":"F10","pos":{"x":165,"y":139,"s":false}},{"name":"F11","pos":{"x":183,"y":139,"s":false}},{"name":"F12","pos":{"x":199,"y":139,"s":false}},{"name":"F13","pos":{"x":215,"y":139,"s":false}},{"name":"F14","pos":{"x":231,"y":139,"s":false}},{"name":"F15","pos":{"x":247,"y":139,"s":false}},{"name":"F16","pos":{"x":264,"y":139,"s":false}},{"name":"F17","pos":{"x":280,"y":139,"s":false}},{"name":"F18","pos":{"x":296,"y":139,"s":false}},{"name":"F19","pos":{"x":312,"y":139,"s":false}},{"name":"F20","pos":{"x":328,"y":139,"s":false}},{"name":"F21","pos":{"x":346,"y":139,"s":false}},{"name":"F22","pos":{"x":362,"y":139,"s":false}},{"name":"F23","pos":{"x":378,"y":139,"s":false}},{"name":"F24","pos":{"x":394,"y":139,"s":false}},{"name":"F25","pos":{"x":410,"y":139,"s":false}},{"name":"F26","pos":{"x":427,"y":139,"s":false}},{"name":"F27","pos":{"x":443,"y":139,"s":false}},{"name":"F28","pos":{"x":459,"y":139,"s":false}},{"name":"F29","pos":{"x":475,"y":139,"s":false}},{"name":"F30","pos":{"x":491,"y":139,"s":false}},{"name":"E1","pos":{"x":20,"y":186,"s":false}},{"name":"E2","pos":{"x":36,"y":186,"s":false}},{"name":"E3","pos":{"x":52,"y":186,"s":false}},{"name":"E4","pos":{"x":68,"y":186,"s":false}},{"name":"E5","pos":{"x":84,"y":186,"s":false}},{"name":"E6","pos":{"x":101,"y":186,"s":false}},{"name":"E7","pos":{"x":117,"y":186,"s":false}},{"name":"E8","pos":{"x":133,"y":186,"s":false}},{"name":"E9","pos":{"x":149,"y":186,"s":false}},{"name":"E10","pos":{"x":165,"y":186,"s":false}},{"name":"E11","pos":{"x":183,"y":186,"s":false}},{"name":"E12","pos":{"x":199,"y":186,"s":false}},{"name":"E13","pos":{"x":215,"y":186,"s":false}},{"name":"E14","pos":{"x":231,"y":186,"s":false}},{"name":"E15","pos":{"x":247,"y":186,"s":false}},{"name":"E16","pos":{"x":264,"y":186,"s":false}},{"name":"E17","pos":{"x":280,"y":186,"s":false}},{"name":"E18","pos":{"x":296,"y":186,"s":false}},{"name":"E19","pos":{"x":312,"y":186,"s":false}},{"name":"E20","pos":{"x":328,"y":186,"s":false}},{"name":"E21","pos":{"x":346,"y":186,"s":false}},{"name":"E22","pos":{"x":362,"y":186,"s":false}},{"name":"E23","pos":{"x":378,"y":186,"s":false}},{"name":"E24","pos":{"x":394,"y":186,"s":false}},{"name":"E25","pos":{"x":410,"y":186,"s":false}},{"name":"E26","pos":{"x":427,"y":186,"s":false}},{"name":"E27","pos":{"x":443,"y":186,"s":false}},{"name":"E28","pos":{"x":459,"y":186,"s":false}},{"name":"E29","pos":{"x":475,"y":186,"s":false}},{"name":"E30","pos":{"x":491,"y":186,"s":false}},{"name":"D1","pos":{"x":20,"y":202,"s":false}},{"name":"D2","pos":{"x":36,"y":202,"s":false}},{"name":"D3","pos":{"x":52,"y":202,"s":false}},{"name":"D4","pos":{"x":68,"y":202,"s":false}},{"name":"D5","pos":{"x":84,"y":202,"s":false}},{"name":"D6","pos":{"x":101,"y":202,"s":false}},{"name":"D7","pos":{"x":117,"y":202,"s":false}},{"name":"D8","pos":{"x":133,"y":202,"s":false}},{"name":"D9","pos":{"x":149,"y":202,"s":false}},{"name":"D10","pos":{"x":165,"y":202,"s":false}},{"name":"D11","pos":{"x":183,"y":202,"s":false}},{"name":"D12","pos":{"x":199,"y":202,"s":false}},{"name":"D13","pos":{"x":215,"y":202,"s":false}},{"name":"D14","pos":{"x":231,"y":202,"s":false}},{"name":"D15","pos":{"x":247,"y":202,"s":false}},{"name":"D16","pos":{"x":264,"y":202,"s":false}},{"name":"D17","pos":{"x":280,"y":202,"s":false}},{"name":"D18","pos":{"x":296,"y":202,"s":false}},{"name":"D19","pos":{"x":312,"y":202,"s":false}},{"name":"D20","pos":{"x":328,"y":202,"s":false}},{"name":"D21","pos":{"x":346,"y":202,"s":false}},{"name":"D22","pos":{"x":362,"y":202,"s":false}},{"name":"D23","pos":{"x":378,"y":202,"s":false}},{"name":"D24","pos":{"x":394,"y":202,"s":false}},{"name":"D25","pos":{"x":410,"y":202,"s":false}},{"name":"D26","pos":{"x":427,"y":202,"s":false}},{"name":"D27","pos":{"x":443,"y":202,"s":false}},{"name":"D28","pos":{"x":459,"y":202,"s":false}},{"name":"D29","pos":{"x":475,"y":202,"s":false}},{"name":"D30","pos":{"x":491,"y":202,"s":false}},{"name":"C1","pos":{"x":20,"y":218,"s":false}},{"name":"C2","pos":{"x":36,"y":218,"s":false}},{"name":"C3","pos":{"x":52,"y":218,"s":false}},{"name":"C4","pos":{"x":68,"y":218,"s":false}},{"name":"C5","pos":{"x":84,"y":218,"s":false}},{"name":"C6","pos":{"x":101,"y":218,"s":false}},{"name":"C7","pos":{"x":117,"y":218,"s":false}},{"name":"C8","pos":{"x":133,"y":218,"s":false}},{"name":"C9","pos":{"x":149,"y":218,"s":false}},{"name":"C10","pos":{"x":165,"y":218,"s":false}},{"name":"C11","pos":{"x":183,"y":218,"s":false}},{"name":"C12","pos":{"x":199,"y":218,"s":false}},{"name":"C13","pos":{"x":215,"y":218,"s":false}},{"name":"C14","pos":{"x":231,"y":218,"s":false}},{"name":"C15","pos":{"x":247,"y":218,"s":false}},{"name":"C16","pos":{"x":264,"y":218,"s":false}},{"name":"C17","pos":{"x":280,"y":218,"s":false}},{"name":"C18","pos":{"x":296,"y":218,"s":false}},{"name":"C19","pos":{"x":312,"y":218,"s":false}},{"name":"C20","pos":{"x":328,"y":218,"s":false}},{"name":"C21","pos":{"x":346,"y":218,"s":false}},{"name":"C22","pos":{"x":362,"y":218,"s":false}},{"name":"C23","pos":{"x":378,"y":218,"s":false}},{"name":"C24","pos":{"x":394,"y":218,"s":false}},{"name":"C25","pos":{"x":410,"y":218,"s":false}},{"name":"C26","pos":{"x":427,"y":218,"s":false}},{"name":"C27","pos":{"x":443,"y":218,"s":false}},{"name":"C28","pos":{"x":459,"y":218,"s":false}},{"name":"C29","pos":{"x":475,"y":218,"s":false}},{"name":"C30","pos":{"x":491,"y":218,"s":false}},{"name":"B1","pos":{"x":20,"y":234,"s":false}},{"name":"B2","pos":{"x":36,"y":234,"s":false}},{"name":"B3","pos":{"x":52,"y":234,"s":false}},{"name":"B4","pos":{"x":68,"y":234,"s":false}},{"name":"B5","pos":{"x":84,"y":234,"s":false}},{"name":"B6","pos":{"x":101,"y":234,"s":false}},{"name":"B7","pos":{"x":117,"y":234,"s":false}},{"name":"B8","pos":{"x":133,"y":234,"s":false}},{"name":"B9","pos":{"x":149,"y":234,"s":false}},{"name":"B10","pos":{"x":165,"y":234,"s":false}},{"name":"B11","pos":{"x":183,"y":234,"s":false}},{"name":"B12","pos":{"x":199,"y":234,"s":false}},{"name":"B13","pos":{"x":215,"y":234,"s":false}},{"name":"B14","pos":{"x":231,"y":234,"s":false}},{"name":"B15","pos":{"x":247,"y":234,"s":false}},{"name":"B16","pos":{"x":264,"y":234,"s":false}},{"name":"B17","pos":{"x":280,"y":234,"s":false}},{"name":"B18","pos":{"x":296,"y":234,"s":false}},{"name":"B19","pos":{"x":312,"y":234,"s":false}},{"name":"B20","pos":{"x":328,"y":234,"s":false}},{"name":"B21","pos":{"x":346,"y":234,"s":false}},{"name":"B22","pos":{"x":362,"y":234,"s":false}},{"name":"B23","pos":{"x":378,"y":234,"s":false}},{"name":"B24","pos":{"x":394,"y":234,"s":false}},{"name":"B25","pos":{"x":410,"y":234,"s":false}},{"name":"B26","pos":{"x":427,"y":234,"s":false}},{"name":"B27","pos":{"x":443,"y":234,"s":false}},{"name":"B28","pos":{"x":459,"y":234,"s":false}},{"name":"B29","pos":{"x":475,"y":234,"s":false}},{"name":"B30","pos":{"x":491,"y":234,"s":false}},{"name":"A1","pos":{"x":20,"y":250,"s":false}},{"name":"A2","pos":{"x":36,"y":250,"s":false}},{"name":"A3","pos":{"x":52,"y":250,"s":false}},{"name":"A4","pos":{"x":68,"y":250,"s":false}},{"name":"A5","pos":{"x":84,"y":250,"s":false}},{"name":"A6","pos":{"x":101,"y":250,"s":false}},{"name":"A7","pos":{"x":117,"y":250,"s":false}},{"name":"A8","pos":{"x":133,"y":250,"s":false}},{"name":"A9","pos":{"x":149,"y":250,"s":false}},{"name":"A10","pos":{"x":165,"y":250,"s":false}},{"name":"A11","pos":{"x":183,"y":250,"s":false}},{"name":"A12","pos":{"x":199,"y":250,"s":false}},{"name":"A13","pos":{"x":215,"y":250,"s":false}},{"name":"A14","pos":{"x":231,"y":250,"s":false}},{"name":"A15","pos":{"x":247,"y":250,"s":false}},{"name":"A16","pos":{"x":264,"y":250,"s":false}},{"name":"A17","pos":{"x":280,"y":250,"s":false}},{"name":"A18","pos":{"x":296,"y":250,"s":false}},{"name":"A19","pos":{"x":312,"y":250,"s":false}},{"name":"A20","pos":{"x":328,"y":250,"s":false}},{"name":"A21","pos":{"x":346,"y":250,"s":false}},{"name":"A22","pos":{"x":362,"y":250,"s":false}},{"name":"A23","pos":{"x":378,"y":250,"s":false}},{"name":"A24","pos":{"x":394,"y":250,"s":false}},{"name":"A25","pos":{"x":410,"y":250,"s":false}},{"name":"A26","pos":{"x":427,"y":250,"s":false}},{"name":"A27","pos":{"x":443,"y":250,"s":false}},{"name":"A28","pos":{"x":459,"y":250,"s":false}},{"name":"A29","pos":{"x":475,"y":250,"s":false}},{"name":"A30","pos":{"x":491,"y":250,"s":false}}]
-        },
-		{
-			"category": "c3",
-			"text": "Sensor Ultrasónico",
-			"image": "./images/comp/c3.png",
-			"width": 199.65, "height": 128.57,
-            "items": [{"name":"VCC","pos":{"x":75,"y":121,"s":false}},
-            {"name":"Trig","pos":{"x":89,"y":121,"s":false}},
-            {"name":"Echo","pos":{"x":100,"y":121,"s":false}},
-            {"name":"GND","pos":{"x":114,"y":121,"s":false}}]
-		},
-		{
-			"category": "c4",
-			"text": "HC-05-male",
-			"image": "./images/comp/c4.png",
-			"width": 300, "height": 158.57,
-            "items": [{"name":"Key","pos":{"x":282,"y":10,"s":false}},{"name":"Vcc","pos":{"x":282,"y":35,"s":false}},{"name":"GND","pos":{"x":282,"y":61,"s":false}},{"name":"TXD","pos":{"x":282,"y":85,"s":false}},
-            {"name":"RXD","pos":{"x":282,"y":110,"s":false}},{"name":"State","pos":{"x":282,"y":135,"s":false}}]
-		},
-		{
-			"category": "c5",
-			"text": "LCD",
-			"image": "./images/comp/c5.png",
-			"width": 500.65, "height": 228.57,
-            "items": [{"name":"GND","pos":{"x":37,"y":5,"s":false}},
-            {"name":"VCC","pos":{"x":54,"y":5,"s":false}},
-            {"name":"VEE","pos":{"x":70,"y":5,"s":false}},
-            {"name":"RS","pos":{"x":87,"y":5,"s":false}},
-            {"name":"R/W","pos":{"x":100,"y":5,"s":false}}, {"name":"E","pos":{"x":117,"y":5,"s":false}},
-            {"name":"D0","pos":{"x":134,"y":5,"s":false}},
-            {"name":"D1","pos":{"x":150,"y":5,"s":false}},
-            {"name":"D2","pos":{"x":163,"y":5,"s":false}},{"name":"D3","pos":{"x":180,"y":5,"s":false}},
-            {"name":"D4","pos":{"x":198,"y":5,"s":false}},
-            {"name":"D5","pos":{"x":214,"y":5,"s":false}},
-            {"name":"D6","pos":{"x":227,"y":5,"s":false}},
-            {"name":"D7","pos":{"x":243,"y":5,"s":false}},
-            {"name":"An(+)","pos":{"x":260,"y":5,"s":false}},
-            {"name":"Ca(-)","pos":{"x":277,"y":5,"s":false}}]
-        },
-        {
-			"category": "c6",
-			"text": "ESP-8266 WIFI Module",
-			"image": "./images/comp/c6.png",
-			"width": 300.65, "height": 228.57,
-            "items": [{"name":"TX","pos":{"x":5,"y":53,"s":false}},
-            {"name":"RX","pos":{"x":5,"y":74,"s":false}},
-            {"name":"V+","pos":{"x":5,"y":95,"s":false}},
-            {"name":"GND0","pos":{"x":5,"y":139,"s":false}},
-            {"name":"GND1","pos":{"x":65,"y":7,"s":false}}, {"name":"GND2","pos":{"x":65,"y":210,"s":false}},
-            {"name":"VBat","pos":{"x":85,"y":7,"s":false}},
-            {"name":"LDO","pos":{"x":85,"y":210,"s":false}},
-            {"name":"V+1","pos":{"x":105,"y":7,"s":false}},
-            {"name":"3V","pos":{"x":105,"y":210,"s":false}},
-            {"name":"#13","pos":{"x":125,"y":7,"s":false}},
-            {"name":"#15","pos":{"x":125,"y":210,"s":false}},
-            {"name":"#12","pos":{"x":145,"y":7,"s":false}},
-            {"name":"#2","pos":{"x":145,"y":210,"s":false}},
-            {"name":"#14","pos":{"x":165,"y":7,"s":false}},
-            {"name":"#0","pos":{"x":165,"y":210,"s":false}},
-            {"name":"#16","pos":{"x":185,"y":7,"s":false}},
-            {"name":"#4","pos":{"x":185,"y":210,"s":false}},
-            {"name":"EN","pos":{"x":205,"y":7,"s":false}},
-            {"name":"#5","pos":{"x":205,"y":210,"s":false}},
-            {"name":"A","pos":{"x":225,"y":7,"s":false}},
-            {"name":"RX1","pos":{"x":225,"y":210,"s":false}},
-            {"name":"RST","pos":{"x":245,"y":7,"s":false}},
-            {"name":"TX1","pos":{"x":245,"y":210,"s":false}} ]
-        },
-        {
-            "category": "c7",
-            "text": "Pir Sensor ",
-            "image": "./images/comp/c7.png",
-            "width": 199.65, "height": 128.57,
-            "items": [{"name":"GND","pos":{"x":78,"y":121,"s":false}},
-            {"name":"Dout","pos":{"x":95,"y":121,"s":false}},
-            {"name":"Vcc","pos":{"x":110,"y":121,"s":false}}]
-        },
-        {
-            "category": "c8",
-            "text": "LM34 Temperature Sensor ",
-            "image": "./images/comp/c8.png",
-            "width": 93, "height": 128.57,
-            "items": [
-            {"name":"Vcc","pos":{"x":5,"y":115,"s":false}},
-            {"name":"Output","pos":{"x":41,"y":115,"s":false}},
-            {"name":"GND","pos":{"x":88,"y":115,"s":false}}
-            ]
-        },
-        {
-            "category": "c9",
-            "text": "LM34 Temperature Sensor ",
-            "image": "./images/comp/c9.png",
-            "width": 250, "height": 128.57,
-            "items": [
-            {"name":"Vcc","pos":{"x":104,"y":116,"s":false}},
-            {"name":"GND","pos":{"x":118,"y":118,"s":false}},
-            {"name":"Out","pos":{"x":136,"y":118,"s":false}}
-            ]
-        }
-        ,
-        {
-            "category": "c10",
-            "text": "Led Blue",
-            "image": "./images/comp/c10.png",
-            "width": 40, "height": 140,
-            "items": [
-            {"name":"Catodo(-)","pos":{"x":8,"y":109,"s":false}},
-            {"name":"Anodo(+)","pos":{"x":18,"y":129,"s":false}}
-            ]
-        }
-        ,
-        {
-            "category": "c11",
-            "text": "RHT03 Humidity Sensor",
-            "image": "./images/comp/c11.png",
-            "width": 90, "height": 140,
-            "items": [
-            {"name":"Vcc","pos":{"x":8,"y":129,"s":false}},
-            {"name":"Data","pos":{"x":28,"y":129,"s":false}},
-            {"name":"NC","pos":{"x":48,"y":129,"s":false}},
-            {"name":"GND","pos":{"x":68,"y":129,"s":false}} ]
-        } ,
-        {
-            "category": "c12",
-            "text": "Speaker",
-            "image": "./images/comp/c12.png",
-            "width": 90, "height": 140,
-            "items": [
-            {"name":"Positive","pos":{"x":8,"y":129,"s":false}},
-            {"name":"Negative","pos":{"x":28,"y":129,"s":false}}]
-        } ,
-        {
-            "category": "c13",
-            "text": "Giroscopy",
-            "image": "./images/comp/c13.png",
-            "width": 90, "height": 140,
-            "items": [
-            {"name":"VCC","pos":{"x":7,"y":2,"s":false}},
-            {"name":"GND","pos":{"x":7,"y":20,"s":false}},
-            {"name":"SCL","pos":{"x":7,"y":38,"s":false}},
-            {"name":"SDA","pos":{"x":7,"y":56,"s":false}},
-            {"name":"XDA","pos":{"x":7,"y":71,"s":false}},
-            {"name":"XCL","pos":{"x":7,"y":89,"s":false}},
-            {"name":"ADO","pos":{"x":7,"y":107,"s":false}},
-            {"name":"INT","pos":{"x":7,"y":125,"s":false}}
+    {
+        "category": "c1",
+        "text": "Arduino Uno",
+        "image": "./images/comp/c1.png",
+        "width": 500, "height": 354,
+        "items": [{"name":"SCL","pos":{"x":164,"y":12,"s":false}},{"name":"SDA","pos":{"x":180.7,"y":12,"s":false}},{"name":"AREF","pos":{"x":197.4,"y":12,"s":false}},{"name":"GND","pos":{"x":214.1,"y":12,"s":false}},{"name":"D13","pos":{"x":230.8,"y":12,"s":false}},{"name":"D12","pos":{"x":247.5,"y":12,"s":false}},{"name":"D11","pos":{"x":264.2,"y":12,"s":false}},{"name":"D10","pos":{"x":280.9,"y":12,"s":false}},{"name":"D9","pos":{"x":297.6,"y":12,"s":false}},{"name":"D8","pos":{"x":314.29999999999995,"y":12,"s":false}},{"name":"D7","pos":{"x":343,"y":12,"s":false}},{"name":"D6","pos":{"x":359.7,"y":12,"s":false}},{"name":"D5","pos":{"x":376.4,"y":12,"s":false}},{"name":"D4","pos":{"x":393.1,"y":12,"s":false}},{"name":"D3","pos":{"x":409.8,"y":12,"s":false}},{"name":"D2","pos":{"x":426.5,"y":12,"s":false}},{"name":"D1","pos":{"x":443.2,"y":12,"s":false}},{"name":"D0","pos":{"x":459.9,"y":12,"s":false}},{"name":"empty","pos":{"x":224.5,"y":331.5,"s":false}},{"name":"IOREF","pos":{"x":241.2,"y":331.5,"s":false}},{"name":"Reset","pos":{"x":257.9,"y":331.5,"s":false}},{"name":"3,3 V","pos":{"x":274.6,"y":331.5,"s":false}},{"name":"5 V","pos":{"x":291.3,"y":331.5,"s":false}},{"name":"GND1","pos":{"x":308,"y":331.5,"s":false}},{"name":"GND2","pos":{"x":324.7,"y":331.5,"s":false}},{"name":"Vin","pos":{"x":341.4,"y":331.5,"s":false}},{"name":"A0","pos":{"x":375.5,"y":331.5,"s":false}},{"name":"A1","pos":{"x":392.2,"y":331.5,"s":false}},{"name":"A2","pos":{"x":408.9,"y":331.5,"s":false}},{"name":"A3","pos":{"x":425.6,"y":331.5,"s":false}},{"name":"A4","pos":{"x":442.3,"y":331.5,"s":false}},{"name":"A5","pos":{"x":459,"y":331.5,"s":false}}]
+    },
+    {
+        "category": "c2",
+        "text": "Protoboard",
+        "image": "./images/comp/c2.png",
+        "width": 530, "height": 335,
+        "items": [{"name":"nU1","pos":{"x":26,"y":17,"s":false}},{"name":"nU2","pos":{"x":42,"y":17,"s":false}},{"name":"nU3","pos":{"x":58,"y":17,"s":false}},{"name":"nU4","pos":{"x":74,"y":17,"s":false}},{"name":"nU5","pos":{"x":90,"y":17,"s":false}},{"name":"nU6","pos":{"x":124,"y":17,"s":false}},{"name":"nU7","pos":{"x":140,"y":17,"s":false}},{"name":"nU8","pos":{"x":156,"y":17,"s":false}},{"name":"nU9","pos":{"x":172,"y":17,"s":false}},{"name":"nU10","pos":{"x":188,"y":17,"s":false}},{"name":"nU11","pos":{"x":222,"y":17,"s":false}},{"name":"nU12","pos":{"x":238,"y":17,"s":false}},{"name":"nU13","pos":{"x":254,"y":17,"s":false}},{"name":"nU14","pos":{"x":270,"y":17,"s":false}},{"name":"nU15","pos":{"x":286,"y":17,"s":false}},{"name":"nU16","pos":{"x":320,"y":17,"s":false}},{"name":"nU17","pos":{"x":336,"y":17,"s":false}},{"name":"nU18","pos":{"x":352,"y":17,"s":false}},{"name":"nU19","pos":{"x":368,"y":17,"s":false}},{"name":"nU20","pos":{"x":384,"y":17,"s":false}},{"name":"nU21","pos":{"x":418,"y":17,"s":false}},{"name":"nU22","pos":{"x":434,"y":17,"s":false}},{"name":"nU23","pos":{"x":450,"y":17,"s":false}},{"name":"nU24","pos":{"x":466,"y":17,"s":false}},{"name":"nU25","pos":{"x":482,"y":17,"s":false}},{"name":"pU1","pos":{"x":26,"y":33,"s":false}},{"name":"pU2","pos":{"x":42,"y":33,"s":false}},{"name":"pU3","pos":{"x":58,"y":33,"s":false}},{"name":"pU4","pos":{"x":74,"y":33,"s":false}},{"name":"pU5","pos":{"x":90,"y":33,"s":false}},{"name":"pU6","pos":{"x":124,"y":33,"s":false}},{"name":"pU7","pos":{"x":140,"y":33,"s":false}},{"name":"pU8","pos":{"x":156,"y":33,"s":false}},{"name":"pU9","pos":{"x":172,"y":33,"s":false}},{"name":"pU10","pos":{"x":188,"y":33,"s":false}},{"name":"pU11","pos":{"x":222,"y":33,"s":false}},{"name":"pU12","pos":{"x":238,"y":33,"s":false}},{"name":"pU13","pos":{"x":254,"y":33,"s":false}},{"name":"pU14","pos":{"x":270,"y":33,"s":false}},{"name":"pU15","pos":{"x":286,"y":33,"s":false}},{"name":"pU16","pos":{"x":320,"y":33,"s":false}},{"name":"pU17","pos":{"x":336,"y":33,"s":false}},{"name":"pU18","pos":{"x":352,"y":33,"s":false}},{"name":"pU19","pos":{"x":368,"y":33,"s":false}},{"name":"pU20","pos":{"x":384,"y":33,"s":false}},{"name":"pU21","pos":{"x":418,"y":33,"s":false}},{"name":"pU22","pos":{"x":434,"y":33,"s":false}},{"name":"pU23","pos":{"x":450,"y":33,"s":false}},{"name":"pU24","pos":{"x":466,"y":33,"s":false}},{"name":"pU25","pos":{"x":482,"y":33,"s":false}},{"name":"nD1","pos":{"x":26,"y":294,"s":false}},{"name":"nD2","pos":{"x":42,"y":294,"s":false}},{"name":"nD3","pos":{"x":58,"y":294,"s":false}},{"name":"nD4","pos":{"x":74,"y":294,"s":false}},{"name":"nD5","pos":{"x":90,"y":294,"s":false}},{"name":"nD6","pos":{"x":124,"y":294,"s":false}},{"name":"nD7","pos":{"x":140,"y":294,"s":false}},{"name":"nD8","pos":{"x":156,"y":294,"s":false}},{"name":"nD9","pos":{"x":172,"y":294,"s":false}},{"name":"nD10","pos":{"x":188,"y":294,"s":false}},{"name":"nD11","pos":{"x":222,"y":294,"s":false}},{"name":"nD12","pos":{"x":238,"y":294,"s":false}},{"name":"nD13","pos":{"x":254,"y":294,"s":false}},{"name":"nD14","pos":{"x":270,"y":294,"s":false}},{"name":"nD15","pos":{"x":286,"y":294,"s":false}},{"name":"nD16","pos":{"x":320,"y":294,"s":false}},{"name":"nD17","pos":{"x":336,"y":294,"s":false}},{"name":"nD18","pos":{"x":352,"y":294,"s":false}},{"name":"nD19","pos":{"x":368,"y":294,"s":false}},{"name":"nD20","pos":{"x":384,"y":294,"s":false}},{"name":"nD21","pos":{"x":418,"y":294,"s":false}},{"name":"nD22","pos":{"x":434,"y":294,"s":false}},{"name":"nD23","pos":{"x":450,"y":294,"s":false}},{"name":"nD24","pos":{"x":466,"y":294,"s":false}},{"name":"nD25","pos":{"x":482,"y":294,"s":false}},{"name":"pD1","pos":{"x":26,"y":310,"s":false}},{"name":"pD2","pos":{"x":42,"y":310,"s":false}},{"name":"pD3","pos":{"x":58,"y":310,"s":false}},{"name":"pD4","pos":{"x":74,"y":310,"s":false}},{"name":"pD5","pos":{"x":90,"y":310,"s":false}},{"name":"pD6","pos":{"x":124,"y":310,"s":false}},{"name":"pD7","pos":{"x":140,"y":310,"s":false}},{"name":"pD8","pos":{"x":156,"y":310,"s":false}},{"name":"pD9","pos":{"x":172,"y":310,"s":false}},{"name":"pD10","pos":{"x":188,"y":310,"s":false}},{"name":"pD11","pos":{"x":222,"y":310,"s":false}},{"name":"pD12","pos":{"x":238,"y":310,"s":false}},{"name":"pD13","pos":{"x":254,"y":310,"s":false}},{"name":"pD14","pos":{"x":270,"y":310,"s":false}},{"name":"pD15","pos":{"x":286,"y":310,"s":false}},{"name":"pD16","pos":{"x":320,"y":310,"s":false}},{"name":"pD17","pos":{"x":336,"y":310,"s":false}},{"name":"pD18","pos":{"x":352,"y":310,"s":false}},{"name":"pD19","pos":{"x":368,"y":310,"s":false}},{"name":"pD20","pos":{"x":384,"y":310,"s":false}},{"name":"pD21","pos":{"x":418,"y":310,"s":false}},{"name":"pD22","pos":{"x":434,"y":310,"s":false}},{"name":"pD23","pos":{"x":450,"y":310,"s":false}},{"name":"pD24","pos":{"x":466,"y":310,"s":false}},{"name":"pD25","pos":{"x":482,"y":310,"s":false}},{"name":"J1","pos":{"x":20,"y":75,"s":false}},{"name":"J2","pos":{"x":36,"y":75,"s":false}},{"name":"J3","pos":{"x":52,"y":75,"s":false}},{"name":"J4","pos":{"x":68,"y":75,"s":false}},{"name":"J5","pos":{"x":84,"y":75,"s":false}},{"name":"J6","pos":{"x":101,"y":75,"s":false}},{"name":"J7","pos":{"x":117,"y":75,"s":false}},{"name":"J8","pos":{"x":133,"y":75,"s":false}},{"name":"J9","pos":{"x":149,"y":75,"s":false}},{"name":"J10","pos":{"x":165,"y":75,"s":false}},{"name":"J11","pos":{"x":183,"y":75,"s":false}},{"name":"J12","pos":{"x":199,"y":75,"s":false}},{"name":"J13","pos":{"x":215,"y":75,"s":false}},{"name":"J14","pos":{"x":231,"y":75,"s":false}},{"name":"J15","pos":{"x":247,"y":75,"s":false}},{"name":"J16","pos":{"x":264,"y":75,"s":false}},{"name":"J17","pos":{"x":280,"y":75,"s":false}},{"name":"J18","pos":{"x":296,"y":75,"s":false}},{"name":"J19","pos":{"x":312,"y":75,"s":false}},{"name":"J20","pos":{"x":328,"y":75,"s":false}},{"name":"J21","pos":{"x":346,"y":75,"s":false}},{"name":"J22","pos":{"x":362,"y":75,"s":false}},{"name":"J23","pos":{"x":378,"y":75,"s":false}},{"name":"J24","pos":{"x":394,"y":75,"s":false}},{"name":"J25","pos":{"x":410,"y":75,"s":false}},{"name":"J26","pos":{"x":427,"y":75,"s":false}},{"name":"J27","pos":{"x":443,"y":75,"s":false}},{"name":"J28","pos":{"x":459,"y":75,"s":false}},{"name":"J29","pos":{"x":475,"y":75,"s":false}},{"name":"J30","pos":{"x":491,"y":75,"s":false}},{"name":"I1","pos":{"x":20,"y":91,"s":false}},{"name":"I2","pos":{"x":36,"y":91,"s":false}},{"name":"I3","pos":{"x":52,"y":91,"s":false}},{"name":"I4","pos":{"x":68,"y":91,"s":false}},{"name":"I5","pos":{"x":84,"y":91,"s":false}},{"name":"I6","pos":{"x":101,"y":91,"s":false}},{"name":"I7","pos":{"x":117,"y":91,"s":false}},{"name":"I8","pos":{"x":133,"y":91,"s":false}},{"name":"I9","pos":{"x":149,"y":91,"s":false}},{"name":"I10","pos":{"x":165,"y":91,"s":false}},{"name":"I11","pos":{"x":183,"y":91,"s":false}},{"name":"I12","pos":{"x":199,"y":91,"s":false}},{"name":"I13","pos":{"x":215,"y":91,"s":false}},{"name":"I14","pos":{"x":231,"y":91,"s":false}},{"name":"I15","pos":{"x":247,"y":91,"s":false}},{"name":"I16","pos":{"x":264,"y":91,"s":false}},{"name":"I17","pos":{"x":280,"y":91,"s":false}},{"name":"I18","pos":{"x":296,"y":91,"s":false}},{"name":"I19","pos":{"x":312,"y":91,"s":false}},{"name":"I20","pos":{"x":328,"y":91,"s":false}},{"name":"I21","pos":{"x":346,"y":91,"s":false}},{"name":"I22","pos":{"x":362,"y":91,"s":false}},{"name":"I23","pos":{"x":378,"y":91,"s":false}},{"name":"I24","pos":{"x":394,"y":91,"s":false}},{"name":"I25","pos":{"x":410,"y":91,"s":false}},{"name":"I26","pos":{"x":427,"y":91,"s":false}},{"name":"I27","pos":{"x":443,"y":91,"s":false}},{"name":"I28","pos":{"x":459,"y":91,"s":false}},{"name":"I29","pos":{"x":475,"y":91,"s":false}},{"name":"I30","pos":{"x":491,"y":91,"s":false}},{"name":"H1","pos":{"x":20,"y":107,"s":false}},{"name":"H2","pos":{"x":36,"y":107,"s":false}},{"name":"H3","pos":{"x":52,"y":107,"s":false}},{"name":"H4","pos":{"x":68,"y":107,"s":false}},{"name":"H5","pos":{"x":84,"y":107,"s":false}},{"name":"H6","pos":{"x":101,"y":107,"s":false}},{"name":"H7","pos":{"x":117,"y":107,"s":false}},{"name":"H8","pos":{"x":133,"y":107,"s":false}},{"name":"H9","pos":{"x":149,"y":107,"s":false}},{"name":"H10","pos":{"x":165,"y":107,"s":false}},{"name":"H11","pos":{"x":183,"y":107,"s":false}},{"name":"H12","pos":{"x":199,"y":107,"s":false}},{"name":"H13","pos":{"x":215,"y":107,"s":false}},{"name":"H14","pos":{"x":231,"y":107,"s":false}},{"name":"H15","pos":{"x":247,"y":107,"s":false}},{"name":"H16","pos":{"x":264,"y":107,"s":false}},{"name":"H17","pos":{"x":280,"y":107,"s":false}},{"name":"H18","pos":{"x":296,"y":107,"s":false}},{"name":"H19","pos":{"x":312,"y":107,"s":false}},{"name":"H20","pos":{"x":328,"y":107,"s":false}},{"name":"H21","pos":{"x":346,"y":107,"s":false}},{"name":"H22","pos":{"x":362,"y":107,"s":false}},{"name":"H23","pos":{"x":378,"y":107,"s":false}},{"name":"H24","pos":{"x":394,"y":107,"s":false}},{"name":"H25","pos":{"x":410,"y":107,"s":false}},{"name":"H26","pos":{"x":427,"y":107,"s":false}},{"name":"H27","pos":{"x":443,"y":107,"s":false}},{"name":"H28","pos":{"x":459,"y":107,"s":false}},{"name":"H29","pos":{"x":475,"y":107,"s":false}},{"name":"H30","pos":{"x":491,"y":107,"s":false}},{"name":"G1","pos":{"x":20,"y":123,"s":false}},{"name":"G2","pos":{"x":36,"y":123,"s":false}},{"name":"G3","pos":{"x":52,"y":123,"s":false}},{"name":"G4","pos":{"x":68,"y":123,"s":false}},{"name":"G5","pos":{"x":84,"y":123,"s":false}},{"name":"G6","pos":{"x":101,"y":123,"s":false}},{"name":"G7","pos":{"x":117,"y":123,"s":false}},{"name":"G8","pos":{"x":133,"y":123,"s":false}},{"name":"G9","pos":{"x":149,"y":123,"s":false}},{"name":"G10","pos":{"x":165,"y":123,"s":false}},{"name":"G11","pos":{"x":183,"y":123,"s":false}},{"name":"G12","pos":{"x":199,"y":123,"s":false}},{"name":"G13","pos":{"x":215,"y":123,"s":false}},{"name":"G14","pos":{"x":231,"y":123,"s":false}},{"name":"G15","pos":{"x":247,"y":123,"s":false}},{"name":"G16","pos":{"x":264,"y":123,"s":false}},{"name":"G17","pos":{"x":280,"y":123,"s":false}},{"name":"G18","pos":{"x":296,"y":123,"s":false}},{"name":"G19","pos":{"x":312,"y":123,"s":false}},{"name":"G20","pos":{"x":328,"y":123,"s":false}},{"name":"G21","pos":{"x":346,"y":123,"s":false}},{"name":"G22","pos":{"x":362,"y":123,"s":false}},{"name":"G23","pos":{"x":378,"y":123,"s":false}},{"name":"G24","pos":{"x":394,"y":123,"s":false}},{"name":"G25","pos":{"x":410,"y":123,"s":false}},{"name":"G26","pos":{"x":427,"y":123,"s":false}},{"name":"G27","pos":{"x":443,"y":123,"s":false}},{"name":"G28","pos":{"x":459,"y":123,"s":false}},{"name":"G29","pos":{"x":475,"y":123,"s":false}},{"name":"G30","pos":{"x":491,"y":123,"s":false}},{"name":"F1","pos":{"x":20,"y":139,"s":false}},{"name":"F2","pos":{"x":36,"y":139,"s":false}},{"name":"F3","pos":{"x":52,"y":139,"s":false}},{"name":"F4","pos":{"x":68,"y":139,"s":false}},{"name":"F5","pos":{"x":84,"y":139,"s":false}},{"name":"F6","pos":{"x":101,"y":139,"s":false}},{"name":"F7","pos":{"x":117,"y":139,"s":false}},{"name":"F8","pos":{"x":133,"y":139,"s":false}},{"name":"F9","pos":{"x":149,"y":139,"s":false}},{"name":"F10","pos":{"x":165,"y":139,"s":false}},{"name":"F11","pos":{"x":183,"y":139,"s":false}},{"name":"F12","pos":{"x":199,"y":139,"s":false}},{"name":"F13","pos":{"x":215,"y":139,"s":false}},{"name":"F14","pos":{"x":231,"y":139,"s":false}},{"name":"F15","pos":{"x":247,"y":139,"s":false}},{"name":"F16","pos":{"x":264,"y":139,"s":false}},{"name":"F17","pos":{"x":280,"y":139,"s":false}},{"name":"F18","pos":{"x":296,"y":139,"s":false}},{"name":"F19","pos":{"x":312,"y":139,"s":false}},{"name":"F20","pos":{"x":328,"y":139,"s":false}},{"name":"F21","pos":{"x":346,"y":139,"s":false}},{"name":"F22","pos":{"x":362,"y":139,"s":false}},{"name":"F23","pos":{"x":378,"y":139,"s":false}},{"name":"F24","pos":{"x":394,"y":139,"s":false}},{"name":"F25","pos":{"x":410,"y":139,"s":false}},{"name":"F26","pos":{"x":427,"y":139,"s":false}},{"name":"F27","pos":{"x":443,"y":139,"s":false}},{"name":"F28","pos":{"x":459,"y":139,"s":false}},{"name":"F29","pos":{"x":475,"y":139,"s":false}},{"name":"F30","pos":{"x":491,"y":139,"s":false}},{"name":"E1","pos":{"x":20,"y":186,"s":false}},{"name":"E2","pos":{"x":36,"y":186,"s":false}},{"name":"E3","pos":{"x":52,"y":186,"s":false}},{"name":"E4","pos":{"x":68,"y":186,"s":false}},{"name":"E5","pos":{"x":84,"y":186,"s":false}},{"name":"E6","pos":{"x":101,"y":186,"s":false}},{"name":"E7","pos":{"x":117,"y":186,"s":false}},{"name":"E8","pos":{"x":133,"y":186,"s":false}},{"name":"E9","pos":{"x":149,"y":186,"s":false}},{"name":"E10","pos":{"x":165,"y":186,"s":false}},{"name":"E11","pos":{"x":183,"y":186,"s":false}},{"name":"E12","pos":{"x":199,"y":186,"s":false}},{"name":"E13","pos":{"x":215,"y":186,"s":false}},{"name":"E14","pos":{"x":231,"y":186,"s":false}},{"name":"E15","pos":{"x":247,"y":186,"s":false}},{"name":"E16","pos":{"x":264,"y":186,"s":false}},{"name":"E17","pos":{"x":280,"y":186,"s":false}},{"name":"E18","pos":{"x":296,"y":186,"s":false}},{"name":"E19","pos":{"x":312,"y":186,"s":false}},{"name":"E20","pos":{"x":328,"y":186,"s":false}},{"name":"E21","pos":{"x":346,"y":186,"s":false}},{"name":"E22","pos":{"x":362,"y":186,"s":false}},{"name":"E23","pos":{"x":378,"y":186,"s":false}},{"name":"E24","pos":{"x":394,"y":186,"s":false}},{"name":"E25","pos":{"x":410,"y":186,"s":false}},{"name":"E26","pos":{"x":427,"y":186,"s":false}},{"name":"E27","pos":{"x":443,"y":186,"s":false}},{"name":"E28","pos":{"x":459,"y":186,"s":false}},{"name":"E29","pos":{"x":475,"y":186,"s":false}},{"name":"E30","pos":{"x":491,"y":186,"s":false}},{"name":"D1","pos":{"x":20,"y":202,"s":false}},{"name":"D2","pos":{"x":36,"y":202,"s":false}},{"name":"D3","pos":{"x":52,"y":202,"s":false}},{"name":"D4","pos":{"x":68,"y":202,"s":false}},{"name":"D5","pos":{"x":84,"y":202,"s":false}},{"name":"D6","pos":{"x":101,"y":202,"s":false}},{"name":"D7","pos":{"x":117,"y":202,"s":false}},{"name":"D8","pos":{"x":133,"y":202,"s":false}},{"name":"D9","pos":{"x":149,"y":202,"s":false}},{"name":"D10","pos":{"x":165,"y":202,"s":false}},{"name":"D11","pos":{"x":183,"y":202,"s":false}},{"name":"D12","pos":{"x":199,"y":202,"s":false}},{"name":"D13","pos":{"x":215,"y":202,"s":false}},{"name":"D14","pos":{"x":231,"y":202,"s":false}},{"name":"D15","pos":{"x":247,"y":202,"s":false}},{"name":"D16","pos":{"x":264,"y":202,"s":false}},{"name":"D17","pos":{"x":280,"y":202,"s":false}},{"name":"D18","pos":{"x":296,"y":202,"s":false}},{"name":"D19","pos":{"x":312,"y":202,"s":false}},{"name":"D20","pos":{"x":328,"y":202,"s":false}},{"name":"D21","pos":{"x":346,"y":202,"s":false}},{"name":"D22","pos":{"x":362,"y":202,"s":false}},{"name":"D23","pos":{"x":378,"y":202,"s":false}},{"name":"D24","pos":{"x":394,"y":202,"s":false}},{"name":"D25","pos":{"x":410,"y":202,"s":false}},{"name":"D26","pos":{"x":427,"y":202,"s":false}},{"name":"D27","pos":{"x":443,"y":202,"s":false}},{"name":"D28","pos":{"x":459,"y":202,"s":false}},{"name":"D29","pos":{"x":475,"y":202,"s":false}},{"name":"D30","pos":{"x":491,"y":202,"s":false}},{"name":"C1","pos":{"x":20,"y":218,"s":false}},{"name":"C2","pos":{"x":36,"y":218,"s":false}},{"name":"C3","pos":{"x":52,"y":218,"s":false}},{"name":"C4","pos":{"x":68,"y":218,"s":false}},{"name":"C5","pos":{"x":84,"y":218,"s":false}},{"name":"C6","pos":{"x":101,"y":218,"s":false}},{"name":"C7","pos":{"x":117,"y":218,"s":false}},{"name":"C8","pos":{"x":133,"y":218,"s":false}},{"name":"C9","pos":{"x":149,"y":218,"s":false}},{"name":"C10","pos":{"x":165,"y":218,"s":false}},{"name":"C11","pos":{"x":183,"y":218,"s":false}},{"name":"C12","pos":{"x":199,"y":218,"s":false}},{"name":"C13","pos":{"x":215,"y":218,"s":false}},{"name":"C14","pos":{"x":231,"y":218,"s":false}},{"name":"C15","pos":{"x":247,"y":218,"s":false}},{"name":"C16","pos":{"x":264,"y":218,"s":false}},{"name":"C17","pos":{"x":280,"y":218,"s":false}},{"name":"C18","pos":{"x":296,"y":218,"s":false}},{"name":"C19","pos":{"x":312,"y":218,"s":false}},{"name":"C20","pos":{"x":328,"y":218,"s":false}},{"name":"C21","pos":{"x":346,"y":218,"s":false}},{"name":"C22","pos":{"x":362,"y":218,"s":false}},{"name":"C23","pos":{"x":378,"y":218,"s":false}},{"name":"C24","pos":{"x":394,"y":218,"s":false}},{"name":"C25","pos":{"x":410,"y":218,"s":false}},{"name":"C26","pos":{"x":427,"y":218,"s":false}},{"name":"C27","pos":{"x":443,"y":218,"s":false}},{"name":"C28","pos":{"x":459,"y":218,"s":false}},{"name":"C29","pos":{"x":475,"y":218,"s":false}},{"name":"C30","pos":{"x":491,"y":218,"s":false}},{"name":"B1","pos":{"x":20,"y":234,"s":false}},{"name":"B2","pos":{"x":36,"y":234,"s":false}},{"name":"B3","pos":{"x":52,"y":234,"s":false}},{"name":"B4","pos":{"x":68,"y":234,"s":false}},{"name":"B5","pos":{"x":84,"y":234,"s":false}},{"name":"B6","pos":{"x":101,"y":234,"s":false}},{"name":"B7","pos":{"x":117,"y":234,"s":false}},{"name":"B8","pos":{"x":133,"y":234,"s":false}},{"name":"B9","pos":{"x":149,"y":234,"s":false}},{"name":"B10","pos":{"x":165,"y":234,"s":false}},{"name":"B11","pos":{"x":183,"y":234,"s":false}},{"name":"B12","pos":{"x":199,"y":234,"s":false}},{"name":"B13","pos":{"x":215,"y":234,"s":false}},{"name":"B14","pos":{"x":231,"y":234,"s":false}},{"name":"B15","pos":{"x":247,"y":234,"s":false}},{"name":"B16","pos":{"x":264,"y":234,"s":false}},{"name":"B17","pos":{"x":280,"y":234,"s":false}},{"name":"B18","pos":{"x":296,"y":234,"s":false}},{"name":"B19","pos":{"x":312,"y":234,"s":false}},{"name":"B20","pos":{"x":328,"y":234,"s":false}},{"name":"B21","pos":{"x":346,"y":234,"s":false}},{"name":"B22","pos":{"x":362,"y":234,"s":false}},{"name":"B23","pos":{"x":378,"y":234,"s":false}},{"name":"B24","pos":{"x":394,"y":234,"s":false}},{"name":"B25","pos":{"x":410,"y":234,"s":false}},{"name":"B26","pos":{"x":427,"y":234,"s":false}},{"name":"B27","pos":{"x":443,"y":234,"s":false}},{"name":"B28","pos":{"x":459,"y":234,"s":false}},{"name":"B29","pos":{"x":475,"y":234,"s":false}},{"name":"B30","pos":{"x":491,"y":234,"s":false}},{"name":"A1","pos":{"x":20,"y":250,"s":false}},{"name":"A2","pos":{"x":36,"y":250,"s":false}},{"name":"A3","pos":{"x":52,"y":250,"s":false}},{"name":"A4","pos":{"x":68,"y":250,"s":false}},{"name":"A5","pos":{"x":84,"y":250,"s":false}},{"name":"A6","pos":{"x":101,"y":250,"s":false}},{"name":"A7","pos":{"x":117,"y":250,"s":false}},{"name":"A8","pos":{"x":133,"y":250,"s":false}},{"name":"A9","pos":{"x":149,"y":250,"s":false}},{"name":"A10","pos":{"x":165,"y":250,"s":false}},{"name":"A11","pos":{"x":183,"y":250,"s":false}},{"name":"A12","pos":{"x":199,"y":250,"s":false}},{"name":"A13","pos":{"x":215,"y":250,"s":false}},{"name":"A14","pos":{"x":231,"y":250,"s":false}},{"name":"A15","pos":{"x":247,"y":250,"s":false}},{"name":"A16","pos":{"x":264,"y":250,"s":false}},{"name":"A17","pos":{"x":280,"y":250,"s":false}},{"name":"A18","pos":{"x":296,"y":250,"s":false}},{"name":"A19","pos":{"x":312,"y":250,"s":false}},{"name":"A20","pos":{"x":328,"y":250,"s":false}},{"name":"A21","pos":{"x":346,"y":250,"s":false}},{"name":"A22","pos":{"x":362,"y":250,"s":false}},{"name":"A23","pos":{"x":378,"y":250,"s":false}},{"name":"A24","pos":{"x":394,"y":250,"s":false}},{"name":"A25","pos":{"x":410,"y":250,"s":false}},{"name":"A26","pos":{"x":427,"y":250,"s":false}},{"name":"A27","pos":{"x":443,"y":250,"s":false}},{"name":"A28","pos":{"x":459,"y":250,"s":false}},{"name":"A29","pos":{"x":475,"y":250,"s":false}},{"name":"A30","pos":{"x":491,"y":250,"s":false}}]
+    },
+    {
+        "category": "c3",
+        "text": "Sensor Ultrasónico",
+        "image": "./images/comp/c3.png",
+        "width": 199.65, "height": 128.57,
+        "items": [{"name":"VCC","pos":{"x":75,"y":121,"s":false}},
+        {"name":"Trig","pos":{"x":89,"y":121,"s":false}},
+        {"name":"Echo","pos":{"x":100,"y":121,"s":false}},
+        {"name":"GND","pos":{"x":114,"y":121,"s":false}}]
+    },
+    {
+        "category": "c4",
+        "text": "HC-05-male",
+        "image": "./images/comp/c4.png",
+        "width": 300, "height": 158.57,
+        "items": [{"name":"Key","pos":{"x":282,"y":10,"s":false}},{"name":"Vcc","pos":{"x":282,"y":35,"s":false}},{"name":"GND","pos":{"x":282,"y":61,"s":false}},{"name":"TXD","pos":{"x":282,"y":85,"s":false}},
+        {"name":"RXD","pos":{"x":282,"y":110,"s":false}},{"name":"State","pos":{"x":282,"y":135,"s":false}}]
+    },
+    {
+        "category": "c5",
+        "text": "LCD",
+        "image": "./images/comp/c5.png",
+        "width": 500.65, "height": 228.57,
+        "items": [{"name":"GND","pos":{"x":37,"y":5,"s":false}},
+        {"name":"VCC","pos":{"x":54,"y":5,"s":false}},
+        {"name":"VEE","pos":{"x":70,"y":5,"s":false}},
+        {"name":"RS","pos":{"x":87,"y":5,"s":false}},
+        {"name":"R/W","pos":{"x":100,"y":5,"s":false}}, {"name":"E","pos":{"x":117,"y":5,"s":false}},
+        {"name":"D0","pos":{"x":134,"y":5,"s":false}},
+        {"name":"D1","pos":{"x":150,"y":5,"s":false}},
+        {"name":"D2","pos":{"x":163,"y":5,"s":false}},{"name":"D3","pos":{"x":180,"y":5,"s":false}},
+        {"name":"D4","pos":{"x":198,"y":5,"s":false}},
+        {"name":"D5","pos":{"x":214,"y":5,"s":false}},
+        {"name":"D6","pos":{"x":227,"y":5,"s":false}},
+        {"name":"D7","pos":{"x":243,"y":5,"s":false}},
+        {"name":"An(+)","pos":{"x":260,"y":5,"s":false}},
+        {"name":"Ca(-)","pos":{"x":277,"y":5,"s":false}}]
+    },
+    {
+        "category": "c6",
+        "text": "ESP-8266 WIFI Module",
+        "image": "./images/comp/c6.png",
+        "width": 300.65, "height": 228.57,
+        "items": [{"name":"TX","pos":{"x":5,"y":53,"s":false}},
+        {"name":"RX","pos":{"x":5,"y":74,"s":false}},
+        {"name":"V+","pos":{"x":5,"y":95,"s":false}},
+        {"name":"GND0","pos":{"x":5,"y":139,"s":false}},
+        {"name":"GND1","pos":{"x":65,"y":7,"s":false}}, {"name":"GND2","pos":{"x":65,"y":210,"s":false}},
+        {"name":"VBat","pos":{"x":85,"y":7,"s":false}},
+        {"name":"LDO","pos":{"x":85,"y":210,"s":false}},
+        {"name":"V+1","pos":{"x":105,"y":7,"s":false}},
+        {"name":"3V","pos":{"x":105,"y":210,"s":false}},
+        {"name":"#13","pos":{"x":125,"y":7,"s":false}},
+        {"name":"#15","pos":{"x":125,"y":210,"s":false}},
+        {"name":"#12","pos":{"x":145,"y":7,"s":false}},
+        {"name":"#2","pos":{"x":145,"y":210,"s":false}},
+        {"name":"#14","pos":{"x":165,"y":7,"s":false}},
+        {"name":"#0","pos":{"x":165,"y":210,"s":false}},
+        {"name":"#16","pos":{"x":185,"y":7,"s":false}},
+        {"name":"#4","pos":{"x":185,"y":210,"s":false}},
+        {"name":"EN","pos":{"x":205,"y":7,"s":false}},
+        {"name":"#5","pos":{"x":205,"y":210,"s":false}},
+        {"name":"A","pos":{"x":225,"y":7,"s":false}},
+        {"name":"RX1","pos":{"x":225,"y":210,"s":false}},
+        {"name":"RST","pos":{"x":245,"y":7,"s":false}},
+        {"name":"TX1","pos":{"x":245,"y":210,"s":false}} ]
+    },
+    {
+        "category": "c7",
+        "text": "Pir Sensor ",
+        "image": "./images/comp/c7.png",
+        "width": 199.65, "height": 128.57,
+        "items": [{"name":"GND","pos":{"x":78,"y":121,"s":false}},
+        {"name":"Dout","pos":{"x":95,"y":121,"s":false}},
+        {"name":"Vcc","pos":{"x":110,"y":121,"s":false}}]
+    },
+    {
+        "category": "c8",
+        "text": "LM34 Temperature Sensor ",
+        "image": "./images/comp/c8.png",
+        "width": 93, "height": 128.57,
+        "items": [
+        {"name":"Vcc","pos":{"x":5,"y":115,"s":false}},
+        {"name":"Output","pos":{"x":41,"y":115,"s":false}},
+        {"name":"GND","pos":{"x":88,"y":115,"s":false}}
         ]
-        },
-        {
-            "category": "c14",
-            "text": "Potenciometer",
-            "image": "./images/comp/c14.png",
-            "width": 100, "height": 140,
-            "items": [
-            {"name":"T1","pos":{"x":25,"y":129,"s":false}},
-            {"name":"t2","pos":{"x":45,"y":129,"s":false}},{"name":"t3","pos":{"x":67,"y":129,"s":false}}]
-        } ,
-        {
-            "category": "c15",
-            "text": "PushButton",
-            "image": "./images/comp/c15.png",
-            "width": 100, "height": 140,
-            "items": [
-            {"name":"Positive","pos":{"x":36,"y":129,"s":false}},
-            {"name":"Negative","pos":{"x":51,"y":129,"s":false}}
-         ]},
-         {
-             "category": "c16",
-             "text": "LUX Sensor",
-             "image": "./images/comp/c16.png",
-             "width": 150, "height": 140,
-             "items": [
-             {"name":"VIN","pos":{"x":20,"y":115,"s":false}},
-             {"name":"GND","pos":{"x":40,"y":115,"s":false}},
-             {"name":"3VO","pos":{"x":58,"y":115,"s":false}},
-             {"name":"IND","pos":{"x":78,"y":115,"s":false}},
-             {"name":"SDA","pos":{"x":98,"y":115,"s":false}},
-             {"name":"SCL","pos":{"x":118,"y":115,"s":false}}
-          ]},
-          {
-              "category": "c17",
-              "text": "LM 390 ",
-              "image": "./images/comp/c17.png",
-              "width": 140, "height": 50,
-              "items": [
-              {"name":"Positive","pos":{"x":36,"y":25,"s":false}},
-              {"name":"Negative","pos":{"x":51,"y":25,"s":false}}
-           ]}
-           ,
-          {
-              "category": "c18",
-              "text": "Resistor",
-              "image": "./images/comp/c18.png",
-              "width": 95, "height": 40,
-              "items": [
-              {"name":"Positive","pos":{"x":0,"y":11,"s":false}},
-              {"name":"Negative","pos":{"x":80,"y":11,"s":false}}
-           ]}
+    },
+    {
+        "category": "c9",
+        "text": "LM34 Temperature Sensor ",
+        "image": "./images/comp/c9.png",
+        "width": 250, "height": 128.57,
+        "items": [
+        {"name":"Vcc","pos":{"x":104,"y":116,"s":false}},
+        {"name":"GND","pos":{"x":118,"y":118,"s":false}},
+        {"name":"Out","pos":{"x":136,"y":118,"s":false}}
+        ]
+    }
+    ,
+    {
+        "category": "c10",
+        "text": "Led Blue",
+        "image": "./images/comp/c10.png",
+        "width": 40, "height": 140,
+        "items": [
+        {"name":"Catodo(-)","pos":{"x":8,"y":109,"s":false}},
+        {"name":"Anodo(+)","pos":{"x":18,"y":129,"s":false}}
+        ]
+    }
+    ,
+    {
+        "category": "c11",
+        "text": "RHT03 Humidity and Temperature Sensor",
+        "image": "./images/comp/c11.png",
+        "width": 90, "height": 140,
+        "items": [
+        {"name":"Vcc","pos":{"x":8,"y":129,"s":false}},
+        {"name":"Data","pos":{"x":28,"y":129,"s":false}},
+        {"name":"NC","pos":{"x":48,"y":129,"s":false}},
+        {"name":"GND","pos":{"x":68,"y":129,"s":false}} ]
+    } ,
+    {
+        "category": "c12",
+        "text": "Speaker",
+        "image": "./images/comp/c12.png",
+        "width": 90, "height": 140,
+        "items": [
+        {"name":"Positive","pos":{"x":8,"y":129,"s":false}},
+        {"name":"Negative","pos":{"x":28,"y":129,"s":false}}]
+    } ,
+    {
+        "category": "c13",
+        "text": "Giroscopy",
+        "image": "./images/comp/c13.png",
+        "width": 90, "height": 140,
+        "items": [
+        {"name":"VCC","pos":{"x":7,"y":2,"s":false}},
+        {"name":"GND","pos":{"x":7,"y":20,"s":false}},
+        {"name":"SCL","pos":{"x":7,"y":38,"s":false}},
+        {"name":"SDA","pos":{"x":7,"y":56,"s":false}},
+        {"name":"XDA","pos":{"x":7,"y":71,"s":false}},
+        {"name":"XCL","pos":{"x":7,"y":89,"s":false}},
+        {"name":"ADO","pos":{"x":7,"y":107,"s":false}},
+        {"name":"INT","pos":{"x":7,"y":125,"s":false}}
+    ]
+    },
+    {
+        "category": "c14",
+        "text": "Potenciometer",
+        "image": "./images/comp/c14.png",
+        "width": 100, "height": 140,
+        "items": [
+        {"name":"T1","pos":{"x":25,"y":129,"s":false}},
+        {"name":"t2","pos":{"x":45,"y":129,"s":false}},{"name":"t3","pos":{"x":67,"y":129,"s":false}}]
+    } ,
+    {
+        "category": "c15",
+        "text": "PushButton",
+        "image": "./images/comp/c15.png",
+        "width": 100, "height": 140,
+        "items": [
+        {"name":"Positive","pos":{"x":36,"y":129,"s":false}},
+        {"name":"Negative","pos":{"x":51,"y":129,"s":false}}
+     ]},
+     {
+         "category": "c16",
+         "text": "LUX Sensor",
+         "image": "./images/comp/c16.png",
+         "width": 150, "height": 140,
+         "items": [
+         {"name":"VIN","pos":{"x":20,"y":115,"s":false}},
+         {"name":"GND","pos":{"x":40,"y":115,"s":false}},
+         {"name":"3VO","pos":{"x":58,"y":115,"s":false}},
+         {"name":"IND","pos":{"x":78,"y":115,"s":false}},
+         {"name":"SDA","pos":{"x":98,"y":115,"s":false}},
+         {"name":"SCL","pos":{"x":118,"y":115,"s":false}}
+      ]},
+      {
+          "category": "c17",
+          "text": "LM 390 ",
+          "image": "./images/comp/c17.png",
+          "width": 260, "height": 150,
+          "items": [
+          {"name":"GND","pos":{"x":3,"y":40,"s":false}},
+          {"name":"A0","pos":{"x":3,"y":60,"s":false}},
+          {"name":"D0","pos":{"x":3,"y":80,"s":false}},
+          {"name":"+5V","pos":{"x":3,"y":100,"s":false}}
+
+
+       ]}
+       ,
+      {
+          "category": "c18",
+          "text": "Resistor",
+          "image": "./images/comp/c18.png",
+          "width": 95, "height": 40,
+          "items": [
+          {"name":"Positive","pos":{"x":0,"y":11,"s":false}},
+          {"name":"Negative","pos":{"x":80,"y":11,"s":false}}
+       ]}
 ]
-    
-        
-    
