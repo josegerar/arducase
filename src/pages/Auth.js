@@ -17,6 +17,7 @@ class AuthPage extends Component {
         this.passwordEl = React.createRef();
     }
 
+    //funcion para hacer la peticion al servidor y retornar el token de session en caso de datos de ssion validos
     submitHandler = (event) => {
         event.preventDefault();
         const username = this.usernameEl.current.value;
@@ -49,7 +50,6 @@ class AuthPage extends Component {
         }).then(res => {
             return res.json();
         }).then(resData => {
-            console.log(resData);
             if (resData.errors) {
                 throw new Error("Ha ocurrido un error");
             }
@@ -57,10 +57,7 @@ class AuthPage extends Component {
                 this.context.login(resData.data.login.token);
             }
         }).catch(err => {
-            console.log(
-                err
-            );
-            
+            console.log(err);
             this.setState({ errMessage: err.message });
         });
     };

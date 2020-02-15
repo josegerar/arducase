@@ -36,6 +36,7 @@ class ProjectsPage extends Component {
         this.setState({ creating: true });
     }
 
+    //funcion para enviar los datos de un nuevo proyecto al servidor y crearlo
     modalConfirmHandler = () => {
         this.setState({ creating: false });
         const $ = go.GraphObject.make;
@@ -100,7 +101,6 @@ class ProjectsPage extends Component {
             }
             return res.json();
         }).then(resData => {
-            console.log(resData);
             this.setState(prevState => {
                 const updatedProjects = [...prevState.projects];
                 updatedProjects.push({
@@ -188,27 +188,20 @@ class ProjectsPage extends Component {
         const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
             const byteCharacters = atob(b64Data);
             const byteArrays = [];
-
             for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
                 const slice = byteCharacters.slice(offset, offset + sliceSize);
-
                 const byteNumbers = new Array(slice.length);
                 for (let i = 0; i < slice.length; i++) {
                     byteNumbers[i] = slice.charCodeAt(i);
                 }
-
                 const byteArray = new Uint8Array(byteNumbers);
                 byteArrays.push(byteArray);
             }
-
             const blob = new Blob(byteArrays, { type: contentType });
             return blob;
         }
-
         const contentType = 'image/png';
         const b64Data = imageData;
-
-
         const blob = b64toBlob(b64Data, contentType);
         const blobUrl = URL.createObjectURL(blob);
         return blobUrl;
@@ -350,7 +343,6 @@ class ProjectsPage extends Component {
         this.setState(prevState => {
             const selectedemails = prevState.emails;
             selectedemails.push(email);
-            console.log(selectedemails);
             return { emails: selectedemails };
         });
     }
@@ -364,11 +356,10 @@ class ProjectsPage extends Component {
         });
     }
 
+    //funcion para compartir proyectos entre usuarios de la app
     modalAddEmailsConfirmHandler = () => {
         this.modalCancelHandler();
         this.setState({ isLoading: true, sharing: false, emails: [] });
-        console.log(this.state.emails);
-
         let emailsString = ``;
         for (let i = 0; i < this.state.emails.length; i++) {
             const email = this.state.emails[i];
@@ -377,13 +368,10 @@ class ProjectsPage extends Component {
                 emailsString += `, `;
             }
         }
-        console.log(emailsString);
         const requestBody = {
             query: `
                 mutation {
-                    addEmailsProyect(emails:[
-                        ${emailsString}
-                    ], projectId: "${this.state.selectedProject._id}") {
+                    addEmailsProyect(emails:[${emailsString}], projectId: "${this.state.selectedProject._id}") {
                         _id
                         title
                     }

@@ -1,5 +1,5 @@
 import * as go from 'gojs';
-import { generateCode } from "../components/Blockly/index";
+
 const componentsList = require("../json/componentsList.json");
 
 export let onMoreInfo = {
@@ -10,10 +10,12 @@ export let onMoreInfo = {
     links: []
 };
 
+//inicia el canvas del diagrama
 let WENT, diagram, cw = 1;
 export const initDiagram = (savedModel) => {
     WENT = go.GraphObject.make;
 
+    
     diagram = WENT(go.Diagram, "divDiagram", {
         "undoManager.isEnabled": true,
         "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,

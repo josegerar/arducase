@@ -20,11 +20,8 @@ class CreateAccountPage extends Component {
         this.passwordEl = React.createRef();
         this.emailEl = React.createRef();
     }
-    componentDidMount() {
-        console.log(this.context.webservice);
 
-    }
-
+    //
     submitHandler = (event) => {
         event.preventDefault();
         const name = this.nameEl.current.value;

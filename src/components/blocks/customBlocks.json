@@ -12,20 +12,35 @@
         "output": "Boolean",
         "tooltip": "Will return 1 you choose High or 0 if you choose Low."
     },
-    {
-        "type": "inout_digital_read", "colour": "190",
-        "message0": "Digital read PIN# %1",
+	{
+        "type": "inout_buildin_led", "colour": "190",
+        "message0": "Integrated LED Stat %1",
         "args0": [
-            {
-                "type": "field_dropdown",
-				"name": "PIN",
-                "options": [["0","0"],["1","1"],["2","2"],["3","3"],["4","4"],["5","5"],["6","6"],["7","7"],["8","8"],["9","9"],["10","10"],["11","11"],["12","12"],["13","13"],["A0","A0"],["A1","A1"],["A2","A2"],["A3","A3"],["A4","A4"],["A5","A5"]]
-            }
+			{
+				"type": "field_dropdown",
+				"name": "STAT",
+				"options": [["HIGH","HIGH"],["LOW","LOW"]]
+			}
         ],
-        "output": "Number",
-        "tooltip": "Reads the value from a specified digital pin, either HIGH or LOW."
-    },
-    {
+        "previousStatement": null,
+		"nextStatement": null,
+        "tooltip": "This block will control the internal LED of the Arduino."
+	},
+	{
+        "type": "inout_buildin_led2", "colour": "190",
+        "message0": "Integrated LED Stat %1",
+        "args0": [
+			{
+				"type": "field_dropdown",
+				"name": "STAT",
+				"options": [["HIGH","HIGH"],["LOW","LOW"]]
+			}
+        ],
+        "previousStatement": null,
+		"nextStatement": null,
+        "tooltip": "This block will control the internal LED of the NODEMCU."
+	},
+	{
         "type": "inout_digital_write", "colour": "190",
         "message0": "Digital write PIN# %1 STAT %2",
         "args0": [
@@ -43,11 +58,16 @@
         "previousStatement": null,
 		"nextStatement": null,
         "tooltip": "Write a HIGH or a LOW value to a digital pin"
-    },
+	},
 	{
-        "type": "inout_buildin_led", "colour": "190",
-        "message0": "Integrated LED Stat %1",
+        "type": "inout_digital_write2", "colour": "190",
+        "message0": "Digital write PIN# %1 STAT %2",
         "args0": [
+            {
+                "type": "field_dropdown",
+				"name": "PIN",
+                "options": [["D0", "16"],["D1", "5"], ["D2", "4"], ["D3", "0"], ["D4", "2"],["D5", "14"], ["D6", "12"], ["D7", "13"], ["D8", "15"], ["RX", "3"], ["TX", "1"]]
+            },
 			{
 				"type": "field_dropdown",
 				"name": "STAT",
@@ -56,7 +76,33 @@
         ],
         "previousStatement": null,
 		"nextStatement": null,
-        "tooltip": "This block will control the internal LED of the NODEMCU"
+        "tooltip": "Write a HIGH or a LOW value to a digital pin"
+	},
+	{
+        "type": "inout_digital_read", "colour": "190",
+        "message0": "Digital read PIN# %1",
+        "args0": [
+            {
+                "type": "field_dropdown",
+				"name": "PIN",
+                "options": [["0","0"],["1","1"],["2","2"],["3","3"],["4","4"],["5","5"],["6","6"],["7","7"],["8","8"],["9","9"],["10","10"],["11","11"],["12","12"],["13","13"],["A0","A0"],["A1","A1"],["A2","A2"],["A3","A3"],["A4","A4"],["A5","A5"]]
+            }
+        ],
+        "output": "Number",
+        "tooltip": "Reads the value from a specified digital pin, either HIGH or LOW."
+	},
+	{
+        "type": "inout_digital_read2", "colour": "190",
+        "message0": "Digital read PIN# %1",
+        "args0": [
+            {
+                "type": "field_dropdown",
+				"name": "PIN",
+                "options": [["D0", "16"],["D1", "5"], ["D2", "4"], ["D3", "0"], ["D4", "2"],["D5", "14"], ["D6", "12"], ["D7", "13"], ["D8", "15"], ["RX", "3"], ["TX", "1"]]
+            }
+        ],
+        "output": "Number",
+        "tooltip": "Reads the value from a specified digital pin, either HIGH or LOW."
     },
 	{
 		"type": "inout_analog_read", "colour": "190",
@@ -72,6 +118,19 @@
         "tooltip": "Reads the value from the specified analog pin"
 	},
 	{
+		"type": "inout_analog_read2", "colour": "190",
+        "message0": "Analog read PIN# %1",
+        "args0": [
+			{
+				"type": "field_dropdown",
+				"name": "PIN",
+				"options": [["A0","A0"]]
+			}
+        ],
+		"output": "Number",
+        "tooltip": "Reads the value from the specified analog pin"
+	},
+	{
 		"type": "inout_analog_write", "colour": "190",
         "message0": "Analog write (PWM) PIN# %1 Value %2",
         "args0": [
@@ -79,6 +138,27 @@
 				"type": "field_dropdown",
 				"name": "PIN",
 				"options": [["3","3"],["5","5"],["6","6"],["9","9"],["10","10"],["11","11"]]
+			},
+			{
+				"type": "input_value",
+				"name": "Value",
+				"check": "Number"
+			}
+        ],
+		"inputsInline": true,
+        "tooltip": "Write analog value between 0 and 255 to a specific Port",
+		"previousStatement": null,
+		"nextStatement": null
+		
+	},
+	{
+		"type": "inout_analog_write2", "colour": "190",
+        "message0": "Analog write (PWM) PIN# %1 Value %2",
+        "args0": [
+			{
+				"type": "field_dropdown",
+				"name": "PIN",
+				"options": [["D0", "16"],["D1", "5"], ["D2", "4"], ["D3", "0"], ["D4", "2"],["D5", "14"], ["D6", "12"], ["D7", "13"], ["D8", "15"], ["RX", "3"], ["TX", "1"]]
 			},
 			{
 				"type": "input_value",
@@ -190,7 +270,7 @@
 	},
 	{
 		"type": "text", "colour": "126",
-        "message0": "%1",
+        "message0": "\" %1 \"",
         "args0": [
 			{
                 "type": "field_input",
@@ -207,7 +287,7 @@
 			{
                 "type": "field_input",
 				"name": "NUM",
-				"check": "Number"
+				"text": "0"
             }
 		],
 		"output": "Number",
@@ -241,6 +321,78 @@
 		"previousStatement": null,
 		"nextStatement": null,
         "tooltip": ""
+	},
+	{
+		"type": "logic_compare"
+	},
+	{
+		"type": "logic_operation",
+		"message0": "%1 %2 %3",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "A",
+				"check": "Boolean"
+			},
+			{
+				"type": "field_dropdown",
+				"name": "OP",
+				"options": [["and","AND"],["or","OR"]]
+			},
+			{
+				"type": "input_value",
+				"name": "B",
+				"check": "Boolean"
+			}
+		],
+		"inputsInline": true,
+		"output": "Boolean",
+		"colour": 44,
+		"tooltip": "Return true if both inputs are true or Return true if a least one of the inputs is true."
+	},
+	{
+		"type": "logic_boolean",
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "field_dropdown",
+				"name": "BOOL",
+				"options": [
+					[
+						"true",
+						"TRUE"
+					],
+					[
+						"false",
+						"FALSE"
+					]
+				]
+			}
+		],
+		"output": "Boolean",
+		"colour": 44,
+		"tooltip": "Returns either true or false."
+	},
+	{
+		"type": "logic_null",
+		"message0": "null",
+		"output": null,
+		"colour": 44,
+		"tooltip": "Returns null."
+	},
+	{
+		"type": "logic_negate",
+		"message0": "not %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "BOOL",
+				"check": "Boolean"
+			}
+		],
+		"output": "Boolean",
+		"colour": 44,
+		"tooltip": "Returns true if the input is false. Returns false if the input is true."
 	},
 	{
 		"type": "while_do", "colour": "44",
@@ -285,6 +437,35 @@
         "tooltip": ""
 	},
 	{
+		"type": "variables_declare"
+	},
+	{
+		"type": "variables_get"
+	},
+	{
+		"type": "variables_set"
+	},
+	{
+		"type": "function_void",
+		"message0": "to %1 %2 %3",
+		"args0": [
+			{
+				"type": "field_input",
+				"name": "NAME",
+				"text": "anything"
+			},
+			{
+				"type": "input_dummy"
+			},
+			{
+				"type": "input_statement",
+				"name": "myFunctionVoid"
+			}
+		],
+		"colour": 345,
+		"tooltip": ""
+	},
+	{
 		"type": "ipt_pingip",
         "message0": "Ping IP %1 . %2 . %3 . %4",
         "args0": [
@@ -314,6 +495,189 @@
         "tooltip": "Ping a remote machine and know if it’s reachable. Require the ESP8266 Ping Library."
 	},
 	{
+		"type": "iots_connectnetwork_pass",
+		"message0": "Connect Network %1 SSID %2 Password %3",
+		"args0": [
+			{
+				"type": "input_dummy"
+			},
+			{
+				"type": "input_value",
+				"name": "ssid",
+				"check": "String"
+			},
+			{
+				"type": "input_value",
+				"name": "password",
+				"check": "String"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": null,
+		"nextStatement": null,
+		"tooltip": "This bloc will connect the board to an encrypted Wifi network. You should specify the name of the WIFI network and the password."
+	},
+	{
+		"type": "iots_isconnected",
+		"message0": "Is Connected?",
+		"inputsInline": true,
+		"output": "Boolean",
+		"tooltip": "Returns True or False if the board is connected to a WIFI network."
+	},
+	{
+		"type": "iot_startserver",
+		"message0": "Start Server %1 Port %2",
+		"args0": [
+			{
+				"type": "input_dummy"
+			},
+			{
+				"type": "input_value",
+				"name": "port",
+				"check": "Number"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": null,
+		"nextStatement": null,
+		"tooltip": "Will make the board run a server and listening (or waiting for incoming requests) on the specified port."
+	},
+	{
+		"type": "iot_startserver2",
+		"message0": "Start WebSocket Server %1 Port %2",
+		"args0": [
+			{
+				"type": "input_dummy"
+			},
+			{
+				"type": "input_value",
+				"name": "port",
+				"check": "Number"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": null,
+		"nextStatement": null,
+		"tooltip": "Will make the board run a server and listening (or waiting for incoming requests) on the specified port."
+	},
+	{
+		"type": "infrared_read",
+		"message0": "Infrared %1 PIN# %2",
+		"args0": [
+			{
+				"type": "field_image",
+				"src": "https://img1.bgxcdn.com/thumb/large/oaupload/banggood/images/04/CA/5152ab3a-6805-4554-82ec-d25192b0a0b3.JPG",
+				"width": 64,
+				"height": 64,
+				"alt": "*",
+				"flipRtl": false
+			},
+			{
+				"type": "field_dropdown",
+				"name": "PIN",
+				"options": [["D0", "16"],["D1", "5"], ["D2", "4"], ["D3", "0"], ["D4", "2"],["D5", "14"], ["D6", "12"], ["D7", "13"], ["D8", "15"], ["RX", "3"], ["TX", "1"]]
+			}
+		],
+		"output": "Number",
+		"colour": 190,
+		"tooltip": ""
+	},
+	{
+		"type": "lcdi2c_setup",
+		"message0": "SETUP SERIAL LCD I2C Address %1 %2 %3 Columns %4 Rows %5",
+		"args0": [
+			{
+				"type": "input_dummy"
+			},
+			{
+				"type": "field_input",
+				"name": "NAME",
+				"text": "0x3F"
+			},
+			{
+				"type": "input_dummy"
+			},
+			{
+				"type": "input_value",
+				"name": "COLUMNS",
+				"check": "Number"
+			},
+			{
+				"type": "input_value",
+				"name": "ROWS",
+				"check": "Number"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": null,
+		"nextStatement": null,
+		"colour": 120,
+		"tooltip": ""
+	},
+	{
+		"type": "lcdi2c_print",
+		"message0": "LCD Print %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "texttoprint"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": null,
+		"nextStatement": null,
+		"colour": 120,
+		"tooltip": ""
+	},
+	{
+		"type": "lcdi2c_clear",
+		"message0": "LCD Clear",
+		"previousStatement": null,
+		"nextStatement": null,
+		"colour": 120,
+		"tooltip": ""
+	},
+	{
+		"type": "lcdi2c_setcursor",
+		"message0": "LCD set Cursor %1 Columns %2 Rows %3",
+		"args0": [
+			{
+				"type": "input_dummy"
+			},
+			{
+				"type": "input_value",
+				"name": "column",
+				"check": "Number"
+			},
+			{
+				"type": "input_value",
+				"name": "row",
+				"check": "Number"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": null,
+		"nextStatement": null,
+		"colour": 120,
+		"tooltip": ""
+	},
+	{
+		"type": "lcdi2c_display",
+		"message0": "LCD Display",
+		"previousStatement": null,
+		"nextStatement": null,
+		"colour": 120,
+		"tooltip": ""
+	},
+	{
+		"type": "lcdi2c_nodisplay",
+		"message0": "LCD No Display",
+		"previousStatement": null,
+		"nextStatement": null,
+		"colour": 120,
+		"tooltip": ""
+	},
+	{
 		"type": "arduino_setup",
         "message0": "Setup %1",
         "args0": [
@@ -330,5 +694,52 @@
 			}
 		],
         "tooltip": ""
+	},
+	{
+		"type": "base_delayms",
+		"message0": "Delay Ms %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "DELAY_TIME",
+				"check": "Number"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": null,
+		"nextStatement": null,
+		"tooltip": "Delay specific time in Ms."
+	},
+	{
+		"type": "iots_localip",
+		"message0": "Local IP",
+		"inputsInline": true,
+		"output": null,
+		"tooltip": "This bloc will return the local IP of the board."
+	},
+	{
+		"type": "mqtt_loop",
+		"message0": "WebSocket Loop",
+		"previousStatement": null,
+		"nextStatement": null,
+		"tooltip": ""
+	},
+	{
+		"type": "wsocket_bctxt",
+		"message0": "WebSocket BroadcastTXT %1 %2",
+		"args0": [
+			{
+				"type": "input_dummy"
+			},
+			{
+				"type": "input_value",
+				"name": "TXT",
+				"check": "String"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": null,
+		"nextStatement": null,
+		"tooltip": ""
 	}
 ]

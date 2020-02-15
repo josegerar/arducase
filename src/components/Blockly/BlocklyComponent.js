@@ -38,6 +38,7 @@ class BlocklyComponent extends React.Component {
 
     render() {
         const { children } = this.props;
+
         return <React.Fragment>
             <div ref={e => this.blocklyDiv = e} id="blocklyDiv" className="div-contentCode" />
             <xml xmlns="https://developers.google.com/blockly/xml" is="blockly" style={{ display: 'none' }} ref={(toolbox) => { this.toolbox = toolbox; }}>

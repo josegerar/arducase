@@ -10,6 +10,7 @@ import AuthContext from './context/auth-context';
 
 import './App.css';
 
+//componente principal sobre el cual se ejeecutan internamete todos los demas componentes
 class App extends Component {
   state = {
     token: null,
@@ -22,6 +23,7 @@ class App extends Component {
     this.verifyUser();
   }
 
+  //verificacion inicial del token para decidor que componente mostrar en caso de ser o no valida la session 
   verifyUser = () => {
     const tokenTemp = localStorage.getItem("TOKEN");
     if (tokenTemp) {
@@ -51,13 +53,14 @@ class App extends Component {
     return JSON.parse(payload);
   }
 
+  //registra la session en el navegador y el la app
   login = (token) => {
     localStorage.setItem("TOKEN", token);
     const data = this.substrapToken(token);
-    console.log(data);
     this.setState({ token: token, userId: data.userId, email: data.email });
   };
 
+  //cierra la session
   logout = () => {
     this.setState({ token: null, userId: null });
     localStorage.removeItem("TOKEN");

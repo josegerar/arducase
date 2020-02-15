@@ -28,10 +28,10 @@ export default class GenArduino{
     getArduinoSetup(){
         const array = Blockly.mainWorkspace.getBlocksByType("arduino_setup", true);
         if (array.length === 0) {
-            let arduinoSetup = Blockly.mainWorkspace.newBlock('arduino_setup');
-            arduinoSetup.initSvg();
-            arduinoSetup.render();
-            return arduinoSetup;
+            //let arduinoSetup = Blockly.mainWorkspace.newBlock('arduino_setup');
+            //arduinoSetup.initSvg();
+            //arduinoSetup.render();
+            //return arduinoSetup;
         }
         return array[0];
     }

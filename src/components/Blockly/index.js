@@ -36,7 +36,10 @@ const Shadow = (p) => {
 };
 
 const downloadCode = () => {
-    Blockly.Arduino.saveTextFileAs("Code.ino", Blockly.Arduino.generateArduino());
+    Blockly.Arduino.saveTextFileAs(
+        "Code.ino",
+        Blockly.Arduino.generateArduino()
+    );
 }
 
 const generateCode = (nodeDataArray, linkDataArray) => {
