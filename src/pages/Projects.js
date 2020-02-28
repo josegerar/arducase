@@ -167,7 +167,8 @@ class ProjectsPage extends Component {
             body: JSON.stringify(requestBody),
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            cache: "default"
         }).then(res => {
             if (res.status !== 200 && res.status !== 201) {
                 throw new Error('Failed!');

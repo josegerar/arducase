@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "blockly": "^3.20200123.1",
     "bootstrap": "^4.4.1",
+    "fabric": "^3.0.0",
     "gojs": "^2.1.7",
     "gojs-react": "^1.0.5",
     "jquery": "^3.4.1",

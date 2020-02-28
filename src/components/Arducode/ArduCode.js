@@ -73,7 +73,6 @@ Blockly.Arduino.init = function(workspace) {
       Blockly.Arduino.variableDB_ = new Blockly.Names(
         Blockly.Arduino.RESERVED_WORDS_
       );
-      console.log("Hola estoy aquí");
     } else {
       Blockly.Arduino.variableDB_.reset();
     }

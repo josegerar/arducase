@@ -31,7 +31,7 @@ class BlocklyComponent extends React.Component {
             comments: true
         });
         if (initialXml) {
-            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(initialXml), this.primaryWorkspace);
+            this.setXml(initialXml);
         }
         this.primaryWorkspace.addChangeListener(this.changeBloking);
     }

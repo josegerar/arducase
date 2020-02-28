@@ -1,5 +1,7 @@
 import * as go from 'gojs';
 import { generateCode } from "../components/Blockly/index";
+import {IOTeCASE} from "./IOTeCASE.js";
+
 const componentsList = require("../json/componentsList.json");
 
 export let onMoreInfo = {
@@ -200,12 +202,19 @@ export const initDiagram = (savedModel) => {
                         PALETA
      */
     //Creación de la paleta
-    let palette = new go.Palette("listComponents");
-    palette.nodeTemplate = paletteTemplate;
-    //Llenado de la paleta
-    palette.model = new go.GraphLinksModel(components);
-
-
+    // let palette = new go.Palette("listComponents");
+    // palette.nodeTemplate = paletteTemplate;
+    // //Llenado de la paleta
+    // palette.model = new go.GraphLinksModel(components);
+    let palette = IOTeCASE.Palette("vertical", "listComponents");
+    palette.sourceMap = {
+        path: "image",
+        height: 110,
+        width: 110,
+        name: "text"
+    }    
+    palette.model = components;
+    
     /* 
                         OVERVIEW
      */
