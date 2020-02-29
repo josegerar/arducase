@@ -1,3 +1,5 @@
 npm i path-to-regexp --save
 npm i ncp --save
 npm install react-bootstrap bootstrap
+git config --global user.name "JOSE GARCIA"
+git config --global user.email "jgarcia24121996@gmail.com"
