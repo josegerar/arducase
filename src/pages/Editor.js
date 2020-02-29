@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import BlocklyComponent, {  Block,  Category,  downloadCode} from "../components/Blockly";
+import BlocklyComponent, { Block, Category, downloadCode } from "../components/Blockly";
 import Blockly from "blockly/core";
 
 import Modal from "../components/Modal/Modal";
@@ -9,7 +9,7 @@ import AuthContext from "../context/auth-context";
 import "./Editor.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../components/blocks/customblocks";
-import {  initDiagram,  getModelJson,  getImage_B64,  onMoreInfo,  makeBlob,  saveDiagram} from "../scripts/went";
+import { initDiagram, getModelJson, getImage_B64, onMoreInfo, makeBlob, saveDiagram } from "../scripts/went";
 
 class EditorPage extends Component {
   constructor(props) {
@@ -68,7 +68,7 @@ class EditorPage extends Component {
     const requestBody = {
       query: `
                 mutation {
-                    saveProject(projectSave:{ projectId: "${this.state.projectId}", canvasJSON: ${JSON.stringify(newCanvasJSON )}, especJSON:${JSON.stringify(newEspecJSON)}, lastAccessDate: "${lastAccessDate}", lastUpdateDate: "${lastUpdateDate}", image: "${image}"}) {
+                    saveProject(projectSave:{ projectId: "${this.state.projectId}", canvasJSON: ${JSON.stringify(newCanvasJSON)}, especJSON:${JSON.stringify(newEspecJSON)}, lastAccessDate: "${lastAccessDate}", lastUpdateDate: "${lastUpdateDate}", image: "${image}"}) {
                         _id
                         title
                     }
@@ -84,13 +84,13 @@ class EditorPage extends Component {
         Authorization: "Bearer " + this.context.token
       }
     }).then(res => {
-        return res.json();
-      }).then(resData => {
-        saveDiagram();
-        alert("Project saved.");
-      }).catch(err => {
-        console.log(err);
-      });
+      return res.json();
+    }).then(resData => {
+      saveDiagram();
+      alert("Project saved.");
+    }).catch(err => {
+      console.log(err);
+    });
   };
 
   modalExitHandler = () => {
@@ -147,7 +147,19 @@ class EditorPage extends Component {
           </Modal>
         )}
         <div className="editor-content">
-          <div id="divDiagram" className="div-drawPanel"></div>
+          <div className="div-drawPanel">
+            <div id="divDiagram" className="div-canvasPanel"></div>
+            <div id="toolP" className="div-toolPanel">
+              <div className="div-componentPanel">
+                <div className="div-title"> Components </div>
+                <div id="listComponents" className="div-list"></div>
+              </div>
+              <div className="div-infoPanel">
+                <div className="div-title">Overview</div>
+                <div id="div-overview"></div>
+              </div>
+            </div>
+          </div>
           <div id="divDiagramCode" className="div-drawPanelCode">
             <BlocklyComponent
               ref={e => (this.simpleWorkspace = e)}
@@ -261,17 +273,7 @@ class EditorPage extends Component {
                 <Block type="base_delayms" />
               </Category>
             </BlocklyComponent>
-            <textarea id="content_arduino"  className="txta-contentCode" readOnly={true} ></textarea>
-          </div>
-          <div id="toolP" className="div-toolPanel">
-            <div className="div-componentPanel">
-              <div className="div-title"> Components </div>
-              <div id="listComponents" className="div-list"></div>
-            </div>
-            <div className="div-infoPanel">
-              <div className="div-title">Overview</div>
-              <div id="div-overview"></div>
-            </div>
+            <textarea id="content_arduino" className="txta-contentCode" readOnly={true} ></textarea>
           </div>
           <div className="div-footPanel">
             <div className="div-messagePanel"></div>

@@ -48,6 +48,7 @@ fabric.Canvas.prototype.add = (function (originalFn) {
         return this;
     };
 })(fabric.Canvas.prototype.add);
+console.log(fabric);
 
 fabric.Palette = function (type, DOMSelector) {
     const rootDomNode = document.getElementById(DOMSelector);

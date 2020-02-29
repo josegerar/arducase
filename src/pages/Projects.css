@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 60px 100%;
-    grid-area: 2 / 1 / 3 / 2;
+    grid-area: 1 / 1 / 1 / 1;
     text-align: center;
     border: 1px solid #00979C;
     padding: 2.6rem;

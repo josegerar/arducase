@@ -2,7 +2,7 @@
     /* display: grid; */
     grid-template-columns: 100%;
     grid-template-rows: 100%;
-    grid-area: 2 / 1 / 3 / 2;
+    grid-area: 1 / 1 / 1 / 1;
 
     position: relative;
     padding-right: 55px;

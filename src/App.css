@@ -1,7 +1,14 @@
 .grid-container {
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 60px 1fr;
+  grid-template-rows: 10% 90%;
+}
+
+.grid-container  main  {
+  grid-area: 2 / 1 / 2 / 1;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 100%;
 }
 
 .div-errMessage, .div-successMessage {
