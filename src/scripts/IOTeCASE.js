@@ -56,7 +56,13 @@ fabric.Palette = function (type, DOMSelector) {
     canvas.width = rootDomNode.clientWidth;
     canvas.height = rootDomNode.clientHeight;
     rootDomNode.appendChild(canvas);
-    const pallete = new this.Canvas("canvasPalette", { isDrawingMode: false, preserveObjectStacking: true, selection: false, perPixelTargetFind: true });
+    const pallete = new this.Canvas("canvasPalette", { 
+        isDrawingMode: false, 
+        preserveObjectStacking: true, 
+        selection: false, 
+        perPixelTargetFind: true,
+        moveCursor: "no-drop" 
+    });
     pallete.sourceMap = { "path": "", "name": "", "width": 0, "height": 0 };
     Object.defineProperty(pallete, "model", {
         get: function () {
@@ -85,6 +91,9 @@ fabric.Palette = function (type, DOMSelector) {
                                     hasControls: false,
                                     hoverCursor: "pointer"
                                 });
+                                comp._posXDefault = comp.left;
+                                comp._posYDefault = comp.top;
+                                comp._nodeData = node;
                                 this._posY += img.height * img.scaleY + 20 + txtNombre.height;
                                 this.add(comp);
                                 resolve();
@@ -97,34 +106,24 @@ fabric.Palette = function (type, DOMSelector) {
                 if (this._posY > rootDomNode.clientHeight) {
                     this.setHeight(this._posY);
                 } else this.height = rootDomNode.clientHeight;
+                delete this.posY;
                 this.calcOffset();
             }
             return this._model;
         }
     });
     pallete.on({
-        "mouse:down": e => {
-            if (e.target) {
-                               
-            }
-        },
-        "object:moving": e =>{
-            if (e.target) {
-                pallete.setCursor("no-drop");                
-            }
-            
-        },
         'mouse:up': (e) => {
             if (e.target) {
-                pallete.setCursor("pointer");                
+                e.target._posYDefault && e.target._posXDefault && e.target.set({
+                    top: e.target._posYDefault,
+                    left: e.target._posXDefault
+                });
+                pallete.calcOffset();
+                pallete.forEachObject(o => {
+                    o.setCoords();
+                });
             }
-            pallete.renderAll();
-        },
-        "mouse:move": e =>{
-            if (!e.target) {
-                pallete.setCursor("default");                
-            }
-            console.log(e.target);
         }
     });
     return pallete;
