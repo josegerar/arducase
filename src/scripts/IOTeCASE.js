@@ -48,7 +48,16 @@ fabric.Canvas.prototype.add = (function (originalFn) {
         return this;
     };
 })(fabric.Canvas.prototype.add);
-console.log(fabric);
+
+fabric.window.onresize = function () {
+    if (fabric._pallete) {
+        fabric._pallete.setWidth(fabric._pallete.wrapperEl.parentNode.clientWidth);
+        fabric._pallete.forEachObject(o =>{
+            o.set({left: fabric._pallete.width / 2 - o.width / 2});
+            o._posXDefault = o.left;
+        });
+    }
+}
 
 fabric.Palette = function (type, DOMSelector) {
     const rootDomNode = document.getElementById(DOMSelector);
@@ -57,22 +66,22 @@ fabric.Palette = function (type, DOMSelector) {
     canvas.width = rootDomNode.clientWidth;
     canvas.height = rootDomNode.clientHeight;
     rootDomNode.appendChild(canvas);
-    const pallete = new this.Canvas("canvasPalette", { 
+    this._pallete = new this.Canvas("canvasPalette", { 
         isDrawingMode: false, 
         preserveObjectStacking: true, 
         selection: false, 
         perPixelTargetFind: true,
         moveCursor: "no-drop" 
     });
-    pallete.sourceMap = { "path": "", "name": "", "width": 0, "height": 0 };
-    Object.defineProperty(pallete, "model", {
+    this._pallete.sourceMap = { "path": "", "name": "", "width": 0, "height": 0 };
+    Object.defineProperty(this._pallete, "model", {
         get: function () {
             return this._model;
         },
         set: async function (model) {
             this._model = model;
             this.clear();
-            if (model && model.length > 0) {
+            if (model &&  Array.isArray(model)) {
                 this._posY = 20;
                 for (const node of model) {
                     await new Promise((resolve, reject) => {
@@ -107,27 +116,27 @@ fabric.Palette = function (type, DOMSelector) {
                 if (this._posY > rootDomNode.clientHeight) {
                     this.setHeight(this._posY);
                 } else this.height = rootDomNode.clientHeight;
-                delete this.posY;
+                delete this._posY;
                 this.calcOffset();
             }
             return this._model;
         }
     });
-    pallete.on({
+    this._pallete.on({
         'mouse:up': (e) => {
             if (e.target) {
                 e.target._posYDefault && e.target._posXDefault && e.target.set({
                     top: e.target._posYDefault,
                     left: e.target._posXDefault
                 });
-                pallete.calcOffset();
-                pallete.forEachObject(o => {
+                this._pallete.calcOffset();
+                this._pallete.forEachObject(o => {
                     o.setCoords();
                 });
             }
         }
     });
-    return pallete;
+    return this._pallete;
 }
 
 export { fabric as IOTeCASE };
