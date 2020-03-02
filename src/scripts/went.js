@@ -17,49 +17,52 @@ let WENT, diagram, cw = 1;
 export const initDiagram = (savedModel) => {
     WENT = go.GraphObject.make;
 
+
+    diagram = IOTeCASE.Diagram("divDiagram");
     
-    diagram = WENT(go.Diagram, "divDiagram", {
-        "undoManager.isEnabled": true,
-        "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
-        initialAutoScale: go.Diagram.Uniform,
-        initialContentAlignment: go.Spot.Center
-    });
+
+    // // diagram = WENT(go.Diagram, "divDiagram", {
+    // //     "undoManager.isEnabled": true,
+    // //     "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+    // //     initialAutoScale: go.Diagram.Uniform,
+    // //     initialContentAlignment: go.Spot.Center
+    // // });
 
 
     /* 
                         LISTENERS
      */
     //Cuando se modifica algo, agrega un * al título de la página
-    diagram.addDiagramListener("Modified", function (e) {
-        let idx = document.title.indexOf("*");
-        if (diagram.isModified) {
-            if (idx < 0) document.title += "*";
-        } else {
-            if (idx >= 0) document.title = document.title.substr(0, idx);
-        }
-    });
+    // diagram.addDiagramListener("Modified", function (e) {
+    //     let idx = document.title.indexOf("*");
+    //     if (diagram.isModified) {
+    //         if (idx < 0) document.title += "*";
+    //     } else {
+    //         if (idx >= 0) document.title = document.title.substr(0, idx);
+    //     }
+    // });
 
-    diagram.addModelChangedListener(function (evt) {
-        if (!evt.isTransactionFinished){
-            //console.log(evt.model);
-            return;
-        }
-        const txn = evt.object;  // a Transaction
-        if (txn === null) return;
-        txn.changes.each(function(e) {
-            // ignore any kind of change other than adding/removing a node
-            if (["nodeDataArray", "linkFromPortId", "linkDataArray", "linkToPortId"].indexOf(e.modelChange) === -1) return;
-            generateCode(evt.model.nodeDataArray,evt.model.linkDataArray);
-            // record node insertions and removals
-            if (e.change === go.ChangedEvent.Insert) {
-              console.log(evt.propertyName + " added node with key: " + e.newValue);
-            } else if (e.change === go.ChangedEvent.Remove) {
-              console.log(evt.propertyName + " removed node with key: " + e.oldValue);
-            } else if (e.change === go.ChangedEvent.Property) {
+    // diagram.addModelChangedListener(function (evt) {
+    //     if (!evt.isTransactionFinished){
+    //         //console.log(evt.model);
+    //         return;
+    //     }
+    //     const txn = evt.object;  // a Transaction
+    //     if (txn === null) return;
+    //     txn.changes.each(function(e) {
+    //         // ignore any kind of change other than adding/removing a node
+    //         if (["nodeDataArray", "linkFromPortId", "linkDataArray", "linkToPortId"].indexOf(e.modelChange) === -1) return;
+    //         generateCode(evt.model.nodeDataArray,evt.model.linkDataArray);
+    //         // record node insertions and removals
+    //         if (e.change === go.ChangedEvent.Insert) {
+    //           console.log(evt.propertyName + " added node with key: " + e.newValue);
+    //         } else if (e.change === go.ChangedEvent.Remove) {
+    //           console.log(evt.propertyName + " removed node with key: " + e.oldValue);
+    //         } else if (e.change === go.ChangedEvent.Property) {
                 
-            }
-          });
-    });
+    //         }
+    //       });
+    // });
 
     //Listado de componentes
     let components = componentsList;
@@ -120,17 +123,17 @@ export const initDiagram = (savedModel) => {
             makeButton("Change Color",
                 function (e, obj) { changeColor(e, obj) })
         );
-    diagram.contextMenu = WENT("ContextMenu",
-        makeButton("Paste",
-            function (e, obj) { e.diagram.commandHandler.pasteSelection(e.diagram.toolManager.contextMenuTool.mouseDownPoint); },
-            function (o) { return o.diagram.commandHandler.canPasteSelection(o.diagram.toolManager.contextMenuTool.mouseDownPoint); }),
-        makeButton("Undo",
-            function (e, obj) { e.diagram.commandHandler.undo(); },
-            function (o) { return o.diagram.commandHandler.canUndo(); }),
-        makeButton("Redo",
-            function (e, obj) { e.diagram.commandHandler.redo(); },
-            function (o) { return o.diagram.commandHandler.canRedo(); })
-    );
+    // diagram.contextMenu = WENT("ContextMenu",
+    //     makeButton("Paste",
+    //         function (e, obj) { e.diagram.commandHandler.pasteSelection(e.diagram.toolManager.contextMenuTool.mouseDownPoint); },
+    //         function (o) { return o.diagram.commandHandler.canPasteSelection(o.diagram.toolManager.contextMenuTool.mouseDownPoint); }),
+    //     makeButton("Undo",
+    //         function (e, obj) { e.diagram.commandHandler.undo(); },
+    //         function (o) { return o.diagram.commandHandler.canUndo(); }),
+    //     makeButton("Redo",
+    //         function (e, obj) { e.diagram.commandHandler.redo(); },
+    //         function (o) { return o.diagram.commandHandler.canRedo(); })
+    // );
 
 
     /* 
@@ -191,11 +194,11 @@ export const initDiagram = (savedModel) => {
     );
 
     //Asignación del template (nodos) al diagrama
-    for (let i = 0; i < components.length; i++) {
-        diagram.nodeTemplateMap.add(components[i].category, componentsTemplate);
-    }
+    // for (let i = 0; i < components.length; i++) {
+    //     diagram.nodeTemplateMap.add(components[i].category, componentsTemplate);
+    // }
     //Asignación del template (líneas) al diagrama
-    diagram.linkTemplate = linesTemplate;
+    // diagram.linkTemplate = linesTemplate;
 
 
     /* 
@@ -218,14 +221,14 @@ export const initDiagram = (savedModel) => {
     /* 
                         OVERVIEW
      */
-    WENT(go.Overview, "div-overview", {
-        observed: diagram
-    });
+    // WENT(go.Overview, "div-overview", {
+    //     observed: diagram
+    // });
 
 
     //Carga diagrama
-    loadDiagram(savedModel);
-    layout();
+    // loadDiagram(savedModel);
+    // layout();
 
     document.getElementById("divDiagramCode").style.visibility = "hidden";
     document.getElementById("btnSwitch").addEventListener("click", switchCanvas);

@@ -2,6 +2,10 @@ import { fabric } from "fabric";
 
 fabric.Canvas.prototype.prefix = 'iotc';
 fabric.Canvas.prototype.seq = 0;
+fabric.isTouchDevice = false;
+fabric._pallete = undefined;
+fabric._diagram = undefined;
+fabric._overview = undefined;
 
 fabric.Canvas.prototype.sequence = function () {
     return {
@@ -52,12 +56,33 @@ fabric.Canvas.prototype.add = (function (originalFn) {
 fabric.window.onresize = function () {
     if (fabric._pallete) {
         fabric._pallete.setWidth(fabric._pallete.wrapperEl.parentNode.clientWidth);
-        fabric._pallete.forEachObject(o =>{
-            o.set({left: fabric._pallete.width / 2 - o.width / 2});
+        fabric._pallete.forEachObject(o => {
+            o.set({ left: fabric._pallete.width / 2 - o.width / 2 });
             o._posXDefault = o.left;
         });
     }
 }
+
+fabric.window.ontouchstart = function () {
+    fabric.isTouchDevice = true;
+}
+
+fabric.Diagram = function (DOMSelector) {
+    const rootDomNode = document.getElementById(DOMSelector);
+    const canvas = document.createElement("canvas");
+    canvas.id = "canvasDiagram";
+    canvas.width = rootDomNode.clientWidth;
+    canvas.height = rootDomNode.clientHeight;
+    rootDomNode.appendChild(canvas);
+    this._diagram = new this.Canvas("canvasDiagram", {
+        isDrawingMode: false,
+        preserveObjectStacking: true,
+        selection: false,
+        perPixelTargetFind: true
+    });
+    return this._diagram;
+}
+
 
 fabric.Palette = function (type, DOMSelector) {
     const rootDomNode = document.getElementById(DOMSelector);
@@ -66,12 +91,12 @@ fabric.Palette = function (type, DOMSelector) {
     canvas.width = rootDomNode.clientWidth;
     canvas.height = rootDomNode.clientHeight;
     rootDomNode.appendChild(canvas);
-    this._pallete = new this.Canvas("canvasPalette", { 
-        isDrawingMode: false, 
-        preserveObjectStacking: true, 
-        selection: false, 
+    this._pallete = new this.Canvas("canvasPalette", {
+        isDrawingMode: false,
+        preserveObjectStacking: true,
+        selection: false,
         perPixelTargetFind: true,
-        moveCursor: "no-drop" 
+        moveCursor: "no-drop"
     });
     this._pallete.sourceMap = { "path": "", "name": "", "width": 0, "height": 0 };
     Object.defineProperty(this._pallete, "model", {
@@ -81,7 +106,7 @@ fabric.Palette = function (type, DOMSelector) {
         set: async function (model) {
             this._model = model;
             this.clear();
-            if (model &&  Array.isArray(model)) {
+            if (model && Array.isArray(model)) {
                 this._posY = 20;
                 for (const node of model) {
                     await new Promise((resolve, reject) => {
@@ -123,16 +148,83 @@ fabric.Palette = function (type, DOMSelector) {
         }
     });
     this._pallete.on({
-        'mouse:up': (e) => {
+        'mouse:up': function (e) {
             if (e.target) {
                 e.target._posYDefault && e.target._posXDefault && e.target.set({
                     top: e.target._posYDefault,
                     left: e.target._posXDefault
                 });
-                this._pallete.calcOffset();
-                this._pallete.forEachObject(o => {
+                this.calcOffset();
+                this.forEachObject(o => {
                     o.setCoords();
                 });
+            }
+        },
+        'object:moving': function (e) {
+            if (fabric._diagram) {
+                fabric._diagram._lP = fabric._diagram.wrapperEl.parentNode.getBoundingClientRect();
+                if (fabric._diagram._lP.top < e.e.clientY &&
+                    fabric._diagram._lP.left < e.e.clientX &&
+                    fabric._diagram._lP.left + fabric._diagram._lP.width > e.e.clientX &&
+                    fabric._diagram._lP.top + fabric._diagram._lP.height > e.e.clientY) {
+
+                    var pendingTransform = fabric._pallete._currentTransform;
+
+                    var removeListener = fabric.util.removeListener;
+                    var addListener = fabric.util.addListener;
+                    {
+                        //removeListener(fabric.document, 'mouseup', fabric._pallete._onMouseUp);
+                        removeListener(fabric.document, 'touchend', fabric._pallete._onMouseUp);
+
+                        removeListener(fabric.document, 'mousemove', fabric._pallete._onMouseMove);
+                        removeListener(fabric.document, 'touchmove', fabric._pallete._onMouseMove);
+
+                        addListener(fabric._pallete.upperCanvasEl, 'mousemove', fabric._pallete._onMouseMove);
+                        addListener(fabric._pallete.upperCanvasEl, 'touchmove', fabric._pallete._onMouseMove, {
+                            passive: false
+                        });
+
+                        if (fabric.isTouchDevice) {
+                            // Wait 500ms before rebinding mousedown to prevent double triggers
+                            // from touch devices
+                            setTimeout(function () {
+                                addListener(fabric._pallete.upperCanvasEl, 'mousedown', fabric._pallete._onMouseDown);
+                            }, 500);
+                        }
+                    }
+                    {
+                        addListener(fabric.document, 'touchend', fabric._diagram._onMouseUp, {
+                            passive: false
+                        });
+                        addListener(fabric.document, 'touchmove', fabric._diagram._onMouseMove, {
+                            passive: false
+                        });
+
+                        removeListener(fabric._diagram.upperCanvasEl, 'mousemove', fabric._diagram._onMouseMove);
+                        removeListener(fabric._diagram.upperCanvasEl, 'touchmove', fabric._diagram._onMouseMove);
+
+                        if (fabric.isTouchDevice) {
+                            // Unbind mousedown to prevent double triggers from touch devices
+                            removeListener(fabric._diagram.upperCanvasEl, 'mousedown', fabric._diagram._onMouseDown);
+                        } else {
+                            addListener(fabric.document, 'mouseup', fabric._diagram._onMouseUp);
+                            addListener(fabric.document, 'mousemove', fabric._diagram._onMouseMove);
+                        }
+                    }
+
+                    setTimeout(function () {
+                        e.target.canvas = fabric._diagram;
+                        e.target.migrated = true;
+                        fabric._diagram.add(e.target);
+
+                        fabric._diagram._currentTransform = pendingTransform;
+                        fabric._diagram._currentTransform.scaleX *= -1;
+                        fabric._diagram._currentTransform.original.scaleX *= -1;
+                        fabric._diagram.setActiveObject(e.target);
+                        fabric._diagram.renderAll();
+                    }, 10);
+
+                }
             }
         }
     });
