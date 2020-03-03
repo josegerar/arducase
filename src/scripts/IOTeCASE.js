@@ -55,17 +55,24 @@ fabric.Canvas.prototype.add = (function (originalFn) {
 
 fabric.window.onresize = function () {
     if (fabric._pallete) {
-        fabric._pallete.setWidth(fabric._pallete.wrapperEl.parentNode.clientWidth);
-        fabric._pallete.forEachObject(o => {
-            o.set({ left: fabric._pallete.width / 2 - o.width / 2 });
-            o._posXDefault = o.left;
-        });
+        if (fabric._pallete._align === "vertical") {
+            fabric._pallete.setWidth(fabric._pallete.wrapperEl.parentNode.clientWidth);
+            fabric._pallete.forEachObject(o => {
+                o.set({ left: fabric._pallete.width / 2 - o.width / 2 });
+                o._posXDefault = o.left;
+            });   
+        }
+    }
+    if (fabric._diagram) {
+        fabric._diagram.setWidth(fabric._diagram.wrapperEl.parentNode.clientWidth);
+        fabric._diagram.setHeight(fabric._diagram.wrapperEl.parentNode.clientHeight);
     }
 }
 
 fabric.window.ontouchstart = function () {
     fabric.isTouchDevice = true;
 }
+
 
 fabric.Diagram = function (DOMSelector) {
     const rootDomNode = document.getElementById(DOMSelector);
@@ -107,29 +114,31 @@ fabric.Palette = function (type, DOMSelector) {
             this._model = model;
             this.clear();
             if (model && Array.isArray(model)) {
-                this._posY = 20;
+                this._tamY = 20;
                 for (const node of model) {
                     await new Promise((resolve, reject) => {
                         fabric.Image.fromURL(node[this.sourceMap.path], img => {
                             if (img._originalElement) {
                                 if (img.width > img.height) img.scaleToWidth(this.sourceMap.width);
-                                else img.scaleToHeight(this.sourceMap.width);
+                                else img.scaleToHeight(this.sourceMap.height);
                                 let txtNombre = new fabric.Text(node[this.sourceMap.name], { fontSize: 14 });
+                                this._align = type;
                                 if (type === "vertical") {
                                     img.left = this.width / 2 - (img.width * img.scaleX) / 2;
-                                    img.top = this._posY;
-                                    txtNombre.top = this._posY + img.height * img.scaleY;
+                                    img.top = this._tamY;
+                                    txtNombre.top = this._tamY + img.height * img.scaleY;
                                     txtNombre.left = this.width / 2 - txtNombre.width / 2;
                                 }
                                 let comp = new fabric.Group([img, txtNombre], {
-                                    top: this._posY,
+                                    top: this._tamY,
                                     hasControls: false,
                                     hoverCursor: "pointer"
                                 });
                                 comp._posXDefault = comp.left;
-                                comp._posYDefault = comp.top;
+                                comp._tamYDefault = comp.top;
                                 comp._nodeData = node;
-                                this._posY += img.height * img.scaleY + 20 + txtNombre.height;
+                                comp._sourceMap = this.sourceMap;
+                                this._tamY += img.height * img.scaleY + 20 + txtNombre.height;
                                 this.add(comp);
                                 resolve();
                             } else {
@@ -138,10 +147,9 @@ fabric.Palette = function (type, DOMSelector) {
                         });
                     });
                 };
-                if (this._posY > rootDomNode.clientHeight) {
-                    this.setHeight(this._posY);
+                if (this._tamY > rootDomNode.clientHeight) {
+                    this.setHeight(this._tamY);
                 } else this.height = rootDomNode.clientHeight;
-                delete this._posY;
                 this.calcOffset();
             }
             return this._model;
@@ -149,6 +157,8 @@ fabric.Palette = function (type, DOMSelector) {
     });
     this._pallete.on({
         'mouse:up': function (e) {
+            console.log(e);
+            
             if (e.target) {
                 e.target._posYDefault && e.target._posXDefault && e.target.set({
                     top: e.target._posYDefault,
@@ -167,20 +177,12 @@ fabric.Palette = function (type, DOMSelector) {
                     fabric._diagram._lP.left < e.e.clientX &&
                     fabric._diagram._lP.left + fabric._diagram._lP.width > e.e.clientX &&
                     fabric._diagram._lP.top + fabric._diagram._lP.height > e.e.clientY) {
-
-                    var pendingTransform = fabric._pallete._currentTransform;
-
-                    var removeListener = fabric.util.removeListener;
-                    var addListener = fabric.util.addListener;
                     {
-                        //removeListener(fabric.document, 'mouseup', fabric._pallete._onMouseUp);
-                        removeListener(fabric.document, 'touchend', fabric._pallete._onMouseUp);
+                        fabric.util.removeListener(fabric.document, 'mousemove', fabric._pallete._onMouseMove);
+                        fabric.util.removeListener(fabric.document, 'touchmove', fabric._pallete._onMouseMove);
 
-                        removeListener(fabric.document, 'mousemove', fabric._pallete._onMouseMove);
-                        removeListener(fabric.document, 'touchmove', fabric._pallete._onMouseMove);
-
-                        addListener(fabric._pallete.upperCanvasEl, 'mousemove', fabric._pallete._onMouseMove);
-                        addListener(fabric._pallete.upperCanvasEl, 'touchmove', fabric._pallete._onMouseMove, {
+                        fabric.util.addListener(fabric._pallete.upperCanvasEl, 'mousemove', fabric._pallete._onMouseMove);
+                        fabric.util.addListener(fabric._pallete.upperCanvasEl, 'touchmove', fabric._pallete._onMouseMove, {
                             passive: false
                         });
 
@@ -188,42 +190,46 @@ fabric.Palette = function (type, DOMSelector) {
                             // Wait 500ms before rebinding mousedown to prevent double triggers
                             // from touch devices
                             setTimeout(function () {
-                                addListener(fabric._pallete.upperCanvasEl, 'mousedown', fabric._pallete._onMouseDown);
+                                fabric.util.addListener(fabric._pallete.upperCanvasEl, 'mousedown', fabric._pallete._onMouseDown);
                             }, 500);
                         }
                     }
                     {
-                        addListener(fabric.document, 'touchend', fabric._diagram._onMouseUp, {
+                        fabric.util.addListener(fabric.document, 'touchend', fabric._diagram._onMouseUp, {
                             passive: false
                         });
-                        addListener(fabric.document, 'touchmove', fabric._diagram._onMouseMove, {
+                        fabric.util.addListener(fabric.document, 'touchmove', fabric._diagram._onMouseMove, {
                             passive: false
                         });
 
-                        removeListener(fabric._diagram.upperCanvasEl, 'mousemove', fabric._diagram._onMouseMove);
-                        removeListener(fabric._diagram.upperCanvasEl, 'touchmove', fabric._diagram._onMouseMove);
+                        fabric.util.removeListener(fabric._diagram.upperCanvasEl, 'mousemove', fabric._diagram._onMouseMove);
+                        fabric.util.removeListener(fabric._diagram.upperCanvasEl, 'touchmove', fabric._diagram._onMouseMove);
 
                         if (fabric.isTouchDevice) {
                             // Unbind mousedown to prevent double triggers from touch devices
-                            removeListener(fabric._diagram.upperCanvasEl, 'mousedown', fabric._diagram._onMouseDown);
+                            fabric.util.removeListener(fabric._diagram.upperCanvasEl, 'mousedown', fabric._diagram._onMouseDown);
                         } else {
-                            addListener(fabric.document, 'mouseup', fabric._diagram._onMouseUp);
-                            addListener(fabric.document, 'mousemove', fabric._diagram._onMouseMove);
+                            fabric.util.addListener(fabric.document, 'mouseup', fabric._diagram._onMouseUp);
+                            fabric.util.addListener(fabric.document, 'mousemove', fabric._diagram._onMouseMove);
                         }
                     }
-
                     setTimeout(function () {
-                        e.target.canvas = fabric._diagram;
-                        e.target.migrated = true;
-                        fabric._diagram.add(e.target);
-
-                        fabric._diagram._currentTransform = pendingTransform;
-                        fabric._diagram._currentTransform.scaleX *= -1;
-                        fabric._diagram._currentTransform.original.scaleX *= -1;
-                        fabric._diagram.setActiveObject(e.target);
-                        fabric._diagram.renderAll();
+                        fabric.Image.fromURL(e.target._nodeData[e.target._sourceMap.path], img => {
+                            img.set({
+                                scaleX: e.target._nodeData.width / img.width / (img.getBoundingRect(false).width / img.getScaledWidth()),
+                                scaleY: e.target._nodeData.height / img.height / (img.getBoundingRect(false).height / img.getScaledHeight()),
+                                top: e.e.clientY,
+                                left: e.e.clientX 
+                            });
+                            const pendingTransform = JSON.parse(JSON.stringify(fabric._pallete._currentTransform));
+                            img._nodeData = e.target._nodeData;
+                            fabric._diagram.add(img);
+                            pendingTransform.target = img;
+                            fabric._diagram._currentTransform = pendingTransform;
+                            fabric._diagram.setActiveObject(img);
+                            fabric._diagram.renderAll();
+                        });
                     }, 10);
-
                 }
             }
         }
