@@ -1,6 +1,6 @@
 import * as go from 'gojs';
 import { generateCode } from "../components/Blockly/index";
-import {IOTeCASE} from "./IOTeCASE.js";
+import { IOTeCASE } from "./IOTeCASE.js";
 
 const componentsList = require("../json/componentsList.json");
 
@@ -19,7 +19,8 @@ export const initDiagram = (savedModel) => {
 
 
     diagram = IOTeCASE.Diagram("divDiagram");
-    
+
+    //diagram.nodeTemplateMap.add("", "");
 
     // // diagram = WENT(go.Diagram, "divDiagram", {
     // //     "undoManager.isEnabled": true,
@@ -59,7 +60,7 @@ export const initDiagram = (savedModel) => {
     //         } else if (e.change === go.ChangedEvent.Remove) {
     //           console.log(evt.propertyName + " removed node with key: " + e.oldValue);
     //         } else if (e.change === go.ChangedEvent.Property) {
-                
+
     //         }
     //       });
     // });
@@ -200,6 +201,10 @@ export const initDiagram = (savedModel) => {
     //Asignación del template (líneas) al diagrama
     // diagram.linkTemplate = linesTemplate;
 
+    // for (let i = 0; i < components.length; i++) {
+    //     diagram.nodeTemplateMap.add(components[i].category, {});
+    // }
+
 
     /* 
                         PALETA
@@ -209,15 +214,11 @@ export const initDiagram = (savedModel) => {
     // palette.nodeTemplate = paletteTemplate;
     // //Llenado de la paleta
     // palette.model = new go.GraphLinksModel(components);
-    let palette = IOTeCASE.Palette("vertical", "listComponents");
-    palette.sourceMap = {
-        path: "image",
-        height: 110,
-        width: 110,
-        name: "text"
-    }    
-    palette.model = components;
-    
+    let palette = new IOTeCASE.Palette("listComponents", "vertical");
+    palette.setNodeTemplate({ "nPropPath": "image", "height": 110, "width": 110, "nPropName": "text" });
+    palette.setNodeDataArray(components, "vertical");
+    palette.setDiagram(diagram);
+
     /* 
                         OVERVIEW
      */
