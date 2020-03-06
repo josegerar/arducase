@@ -18,7 +18,7 @@ export const initDiagram = (savedModel) => {
     WENT = go.GraphObject.make;
 
 
-    diagram = IOTeCASE.Diagram("divDiagram");
+    diagram = new IOTeCASE.Diagram("divDiagram");
 
     //diagram.nodeTemplateMap.add("", "");
 

@@ -1,23 +1,21 @@
 import { fabric } from "fabric";
 
 fabric.isTouchDevice = false;
-fabric._pallete = undefined;
 fabric._diagram = undefined;
 fabric._overview = undefined;
 
 fabric.Canvas.prototype.sequence = {
     prefix: 'iotc',
     seq: 0,
-    set: function(p, type) {
+    set: function (p, type) {
         if (type === "prefix")
             this.prefix = String(p);
         else if (type === "seq")
             this.seq = p;
     },
-    get: function(){
-        let result = this.prefix + this.seq;
+    get: function () {
         this.seq += 1;
-        return result;
+        return this.prefix + this.seq;
     }
 };
 fabric.Object.prototype.getZIndex = function () {
@@ -52,6 +50,28 @@ fabric.Canvas.prototype.add = (function (originalFn) {
     };
 })(fabric.Canvas.prototype.add);
 
+fabric.Canvas.prototype._getEl = function (elContainer) {
+
+    const rootDomNode = document.getElementById(elContainer);
+    if (!rootDomNode) {
+        throw new Error("Element cont ainer is not defined");
+    }
+    const canvas = document.createElement("canvas");
+    let el = `${elContainer}canvas`;
+
+    while (document.getElementById(el) !== null) {
+        el += fabric.util.getRandomInt(0, 500);
+    }
+
+    canvas.id = el;
+    canvas.width = rootDomNode.clientWidth;
+    canvas.height = rootDomNode.clientHeight;
+
+    rootDomNode.appendChild(canvas);
+
+    return el;
+}
+
 // fabric.window.onresize = function () {
 //     if (fabric._pallete) {
 //         if (fabric._pallete._align === "vertical") {
@@ -73,23 +93,61 @@ fabric.Canvas.prototype.add = (function (originalFn) {
 //     fabric.isTouchDevice = true;
 // }
 
+fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
-fabric.Diagram = function (DOMSelector) {
-    const rootDomNode = document.getElementById(DOMSelector);
-    const canvas = document.createElement("canvas");
-    canvas.id = "canvasDiagram";
-    canvas.width = rootDomNode.clientWidth;
-    canvas.height = rootDomNode.clientHeight;
-    rootDomNode.appendChild(canvas);
-    this._diagram = new this.Canvas("canvasDiagram", {
-        isDrawingMode: false,
-        preserveObjectStacking: true,
-        selection: false,
-        perPixelTargetFind: true
-    });
+    initialize: function (elContainer, nodeDataArray) {
 
-    return this._diagram;
-}
+        const options = {
+            isDrawingMode: false,
+            preserveObjectStacking: true,
+            selection: false,
+            perPixelTargetFind: true
+        };
+
+        if (arguments.length === 0 || !elContainer) {
+            throw new Error("Properties undefined to call");
+        }
+
+        this.callSuper('initialize', this._getEl(elContainer), options);
+
+        this.upperCanvasEl.tabIndex = 1;
+
+        fabric._diagram = this;
+
+        this._initEvents();
+    },
+
+    isEditing: false,
+
+    _initEvents: function(){
+
+        fabric.window.onresize = this._resizeCanvas.bind(this);
+
+        fabric.util.addListener(this.upperCanvasEl, 'keydown', this._onKeyEvents.bind(this));
+
+        fabric.util.addListener(this.upperCanvasEl, 'blur', this._onBlur.bind(this));
+
+        fabric.util.addListener(this.upperCanvasEl, 'focus', this._onFocus.bind(this));
+    },
+
+    _onBlur: function(){
+        this.isEditing = false;
+    },
+
+    _onFocus: function(e){
+        this.isEditing = true;
+    },
+
+    _onKeyEvents: function (e) {
+        console.log(this.isEditing,e);
+    },
+
+    _resizeCanvas: function () {
+        this.setWidth(this.wrapperEl.parentNode.clientWidth);
+        this.setHeight(this.wrapperEl.parentNode.clientHeight);
+        this._lP = this.wrapperEl.parentNode.getBoundingClientRect();
+    }
+});
 
 fabric.Palette = fabric.util.createClass(fabric.Canvas, {
 
@@ -102,7 +160,7 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
             moveCursor: "no-drop"
         };
 
-        if (!elContainer) {
+        if (arguments.length === 0 || !elContainer) {
             throw new Error("Properties undefined to call");
         }
 
@@ -116,11 +174,10 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
 
         this.on({ 'mouse:up': this._mouseUpEvent, 'object:moving': this._objectMovingEvent });
 
-        fabric._palette = this;
-
         fabric.window.onresize = this._resizeCanvas.bind(this);
 
-        fabric.window.ontouchstart = this._touchStart.bind(this);
+        fabric._palette = this;
+
     },
 
     _diagram: null,
@@ -141,8 +198,6 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
 
     _pWidth: null,
 
-    isTouchDevice: false,
-
     _configNodeDataArray: function (nodeDataArray, orientationType) {
 
         Array.isArray(nodeDataArray) || (nodeDataArray = []);
@@ -156,24 +211,6 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
         this._pWidth = 20;
         this._pHeight = 20;
 
-    },
-
-    _getEl: function (elContainer) {
-        const rootDomNode = document.getElementById(elContainer);
-        const canvas = document.createElement("canvas");
-        let el = "canvasPalette";
-
-        while (document.getElementById(el) !== null) {
-            el += fabric.util.getRandomInt(0, 500);
-        }
-
-        canvas.id = el;
-        canvas.width = rootDomNode.clientWidth;
-        canvas.height = rootDomNode.clientHeight;
-
-        rootDomNode.appendChild(canvas);
-
-        return el;
     },
 
     getDiagram: function () {
@@ -221,6 +258,8 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
                 this._diagram._lP.left + this._diagram._lP.width > e.e.clientX &&
                 this._diagram._lP.top + this._diagram._lP.height > e.e.clientY) {
 
+                const pendingTransform = JSON.parse(JSON.stringify(this._currentTransform));
+
                 {
                     fabric.util.removeListener(fabric.document, 'mousemove', this._onMouseMove);
                     fabric.util.removeListener(fabric.document, 'touchmove', this._onMouseMove);
@@ -230,7 +269,7 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
                         passive: false
                     });
 
-                    if (this.isTouchDevice) {
+                    if (fabric.isTouchSupported) {
                         // Wait 500ms before rebinding mousedown to prevent double triggers
                         // from touch devices
                         setTimeout(function () {
@@ -249,7 +288,7 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
                     fabric.util.removeListener(this._diagram.upperCanvasEl, 'mousemove', this._diagram._onMouseMove);
                     fabric.util.removeListener(this._diagram.upperCanvasEl, 'touchmove', this._diagram._onMouseMove);
 
-                    if (this.isTouchDevice) {
+                    if (fabric.isTouchSupported) {
                         // Unbind mousedown to prevent double triggers from touch devices
                         fabric.util.removeListener(this._diagram.upperCanvasEl, 'mousedown', this._diagram._onMouseDown);
                     } else {
@@ -264,15 +303,17 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
                         img.set({
                             scaleX: e.target._nodeData.width / img.width / (img.getBoundingRect(false).width / img.getScaledWidth()),
                             scaleY: e.target._nodeData.height / img.height / (img.getBoundingRect(false).height / img.getScaledHeight()),
-                            top: e.e.clientY - this._diagram._lP.top - Math.abs(e.pointer.y - e.target.top),
-                            left: e.e.clientX - this._diagram._lP.left - Math.abs(e.pointer.x - e.target.left),
+                            top: e.e.clientY - this._diagram._lP.top - Math.abs(e.pointer.y - e.target.top) / e.target.scaleX / e.target.scaleY,
+                            left: e.e.clientX - this._diagram._lP.left - Math.abs(e.pointer.x - e.target.left) / e.target.scaleX / e.target.scaleY,
                             hasControls: false
                         });
 
-                        const pendingTransform = JSON.parse(JSON.stringify(this._currentTransform));
                         img._nodeData = e.target._nodeData;
+
                         this._diagram.add(img);
+
                         pendingTransform.target = img;
+
                         this._diagram._currentTransform = pendingTransform;
                         this._diagram.setActiveObject(img);
                         this._diagram.renderAll();
@@ -354,7 +395,7 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
         this._pNPathBinding = nodeTemplate.nPropPath;
     },
 
-    _touchStart: function() {
+    _touchStart: function () {
         this.isTouchDevice = true;
     }
 });
