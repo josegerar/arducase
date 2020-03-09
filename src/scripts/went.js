@@ -226,6 +226,9 @@ export const initDiagram = (savedModel) => {
     //     observed: diagram
     // });
 
+    let overView = new IOTeCASE.OverView("div-overview",{
+        observed: diagram
+    });
 
     //Carga diagrama
     // loadDiagram(savedModel);
