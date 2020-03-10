@@ -69,6 +69,9 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
         this.on('mouse:down', this._onMouseDownEvents);
         this.on('mouse:move', this._onPanning);
         this.on('mouse:up', this._offPanning);
+        fabric.util.addListener(fabric.window, 'resize', this._onResizeCanvas.bind(this));
+
+        this.wrapperEl.style.overflow = "hidden";
 
         this._observed = properties.observed;
 
@@ -87,8 +90,6 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
     _maxPointY: 1200,
 
     _observed: null,
-
-    isRendering: false,
 
     _continuePanning: function (e) {
 
@@ -152,37 +153,59 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
     },
 
 
-    xzz:0,
+    xzz: 0,
 
     _onRenderObserved: function (e) {
-            let _toJSON = this._observed.toJSON();
-            delete _toJSON.background;
-            // this.viewportTransform[4] = this._observed.viewportTransform[4] * this._observed.getZoom();
-            // this.viewportTransform[5] = this._observed.viewportTransform[5] * this._observed.getZoom();
-            this.setZoom(this._observed.getZoom() / (((this._observed.width * this._observed.height) / 2) / ((this.width * this.height) / 2)));
-            // this.viewportTransform[4] = this._observed.viewportTransform[4] * this.getZoom();
-            // this.viewportTransform[5] = this._observed.viewportTransform[5] * this.getZoom();
-            //         const _widthD = Math.abs(this._observed.width - this._observed.width * this._observed.getZoom()) + Math.abs(this._observed._maxPointX * this._observed.getZoom());
-            //         const _heightD = Math.abs(this._observed.height - this._observed.height * this._observed.getZoom()) + Math.abs(this._observed._maxPointY * this._observed.getZoom());
 
-            
+        let _toJSON = this._observed.toJSON();
+        delete _toJSON.background;
+        // this.viewportTransform[4] = this._observed.viewportTransform[4] * this._observed.getZoom();
+        // this.viewportTransform[5] = this._observed.viewportTransform[5] * this._observed.getZoom();
 
-            // const _areaO = (this.width * this.height) / 2;
-            // const _areaD = (_widthD * _heightD) / 2;
-            // console.log(_areaD, _areaO);
+        const _widthD = Math.abs(this._observed.width - this._observed.width * this._observed.getZoom()) + Math.abs(this._observed._maxPointX * this._observed.getZoom());
+        const _heightD = Math.abs(this._observed.height - this._observed.height * this._observed.getZoom()) + Math.abs(this._observed._maxPointY * this._observed.getZoom());
 
-            // console.log(((_areaO * 100)/_areaD)/100);
+        if (!_widthD) {
+            console.log("calc");
+
+            this._observed.calcViewportBoundaries();
+        }
+
+        console.log([_widthD, _heightD, this._observed.width, this._observed.height, this.width, this.height]);
+
+        const _percentHiddenX = ((_widthD * 100) / this._observed.width) / 100;
+        const _percentHiddenY = ((_heightD * 100) / this._observed.height) / 100;
+
+        this.setZoom(this._observed.getZoom() / (((this._observed.width * this._observed.height) / 2) / ((this.width * _percentHiddenX * this.height * _percentHiddenY) / 2)));
+        // this.viewportTransform[4] = this._observed.viewportTransform[4] * this.getZoom();
+        // this.viewportTransform[5] = this._observed.viewportTransform[5] * this.getZoom();
 
 
-            //         this.viewportTransform[0] =  ((_areaO * 100)/_areaD)/100;
-            //         this.viewportTransform[3] = this.viewportTransform[0];
-            this.viewportTransform[4] = this.width - this.width * this.getZoom();
-            this.viewportTransform[5] = this.height - this.height * this.getZoom();
-            this.loadFromJSON(_toJSON, () => {
-                this.requestRenderAll();
-            }, (oJSON, oCanvas) => {
+        // const _areaO = (this.width * this.height) / 2;
+        // const _areaD = (_widthD * _heightD) / 2;
+        // console.log(_areaD, _areaO);
 
-            });
+        // console.log(((_areaO * 100)/_areaD)/100);
+
+
+        //         this.viewportTransform[0] =  ((_areaO * 100)/_areaD)/100;
+        //         this.viewportTransform[3] = this.viewportTransform[0]; this.width * _percentHiddenX * this.height * _percentHiddenY
+        this.viewportTransform[4] = this.width - this.width * this.getZoom();
+        this.viewportTransform[5] = this.height - this.height * this.getZoom();
+        this.loadFromJSON(_toJSON, () => {
+            this.requestRenderAll();
+        }, (oJSON, oCanvas) => {
+
+        });
+
+
+    },
+
+    _onResizeCanvas: function () {
+
+        this.setWidth(this.wrapperEl.parentNode.clientWidth);
+        this.setHeight(this.wrapperEl.parentNode.clientHeight);
+
     },
 
     _setLimitsDiagram: function () {
@@ -619,6 +642,8 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
             this.setNodeDataArray(nodeDataArray, orientationType);
         }
 
+        this.wrapperEl.style.overflow = "overlay";
+
         this.on({ 'mouse:up': this._mouseUpEvent, 'object:moving': this._objectMovingEvent });
 
         fabric.util.addListener(fabric.window, 'resize', this._resizeCanvas.bind(this));
@@ -674,7 +699,6 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
 
         rootDomNode.style.maxHeight = "100%";
         rootDomNode.style.maxWidth = "100%";
-        rootDomNode.style.overflow = "scroll";
 
         const canvas = document.createElement("canvas");
         let el = `${elContainer}canvas`;
