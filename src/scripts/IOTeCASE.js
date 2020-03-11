@@ -159,21 +159,20 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     _onRenderObserved: function (e) {
 
-        let _toJSON = this._observed.toJSON();
+        let _toJSON = this._observed.toJSON(["viewportTransform"]);
         delete _toJSON.background;
+
+
+        this.setViewportTransform(_toJSON.viewportTransform);
+
 
         this.setZoom(this._observed.getZoom() / ((Math.abs((this._observed.height - this._observed.height * this._observed.getZoom()) + (this._observed.height + this._observed.height * this._observed.getZoom()))) / this.height));
 
-        console.log([
-            this._observed.height - this._observed.height * this._observed.getZoom(),
-            this._observed._maxPointY * this._observed.getZoom(),
-            this._observed.height,
-            this
-        ]);
 
+        delete _toJSON.viewportTransform;
 
-        this.viewportTransform[4] =  this.width - this.width * this.getZoom();
-        this.viewportTransform[5] = this.height - this.height * this.getZoom();
+        this.viewportTransform[4] = 0;
+        this.viewportTransform[5] = 0;
         this.loadFromJSON(_toJSON, () => {
             this.requestRenderAll();
         }, (oJSON, oCanvas) => {
@@ -203,18 +202,7 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     _setLimitsDiagram: function () {
 
-        const zoom = this.getZoom();
 
-        const minX = this.width - this.width * zoom;
-        const minY = this.height - this.height * zoom;
-
-        if (this.viewportTransform[4] < minX) this.viewportTransform[4] = minX;
-        if (this.viewportTransform[5] < minY) this.viewportTransform[5] = minY;
-
-        if (this.viewportTransform[4] > this._maxPointX * zoom) this.viewportTransform[4] = this._maxPointX * zoom;
-        if (this.viewportTransform[5] > this._maxPointY * zoom) this.viewportTransform[5] = this._maxPointY * zoom;
-
-        this.requestRenderAll();
     }
 
 });
@@ -536,7 +524,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         let zoom = this.getZoom();
         zoom = zoom - e.e.deltaY / Math.abs(e.e.deltaY * 10);
         if (zoom > 2) zoom = 2;
-        if (zoom < 0.5) zoom = 0.5;
+        if (zoom < (this.getWidth()/this._maxPointX)) zoom = this.getWidth()/this._maxPointX;
+        if (zoom < (this.getHeight()/this._maxPointY)) zoom = this.getHeight()/this._maxPointY;
         this.zoomToPoint({ x: e.e.offsetX, y: e.e.offsetY }, zoom);
 
         this._setLimitsDiagram();
@@ -580,19 +569,18 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         const zoom = this.getZoom();
 
-        const minX = this.width - this.width * zoom;
-        const minY = this.height - this.height * zoom;
-        const maxX = this.width + this.width * zoom;
-        const maxY = this.height + this.height * zoom;
-        console.log([minX, minY, maxX, maxY, this.viewportTransform[4], this.viewportTransform[5]]);
-        
+        const minX = this.getWidth() - this._maxPointX * zoom;
+        const minY = this.getHeight() - this._maxPointY * zoom;
+
+        console.log([minX, minY, this.getWidth(), this.getHeight()]);
+
 
         if (this.viewportTransform[4] < minX) this.viewportTransform[4] = minX;
         if (this.viewportTransform[5] < minY) this.viewportTransform[5] = minY;
 
-        if (this.viewportTransform[4] > maxX) this.viewportTransform[4] = maxX;
-        if (this.viewportTransform[5] > maxY) this.viewportTransform[5] = maxY;
-
+        if (this.viewportTransform[4] >= 0) this.viewportTransform[4] = 0;
+        if (this.viewportTransform[5] >= 0) this.viewportTransform[5] = 0;
+        console.log(this.viewportTransform);
         this.requestRenderAll();
     },
 
