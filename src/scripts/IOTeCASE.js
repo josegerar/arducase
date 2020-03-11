@@ -69,13 +69,17 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
         this.on('mouse:down', this._onMouseDownEvents);
         this.on('mouse:move', this._onPanning);
         this.on('mouse:up', this._offPanning);
+
         fabric.util.addListener(fabric.window, 'resize', this._onResizeCanvas.bind(this));
 
         this.wrapperEl.style.overflow = "hidden";
+        this.wrapperEl.style.backgroundColor = "mintcream";
 
         this._observed = properties.observed;
 
         this._observed.on("after:render", this._onRenderObserved.bind(this));
+
+        this._onResizeCanvas();
 
         fabric._overview = this;
 
@@ -127,6 +131,7 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
         canvas.style.maxHeight = "100%";
         canvas.style.maxWidth = "100%";
 
+
         rootDomNode.appendChild(canvas);
 
         return el;
@@ -152,45 +157,22 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     },
 
-
-    xzz: 0,
-
     _onRenderObserved: function (e) {
 
         let _toJSON = this._observed.toJSON();
         delete _toJSON.background;
-        // this.viewportTransform[4] = this._observed.viewportTransform[4] * this._observed.getZoom();
-        // this.viewportTransform[5] = this._observed.viewportTransform[5] * this._observed.getZoom();
 
-        const _widthD = Math.abs(this._observed.width - this._observed.width * this._observed.getZoom()) + Math.abs(this._observed._maxPointX * this._observed.getZoom());
-        const _heightD = Math.abs(this._observed.height - this._observed.height * this._observed.getZoom()) + Math.abs(this._observed._maxPointY * this._observed.getZoom());
+        this.setZoom(this._observed.getZoom() / ((Math.abs((this._observed.height - this._observed.height * this._observed.getZoom()) + (this._observed.height + this._observed.height * this._observed.getZoom()))) / this.height));
 
-        if (!_widthD) {
-            console.log("calc");
-
-            this._observed.calcViewportBoundaries();
-        }
-
-        console.log([_widthD, _heightD, this._observed.width, this._observed.height, this.width, this.height]);
-
-        const _percentHiddenX = ((_widthD * 100) / this._observed.width) / 100;
-        const _percentHiddenY = ((_heightD * 100) / this._observed.height) / 100;
-
-        this.setZoom(this._observed.getZoom() / (((this._observed.width * this._observed.height) / 2) / ((this.width * _percentHiddenX * this.height * _percentHiddenY) / 2)));
-        // this.viewportTransform[4] = this._observed.viewportTransform[4] * this.getZoom();
-        // this.viewportTransform[5] = this._observed.viewportTransform[5] * this.getZoom();
+        console.log([
+            this._observed.height - this._observed.height * this._observed.getZoom(),
+            this._observed._maxPointY * this._observed.getZoom(),
+            this._observed.height,
+            this
+        ]);
 
 
-        // const _areaO = (this.width * this.height) / 2;
-        // const _areaD = (_widthD * _heightD) / 2;
-        // console.log(_areaD, _areaO);
-
-        // console.log(((_areaO * 100)/_areaD)/100);
-
-
-        //         this.viewportTransform[0] =  ((_areaO * 100)/_areaD)/100;
-        //         this.viewportTransform[3] = this.viewportTransform[0]; this.width * _percentHiddenX * this.height * _percentHiddenY
-        this.viewportTransform[4] = this.width - this.width * this.getZoom();
+        this.viewportTransform[4] =  this.width - this.width * this.getZoom();
         this.viewportTransform[5] = this.height - this.height * this.getZoom();
         this.loadFromJSON(_toJSON, () => {
             this.requestRenderAll();
@@ -198,14 +180,25 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
         });
 
-
     },
 
     _onResizeCanvas: function () {
 
-        this.setWidth(this.wrapperEl.parentNode.clientWidth);
-        this.setHeight(this.wrapperEl.parentNode.clientHeight);
+        if (this._observed) {
 
+            const scale = ((this._observed.width / this.wrapperEl.parentNode.clientWidth) >= (this._observed.height / this.wrapperEl.parentNode.clientHeight)) ? (this._observed.width / this.wrapperEl.parentNode.clientWidth) : (this._observed.height / this.wrapperEl.parentNode.clientHeight);
+
+            this.setWidth(this._observed.width / scale);
+            this.setHeight(this._observed.height / scale);
+
+            this.wrapperEl.parentNode.style.padding = `${(this.wrapperEl.parentNode.clientHeight - (this._observed.height / scale)) / 2}px ${(this.wrapperEl.parentNode.clientWidth - (this._observed.width / scale)) / 2}px`;
+
+        } else {
+
+            this.setWidth(this.wrapperEl.parentNode.clientWidth);
+            this.setHeight(this.wrapperEl.parentNode.clientHeight);
+
+        }
     },
 
     _setLimitsDiagram: function () {
@@ -248,6 +241,9 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         this._initContextMenu(elContainer);
 
         this.callSuper('initialize', el, options);
+
+        this.wrapperEl.style.maxHeight = "100%";
+        this.wrapperEl.style.maxWidth = "100%";
 
         this._initDiagram();
     },
@@ -398,8 +394,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         const zoom = this.getZoom();
 
-        this.viewportTransform[4] = ((this._maxPointX * zoom) - (this.width - this.width * zoom)) - (this.width / 2);
-        this.viewportTransform[5] = ((this._maxPointY * zoom) - (this.height - this.height * zoom)) - (this.height / 2);
+        // this.viewportTransform[4] = ((this.width + this.width * zoom) - (this.width - this.width * zoom)) - (this.width / 2);
+        // this.viewportTransform[5] = ((this.height + this.height * zoom) - (this.height - this.height * zoom)) - (this.height / 2);
 
         this.setBackgroundColor({ source: this._backGroundImageURL, repeat: 'repeat' }, this.requestRenderAll.bind(this), () => this.requestRenderAll());
 
@@ -586,12 +582,16 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         const minX = this.width - this.width * zoom;
         const minY = this.height - this.height * zoom;
+        const maxX = this.width + this.width * zoom;
+        const maxY = this.height + this.height * zoom;
+        console.log([minX, minY, maxX, maxY, this.viewportTransform[4], this.viewportTransform[5]]);
+        
 
         if (this.viewportTransform[4] < minX) this.viewportTransform[4] = minX;
         if (this.viewportTransform[5] < minY) this.viewportTransform[5] = minY;
 
-        if (this.viewportTransform[4] > this._maxPointX * zoom) this.viewportTransform[4] = this._maxPointX * zoom;
-        if (this.viewportTransform[5] > this._maxPointY * zoom) this.viewportTransform[5] = this._maxPointY * zoom;
+        if (this.viewportTransform[4] > maxX) this.viewportTransform[4] = maxX;
+        if (this.viewportTransform[5] > maxY) this.viewportTransform[5] = maxY;
 
         this.requestRenderAll();
     },
@@ -643,6 +643,8 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
         }
 
         this.wrapperEl.style.overflow = "overlay";
+        this.wrapperEl.style.maxWidth = "100%";
+        this.wrapperEl.style.maxHeight = "100%";
 
         this.on({ 'mouse:up': this._mouseUpEvent, 'object:moving': this._objectMovingEvent });
 

@@ -190,8 +190,6 @@
 
 .div-infoPanel #div-overview {
     grid-area: 2 / 1 / 3 / 2;
-
-    /*padding: 10px;*/
 }
 
 .div-infoDraggable {
@@ -234,11 +232,4 @@
     padding: 10px;
     height: 100%;
     width: 100%;
-}
-
-.canvas-container {
-    overflow: scroll;
-    overflow-y: hidden;
-    max-height: 100%;
-    max-width: 100%;
 }
