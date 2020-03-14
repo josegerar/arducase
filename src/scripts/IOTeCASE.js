@@ -159,20 +159,11 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     _onRenderObserved: function (e) {
 
-        let _toJSON = this._observed.toJSON(["viewportTransform"]);
+        let _toJSON = this._observed.toJSON();
         delete _toJSON.background;
 
+        this.setZoom(0.13);
 
-        this.setViewportTransform(_toJSON.viewportTransform);
-
-
-        this.setZoom(this._observed.getZoom() / ((Math.abs((this._observed.height - this._observed.height * this._observed.getZoom()) + (this._observed.height + this._observed.height * this._observed.getZoom()))) / this.height));
-
-
-        delete _toJSON.viewportTransform;
-
-        this.viewportTransform[4] = 0;
-        this.viewportTransform[5] = 0;
         this.loadFromJSON(_toJSON, () => {
             this.requestRenderAll();
         }, (oJSON, oCanvas) => {
@@ -250,9 +241,13 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _backGroundImageURL: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hvdF5VCAUAAADLSURBVFhH7ZnBCoMwEET9/68URBHSNj0UolFoI+aQickKlT05jz0MGQIPkb2kadu3ta42ff/MTtLRazct55bajOMjO0lHr920vnWMMTGV0GuphVALoRaiqNV1dq4TLsdUIrTe+z0fw+ndmEo0w/D61AmXYyqh1179WjGVuNLyl0eohVALuZ8Wtzwgt9zyiNxSC6EWQi1EUYtbHpBbbnlEbqmFUAuhFqKoxS0PyC23PCK31EKohVAL0dXK3vLSOX0TnKZ1z8fw/3uiW37L27QIZwrV4gAAAABJRU5ErkJggg==",
 
-    _maxPointX: 1200,
+    _maxPointX: 0,
 
-    _maxPointY: 1200,
+    _maxPointY: 0,
+
+    _limitView: null,
+
+    _limitZoom: null,
 
     isEditing: false,
 
@@ -299,6 +294,45 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         }
 
         document.getElementsByTagName('head')[0].appendChild(style);
+    },
+
+    _addLimit: function () {
+        return new fabric.Rect({
+            fill: 'rgba(0,0,0,0)',
+            stroke: 'rgba(0,0,0,1)',
+            strokeWidth: 4,
+            selectable: false,
+            evented: false
+        });
+    },
+
+    _addLimitsView: function () {
+        this._limitView = this._addLimit();
+
+        this._limitView.set({
+            left: 0,
+            top: 0,
+            width: this.vptCoords.br.x - this.vptCoords.tl.x - this._limitView.strokeWidth,
+            height: this.vptCoords.br.y - this.vptCoords.tl.y - this._limitView.strokeWidth
+        });
+        this.add(this._limitView);
+    },
+
+    _addLimitsZoom: function () {
+        this._limitZoom = this._addLimit();
+
+        let points = {}, iVpt = fabric.util.invertTransform(this.viewportTransform);
+        points.tl = fabric.util.transformPoint({ x: 0, y: 0 }, iVpt);
+        points.br = fabric.util.transformPoint({ x: this._maxPointX * this.getZoom(), y: this._maxPointY * this.getZoom() }, iVpt);
+
+        this._limitZoom.set({
+            left: 0,
+            top: 0,
+            width: points.br.x - points.tl.x - this._limitZoom.strokeWidth,
+            height: points.br.y - points.tl.y - this._limitZoom.strokeWidth
+        });
+
+        this.add(this._limitZoom);
     },
 
     _continuePanning: function (e) {
@@ -380,12 +414,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _initDiagram: function () {
 
-        const zoom = this.getZoom();
-
-        // this.viewportTransform[4] = ((this.width + this.width * zoom) - (this.width - this.width * zoom)) - (this.width / 2);
-        // this.viewportTransform[5] = ((this.height + this.height * zoom) - (this.height - this.height * zoom)) - (this.height / 2);
-
-        this.setBackgroundColor({ source: this._backGroundImageURL, repeat: 'repeat' }, this.requestRenderAll.bind(this), () => this.requestRenderAll());
+        this.calcViewportBoundaries();
 
         this.upperCanvasEl.tabIndex = 1;
 
@@ -394,6 +423,15 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         this._initEvents();
 
         this._lP = this.wrapperEl.parentNode.getBoundingClientRect();
+
+        this._maxPointX = this.getWidth() + (this.getWidth() / 2);
+
+        this._maxPointY = this.getHeight() + (this.getHeight() / 2);
+
+        this._addLimitsView();
+        this._addLimitsZoom();
+
+        this.setBackgroundColor({ source: this._backGroundImageURL, repeat: 'repeat' }, this.requestRenderAll.bind(this), () => this.requestRenderAll());
 
     },
 
@@ -524,8 +562,9 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         let zoom = this.getZoom();
         zoom = zoom - e.e.deltaY / Math.abs(e.e.deltaY * 10);
         if (zoom > 2) zoom = 2;
-        if (zoom < (this.getWidth()/this._maxPointX)) zoom = this.getWidth()/this._maxPointX;
-        if (zoom < (this.getHeight()/this._maxPointY)) zoom = this.getHeight()/this._maxPointY;
+        if (zoom < (this.getWidth() / this._maxPointX)) zoom = this.getWidth() / this._maxPointX;
+        if (zoom < (this.getHeight() / this._maxPointY)) zoom = this.getHeight() / this._maxPointY;
+
         this.zoomToPoint({ x: e.e.offsetX, y: e.e.offsetY }, zoom);
 
         this._setLimitsDiagram();
@@ -567,21 +606,45 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _setLimitsDiagram: function () {
 
-        const zoom = this.getZoom();
-
-        const minX = this.getWidth() - this._maxPointX * zoom;
-        const minY = this.getHeight() - this._maxPointY * zoom;
-
-        console.log([minX, minY, this.getWidth(), this.getHeight()]);
-
+        const minX = this.getWidth() - this._maxPointX * this.getZoom();
+        const minY = this.getHeight() - this._maxPointY * this.getZoom();
 
         if (this.viewportTransform[4] < minX) this.viewportTransform[4] = minX;
         if (this.viewportTransform[5] < minY) this.viewportTransform[5] = minY;
 
         if (this.viewportTransform[4] >= 0) this.viewportTransform[4] = 0;
         if (this.viewportTransform[5] >= 0) this.viewportTransform[5] = 0;
-        console.log(this.viewportTransform);
+
+        this.calcViewportBoundaries();
+
+        this._setLimitsContainer();
+
         this.requestRenderAll();
+    },
+
+    _setLimitsContainer: function () {
+
+        this._limitView && this._limitView.set({
+            top: this.vptCoords.tl.y,
+            left: this.vptCoords.tl.x,
+            width: this.vptCoords.br.x - this.vptCoords.tl.x - this._limitView.strokeWidth,
+            height: this.vptCoords.br.y - this.vptCoords.tl.y - this._limitView.strokeWidth
+        });
+
+        let points = {}, iVpt = fabric.util.invertTransform(this.viewportTransform);
+
+        points.tl = fabric.util.transformPoint({ x: 0, y: 0 }, iVpt);
+        points.br = fabric.util.transformPoint({
+            x: -(this.getWidth() - this._maxPointX * this.getZoom()) + this.getWidth(),
+            y: -(this.getHeight() - this._maxPointY * this.getZoom()) + this.getHeight()
+        }, iVpt);
+
+        this._limitZoom.set({
+            top: 0,
+            left: 0,
+            width: points.br.x - points.tl.x - this._limitZoom.strokeWidth,
+            height: points.br.y - points.tl.y - this._limitZoom.strokeWidth
+        });
     },
 
     _fireObjectMenu: function (e) {
