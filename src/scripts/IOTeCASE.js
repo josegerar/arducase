@@ -33,7 +33,9 @@ fabric.Object.prototype.toObject = (function (toObject) {
             uid: this.uid,
             name: this.name,
             ports: this.ports,
-            part: this.part
+            part: this.part,
+            isLimit: this.isLimit,
+            isRoot: this.isRoot
         });
     };
 })(fabric.Object.prototype.toObject);
@@ -66,8 +68,8 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
         this.callSuper('initialize', el, options);
 
-        this.on('mouse:down', this._onMouseDownEvents);
-        this.on('mouse:move', this._onPanning);
+        this.on('mouse:down', this._onPanning);
+        this.on('mouse:move', this._continuePanning);
         this.on('mouse:up', this._offPanning);
 
         fabric.util.addListener(fabric.window, 'resize', this._onResizeCanvas.bind(this));
@@ -81,6 +83,8 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
         this._onResizeCanvas();
 
+        this.defaultCursor = "pointer";
+
         fabric._overview = this;
 
     },
@@ -89,21 +93,27 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     lastPosY: 0,
 
-    _maxPointX: 1200,
-
-    _maxPointY: 1200,
-
     _observed: null,
+
+    isDragging: false,
+
+    _limitZoom: null,
 
     _continuePanning: function (e) {
 
-        this.viewportTransform[4] = e.e.clientX - this.lastPosX + this.viewportTransform[4];
-        this.viewportTransform[5] = e.e.clientY - this.lastPosY + this.viewportTransform[5];
+        if (this.isDragging) {
 
-        this._setLimitsDiagram();
+            this.viewportTransform[4] = e.e.clientX - this.lastPosX + this.viewportTransform[4];
+            this.viewportTransform[5] = e.e.clientY - this.lastPosY + this.viewportTransform[5];
 
-        this.lastPosX = e.e.clientX;
-        this.lastPosY = e.e.clientY;
+            this._setLimitsDiagram();
+
+            this.requestRenderAll();
+
+            this.lastPosX = e.e.clientX;
+            this.lastPosY = e.e.clientY;
+
+        }
 
     },
 
@@ -139,16 +149,24 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     _offPanning: function (e) {
 
-        this.calcOffset();
+        if (this.isDragging) {
 
-        this.forEachObject(o => {
-            o.setCoords();
-        });
+            this.isDragging = false;
+            this.selection = true;
+
+            this.calcOffset();
+            this.forEachObject(o => {
+                o.setCoords();
+            });
+        }
     },
 
     _onPanning: function (e) {
 
         if (e.button === 1) {
+
+            this.isDragging = true;
+            this.selection = false;
 
             this.lastPosX = e.e.clientX;
             this.lastPosY = e.e.clientY;
@@ -159,15 +177,26 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     _onRenderObserved: function (e) {
 
-        let _toJSON = this._observed.toJSON();
+        let _toJSON = this._observed.toJSON(["isLimit", "isRoot"]);
         delete _toJSON.background;
 
-        this.setZoom(0.13);
+        console.log(_toJSON);
+
 
         this.loadFromJSON(_toJSON, () => {
             this.requestRenderAll();
         }, (oJSON, oCanvas) => {
 
+            oCanvas.set({
+                selectable: false,
+                evented: false
+            });
+
+            if (oCanvas.isLimit) {
+                console.log(oCanvas);
+
+                this._limitZoom = oCanvas;
+            }
         });
 
     },
@@ -181,6 +210,8 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
             this.setWidth(this._observed.width / scale);
             this.setHeight(this._observed.height / scale);
 
+            this.setZoom(this.width / this._observed._maxPointX);
+
             this.wrapperEl.parentNode.style.padding = `${(this.wrapperEl.parentNode.clientHeight - (this._observed.height / scale)) / 2}px ${(this.wrapperEl.parentNode.clientWidth - (this._observed.width / scale)) / 2}px`;
 
         } else {
@@ -188,12 +219,30 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
             this.setWidth(this.wrapperEl.parentNode.clientWidth);
             this.setHeight(this.wrapperEl.parentNode.clientHeight);
 
+            this.setZoom(0.13);
         }
     },
 
     _setLimitsDiagram: function () {
 
+        const minX = this.getWidth() - (this.getWidth() + (this.getWidth() / 2)) * this.getZoom();
+        const minY = this.getHeight() - (this.getHeight() + (this.getHeight() / 2)) * this.getZoom();
 
+        if (this.viewportTransform[4] > minX) this.viewportTransform[4] = minX;
+        if (this.viewportTransform[5] > minY) this.viewportTransform[5] = minY;
+
+        if (this.viewportTransform[4] <= 0) this.viewportTransform[4] = 0;
+        if (this.viewportTransform[5] <= 0) this.viewportTransform[5] = 0;
+
+
+        this.calcViewportBoundaries();
+        console.log(this, minX, minY);
+
+
+        this._limitZoom && this._limitZoom.set({
+            top: this.vptCoords.tl.y,
+            left: this.vptCoords.tl.x,
+        });
     }
 
 });
@@ -260,6 +309,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     lastPosY: 0,
 
     _addCssStyleContextMenu: function (el) {
+
         const css = `
         .${el} {
             width: 200px;
@@ -294,19 +344,24 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         }
 
         document.getElementsByTagName('head')[0].appendChild(style);
+
     },
 
     _addLimit: function () {
+
         return new fabric.Rect({
             fill: 'rgba(0,0,0,0)',
             stroke: 'rgba(0,0,0,1)',
             strokeWidth: 4,
             selectable: false,
-            evented: false
+            evented: false,
+            isRoot: true
         });
+
     },
 
     _addLimitsView: function () {
+
         this._limitView = this._addLimit();
 
         this._limitView.set({
@@ -315,11 +370,16 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             width: this.vptCoords.br.x - this.vptCoords.tl.x - this._limitView.strokeWidth,
             height: this.vptCoords.br.y - this.vptCoords.tl.y - this._limitView.strokeWidth
         });
+
         this.add(this._limitView);
+
     },
 
     _addLimitsZoom: function () {
+
         this._limitZoom = this._addLimit();
+
+        this._limitZoom.isLimit = true;
 
         let points = {}, iVpt = fabric.util.invertTransform(this.viewportTransform);
         points.tl = fabric.util.transformPoint({ x: 0, y: 0 }, iVpt);
@@ -343,6 +403,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             this.viewportTransform[5] = e.e.clientY - this.lastPosY + this.viewportTransform[5];
 
             this._setLimitsDiagram();
+
+            this.requestRenderAll();
 
             this.lastPosX = e.e.clientX;
             this.lastPosY = e.e.clientY;
@@ -559,6 +621,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     },
 
     _onZoom: function (e) {
+
         let zoom = this.getZoom();
         zoom = zoom - e.e.deltaY / Math.abs(e.e.deltaY * 10);
         if (zoom > 2) zoom = 2;
@@ -568,6 +631,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         this.zoomToPoint({ x: e.e.offsetX, y: e.e.offsetY }, zoom);
 
         this._setLimitsDiagram();
+
+        this.requestRenderAll();
 
         e.e.preventDefault();
         e.e.stopPropagation();
@@ -619,7 +684,6 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this._setLimitsContainer();
 
-        this.requestRenderAll();
     },
 
     _setLimitsContainer: function () {
