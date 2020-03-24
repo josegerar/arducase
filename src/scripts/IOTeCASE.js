@@ -35,7 +35,8 @@ fabric.Object.prototype.toObject = (function (toObject) {
             ports: this.ports,
             part: this.part,
             isLimit: this.isLimit,
-            isRoot: this.isRoot
+            isRoot: this.isRoot,
+            isView: this.isView
         });
     };
 })(fabric.Object.prototype.toObject);
@@ -98,6 +99,8 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
     isDragging: false,
 
     _limitZoom: null,
+
+    _limitView: null,
 
     _continuePanning: function (e) {
 
@@ -177,14 +180,31 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     _onRenderObserved: function (e) {
 
-        let _toJSON = this._observed.toJSON(["isLimit", "isRoot"]);
+        let _toJSON = this._observed.toJSON();
         delete _toJSON.background;
 
-        console.log(_toJSON);
+        let vpt = this._observed.viewportTransform.slice(0);
 
+        vpt[0] = this.getZoom();
+        vpt[3] = this.getZoom();
+
+        const relativePoint = new fabric.Point(-this._observed.vptCoords.tl.x, -this._observed.vptCoords.tl.y);
+
+        const ivptR = fabric.util.invertTransform(this._observed.viewportTransform);
+
+        const point = fabric.util.transformPoint(relativePoint, ivptR);
+
+        const after = fabric.util.transformPoint(point, vpt);
+
+        vpt[4] += -after.x;
+        vpt[5] += -after.y;
+
+        this.setViewportTransform(vpt);
 
         this.loadFromJSON(_toJSON, () => {
+
             this.requestRenderAll();
+
         }, (oJSON, oCanvas) => {
 
             oCanvas.set({
@@ -192,13 +212,7 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
                 evented: false
             });
 
-            if (oCanvas.isLimit) {
-                console.log(oCanvas);
-
-                this._limitZoom = oCanvas;
-            }
         });
-
     },
 
     _onResizeCanvas: function () {
@@ -228,21 +242,21 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
         const minX = this.getWidth() - (this.getWidth() + (this.getWidth() / 2)) * this.getZoom();
         const minY = this.getHeight() - (this.getHeight() + (this.getHeight() / 2)) * this.getZoom();
 
-        if (this.viewportTransform[4] > minX) this.viewportTransform[4] = minX;
-        if (this.viewportTransform[5] > minY) this.viewportTransform[5] = minY;
+        // if (this.viewportTransform[4] < minX) this.viewportTransform[4] = minX;
+        // if (this.viewportTransform[5] < minY) this.viewportTransform[5] = minY;
 
-        if (this.viewportTransform[4] <= 0) this.viewportTransform[4] = 0;
-        if (this.viewportTransform[5] <= 0) this.viewportTransform[5] = 0;
+        // if (this.viewportTransform[4] >= 0) this.viewportTransform[4] = 0;
+        // if (this.viewportTransform[5] >= 0) this.viewportTransform[5] = 0;
 
 
-        this.calcViewportBoundaries();
+        // this.calcViewportBoundaries();
         console.log(this, minX, minY);
 
 
-        this._limitZoom && this._limitZoom.set({
-            top: this.vptCoords.tl.y,
-            left: this.vptCoords.tl.x,
-        });
+        // this._limitZoom && this._limitZoom.set({
+        //     top: this.vptCoords.tl.y,
+        //     left: this.vptCoords.tl.x,
+        // });
     }
 
 });
@@ -378,8 +392,6 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     _addLimitsZoom: function () {
 
         this._limitZoom = this._addLimit();
-
-        this._limitZoom.isLimit = true;
 
         let points = {}, iVpt = fabric.util.invertTransform(this.viewportTransform);
         points.tl = fabric.util.transformPoint({ x: 0, y: 0 }, iVpt);
@@ -680,13 +692,13 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         if (this.viewportTransform[4] >= 0) this.viewportTransform[4] = 0;
         if (this.viewportTransform[5] >= 0) this.viewportTransform[5] = 0;
 
-        this.calcViewportBoundaries();
-
         this._setLimitsContainer();
 
     },
 
     _setLimitsContainer: function () {
+
+        this.calcViewportBoundaries();
 
         this._limitView && this._limitView.set({
             top: this.vptCoords.tl.y,
