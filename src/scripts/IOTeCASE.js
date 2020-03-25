@@ -669,12 +669,13 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     _onZoom: function (e) {
 
         let zoom = this.getZoom();
-
-        zoom = zoom - e.e.deltaY / Math.abs(e.e.deltaY * 10);
-
+        
+        if (Math.abs(e.e.deltaY)) zoom = zoom - e.e.deltaY / Math.abs(e.e.deltaY * 10);
+        
         if (zoom > 2) zoom = 2;
         if (zoom < (this.getWidth() / this._maxPointX)) zoom = this.getWidth() / this._maxPointX;
         if (zoom < (this.getHeight() / this._maxPointY)) zoom = this.getHeight() / this._maxPointY;
+        
 
         this.zoomToPoint({ x: e.e.offsetX, y: e.e.offsetY }, zoom);
 
@@ -742,6 +743,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             width: this.vptCoords.br.x - this.vptCoords.tl.x - this._limitView.strokeWidth,
             height: this.vptCoords.br.y - this.vptCoords.tl.y - this._limitView.strokeWidth
         });
+
+        this._limitView && this._limitView.setCoords();
 
         let points = {}, iVpt = fabric.util.invertTransform(this.viewportTransform);
 
