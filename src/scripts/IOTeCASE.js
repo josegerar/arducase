@@ -90,10 +90,6 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     },
 
-    lastPosX: 0,
-
-    lastPosY: 0,
-
     _observed: null,
 
     isDragging: false,
@@ -104,17 +100,17 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     _continuePanning: function (e) {
 
-        if (this.isDragging) {
+        if (this.isDragging && this._observed) {
 
-            this.viewportTransform[4] = e.e.clientX - this.lastPosX + this.viewportTransform[4];
-            this.viewportTransform[5] = e.e.clientY - this.lastPosY + this.viewportTransform[5];
+            const scale = this._observed.getZoom() / this.getZoom();
 
-            this._setLimitsDiagram();
+            e.panningX = -((e.e.clientX - this._observed.lastPosX) * scale);
+            e.panningY = -((e.e.clientY - this._observed.lastPosY) * scale);
 
-            this.requestRenderAll();
+            this._observed.fire("panning:continue", e);
 
-            this.lastPosX = e.e.clientX;
-            this.lastPosY = e.e.clientY;
+            this._observed.lastPosX = e.e.clientX;
+            this._observed.lastPosY = e.e.clientY;
 
         }
 
@@ -157,10 +153,8 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
             this.isDragging = false;
             this.selection = true;
 
-            this.calcOffset();
-            this.forEachObject(o => {
-                o.setCoords();
-            });
+            this._observed && this._observed.fire("panning:off", e);
+
         }
     },
 
@@ -168,11 +162,15 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
         if (e.button === 1) {
 
+            e.panningX = e.e.clientX;
+            e.panningY = e.e.clientY;
+
             this.isDragging = true;
             this.selection = false;
 
-            this.lastPosX = e.e.clientX;
-            this.lastPosY = e.e.clientY;
+            this._observed && this._observed.fire("panning:on", e);
+
+
 
         }
 
@@ -185,10 +183,7 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
         let vpt = this._observed.viewportTransform.slice(0);
 
-        vpt[0] = this.getZoom();
-        vpt[3] = this.getZoom();
-
-        const relativePoint = new fabric.Point(-this._observed.vptCoords.tl.x, -this._observed.vptCoords.tl.y);
+        const relativePoint = new fabric.Point(-(this._observed.vptCoords.tl.x * vpt[0]), -(this._observed.vptCoords.tl.y * vpt[0]));
 
         const ivptR = fabric.util.invertTransform(this._observed.viewportTransform);
 
@@ -196,16 +191,14 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
         const after = fabric.util.transformPoint(point, vpt);
 
+        vpt[0] = this.getZoom();
+        vpt[3] = vpt[0];
         vpt[4] += -after.x;
         vpt[5] += -after.y;
 
         this.setViewportTransform(vpt);
 
-        this.loadFromJSON(_toJSON, () => {
-
-            this.requestRenderAll();
-
-        }, (oJSON, oCanvas) => {
+        this.loadFromJSON(_toJSON, this.requestRenderAll.bind(this), (oJSON, oCanvas) => {
 
             oCanvas.set({
                 selectable: false,
@@ -235,28 +228,6 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
             this.setZoom(0.13);
         }
-    },
-
-    _setLimitsDiagram: function () {
-
-        const minX = this.getWidth() - (this.getWidth() + (this.getWidth() / 2)) * this.getZoom();
-        const minY = this.getHeight() - (this.getHeight() + (this.getHeight() / 2)) * this.getZoom();
-
-        // if (this.viewportTransform[4] < minX) this.viewportTransform[4] = minX;
-        // if (this.viewportTransform[5] < minY) this.viewportTransform[5] = minY;
-
-        // if (this.viewportTransform[4] >= 0) this.viewportTransform[4] = 0;
-        // if (this.viewportTransform[5] >= 0) this.viewportTransform[5] = 0;
-
-
-        // this.calcViewportBoundaries();
-        console.log(this, minX, minY);
-
-
-        // this._limitZoom && this._limitZoom.set({
-        //     top: this.vptCoords.tl.y,
-        //     left: this.vptCoords.tl.x,
-        // });
     }
 
 });
@@ -321,6 +292,35 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     lastPosX: 0,
 
     lastPosY: 0,
+
+    objectsRoot: [],
+
+    add: function () {
+
+        for (let i = 0; i < arguments.length; i++) {
+
+            if (arguments[i].isRoot) {
+
+                this.callSuper('add', arguments[i]);
+
+            } else {
+
+                let position = this.getObjects().length - this.objectsRoot.length;
+
+                if (position < 0) position = 0;
+
+                this.callSuper('add', arguments[i]);
+
+                while (arguments[i].getZIndex() > position) {
+
+                    this.sendBackwards(arguments[i]);
+
+                }
+
+            }
+        }
+
+    },
 
     _addCssStyleContextMenu: function (el) {
 
@@ -387,6 +387,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this.add(this._limitView);
 
+        this.objectsRoot.push(this._limitView);
+
     },
 
     _addLimitsZoom: function () {
@@ -405,23 +407,19 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         });
 
         this.add(this._limitZoom);
+
+        this.objectsRoot.push(this._limitZoom);
     },
 
     _continuePanning: function (e) {
 
-        if (this.isDragging) {
+        this.viewportTransform[4] = e.panningX + this.viewportTransform[4];
+        this.viewportTransform[5] = e.panningY + this.viewportTransform[5];
 
-            this.viewportTransform[4] = e.e.clientX - this.lastPosX + this.viewportTransform[4];
-            this.viewportTransform[5] = e.e.clientY - this.lastPosY + this.viewportTransform[5];
+        this._setLimitsDiagram();
 
-            this._setLimitsDiagram();
+        this.requestRenderAll();
 
-            this.requestRenderAll();
-
-            this.lastPosX = e.e.clientX;
-            this.lastPosY = e.e.clientY;
-
-        }
     },
 
     _getEl: function (elContainer) {
@@ -518,11 +516,18 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this.on('mouse:wheel', this._onZoom);
         this.on('mouse:down', this._onMouseDownEvents);
-        this.on('mouse:move', this._continuePanning);
-        this.on('mouse:up', this._offPanning);
+        this.on('mouse:move', this._onMouseMoveEvents);
+        this.on('mouse:up', this._onMouseUpEvents);
+
         this.on('object:moving', this._onObjectMoving);
-        this.on("render:contextmenu", this._onRenderContextMenu);
         this.on("object:selected", this._onObjectSelected);
+
+        this.on("render:contextmenu", this._onRenderContextMenu);
+
+        this.on("panning:on", this._onPanning);
+        this.on("panning:continue", this._continuePanning);
+        this.on("panning:off", this._offPanning);
+
     },
 
     _offContextMenu: function (e) {
@@ -598,8 +603,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             this.isDragging = true;
             this.selection = false;
 
-            this.lastPosX = e.e.clientX;
-            this.lastPosY = e.e.clientY;
+            this.lastPosX = e.panningX;
+            this.lastPosY = e.panningY;
 
         }
 
@@ -615,11 +620,40 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _onMouseDownEvents: function (e) {
 
-        this._onPanning(e);
+        if (!e.target && e.button === 1) {
+
+            e.panningX = e.e.clientX;
+            e.panningY = e.e.clientY;
+
+            this.fire("panning:on", e);
+
+        }
 
         this._offContextMenu(e);
 
         this._fireObjectMenu(e);
+
+    },
+
+    _onMouseMoveEvents: function (e) {
+
+        if (this.isDragging) {
+
+            e.panningX = e.e.clientX - this.lastPosX;
+            e.panningY = e.e.clientY - this.lastPosY;
+
+            this.fire("panning:continue", e);
+
+            this.lastPosX = e.e.clientX;
+            this.lastPosY = e.e.clientY;
+
+        }
+
+    },
+
+    _onMouseUpEvents: function (e) {
+
+        this.fire("panning:off", e);
 
     },
 
@@ -635,7 +669,9 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     _onZoom: function (e) {
 
         let zoom = this.getZoom();
+
         zoom = zoom - e.e.deltaY / Math.abs(e.e.deltaY * 10);
+
         if (zoom > 2) zoom = 2;
         if (zoom < (this.getWidth() / this._maxPointX)) zoom = this.getWidth() / this._maxPointX;
         if (zoom < (this.getHeight() / this._maxPointY)) zoom = this.getHeight() / this._maxPointY;
@@ -996,22 +1032,35 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
     },
 
     _setNodeItemsV: async function (nodeDataArray) {
+
         this._pWidth += this._pNWidth;
+
         for (let i = 0; i < nodeDataArray.length; i++) {
+
             const node = nodeDataArray[i];
+
             let image = await this._nodeImageItem(node[this._pNPathBinding]);
+
             let txtNombre = new fabric.Text(node[this._pNNameBinding], { fontSize: 14 });
+
             image.left = this.width / 2 - (image.width * image.scaleX) / 2;
             image.top = this._pHeight;
+
             txtNombre.top = this._pHeight + image.height * image.scaleY;
             txtNombre.left = this.width / 2 - txtNombre.width / 2;
+
             let comp = new fabric.Group([image, txtNombre], { top: this._pHeight, hasControls: false, hoverCursor: "pointer" });
+
             comp._posXDefault = comp.left;
             comp._posYDefault = comp.top;
             comp._nodeData = node;
+
             this.add(comp);
+
             this._pHeight += image.height * image.scaleY + 20 + txtNombre.height;
+
         }
+
         if (this._pHeight > this.wrapperEl.parentNode.clientHeight) this.setHeight(this._pHeight);
         else this.setHeight(this.wrapperEl.parentNode.clientHeight);
     },
@@ -1022,17 +1071,20 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
     */
 
     setNodeTemplate: function (nodeTemplate) {
+
         this._pNWidth = nodeTemplate.width;
         this._pNHeight = nodeTemplate.height;
+
         this._pNNameBinding = nodeTemplate.nPropName;
         this._pNPathBinding = nodeTemplate.nPropPath;
+
     },
 
     _touchStart: function () {
+
         this.isTouchDevice = true;
+
     }
 });
-
-
 
 export { fabric as IOTeCASE };
