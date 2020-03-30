@@ -94,10 +94,6 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     isDragging: false,
 
-    _limitZoom: null,
-
-    _limitView: null,
-
     _continuePanning: function (e) {
 
         if (this.isDragging && this._observed) {
@@ -112,6 +108,9 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
             this._observed.lastPosX = e.e.clientX;
             this._observed.lastPosY = e.e.clientY;
 
+        } else {
+
+            this._verifyCursor(e);
         }
 
     },
@@ -146,31 +145,42 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
         return el;
     },
 
+    getCursor: function () {
+
+        return this.upperCanvasEl.style.cursor;
+
+    },
+
     _offPanning: function (e) {
 
         if (this.isDragging) {
 
             this.isDragging = false;
-            this.selection = true;
 
             this._observed && this._observed.fire("panning:off", e);
 
         }
+
+        this._verifyCursor(e);
     },
 
     _onPanning: function (e) {
 
-        if (e.button === 1) {
+        if (e.button === 1 && this._observed) {
 
-            e.panningX = e.e.clientX;
-            e.panningY = e.e.clientY;
+            const coords = this._observed.vptCoords;
+            const point = new fabric.Point(e.absolutePointer.x * this._observed.getZoom(), e.absolutePointer.y * this._observed.getZoom());
 
-            this.isDragging = true;
-            this.selection = false;
+            if ((coords.tl.x < point.x && coords.tl.y < point.y) && (coords.br.x > point.x && coords.br.y > point.y)) {
 
-            this._observed && this._observed.fire("panning:on", e);
+                e.panningX = e.e.clientX;
+                e.panningY = e.e.clientY;
 
+                this.isDragging = true;
 
+                this._observed && this._observed.fire("panning:on", e);
+
+            }
 
         }
 
@@ -180,23 +190,6 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
         let _toJSON = this._observed.toJSON();
         delete _toJSON.background;
-
-        let vpt = this._observed.viewportTransform.slice(0);
-
-        const relativePoint = new fabric.Point(-(this._observed.vptCoords.tl.x * vpt[0]), -(this._observed.vptCoords.tl.y * vpt[0]));
-
-        const ivptR = fabric.util.invertTransform(this._observed.viewportTransform);
-
-        const point = fabric.util.transformPoint(relativePoint, ivptR);
-
-        const after = fabric.util.transformPoint(point, vpt);
-
-        vpt[0] = this.getZoom();
-        vpt[3] = vpt[0];
-        vpt[4] += -after.x;
-        vpt[5] += -after.y;
-
-        this.setViewportTransform(vpt);
 
         this.loadFromJSON(_toJSON, this.requestRenderAll.bind(this), (oJSON, oCanvas) => {
 
@@ -217,7 +210,7 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
             this.setWidth(this._observed.width / scale);
             this.setHeight(this._observed.height / scale);
 
-            this.setZoom(this.width / this._observed._maxPointX);
+            this.setZoom(this.width / (this._observed._maxPointX + 4));
 
             this.wrapperEl.parentNode.style.padding = `${(this.wrapperEl.parentNode.clientHeight - (this._observed.height / scale)) / 2}px ${(this.wrapperEl.parentNode.clientWidth - (this._observed.width / scale)) / 2}px`;
 
@@ -227,7 +220,31 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
             this.setHeight(this.wrapperEl.parentNode.clientHeight);
 
             this.setZoom(0.13);
+
         }
+
+    },
+
+    _verifyCursor: function (e) {
+
+        if (this._observed) {
+
+            const coords = this._observed.vptCoords;
+            const point = new fabric.Point(e.absolutePointer.x * this._observed.getZoom(), e.absolutePointer.y * this._observed.getZoom());
+
+            if ((coords.tl.x < point.x && coords.tl.y < point.y) && (coords.br.x > point.x && coords.br.y > point.y)) {
+
+                if (this.getCursor() !== "pointer") this.setCursor("pointer");
+
+            }
+            else {
+
+                if (this.getCursor() !== "default") this.setCursor("default");
+
+            }
+
+        }
+
     }
 
 });
@@ -486,24 +503,24 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _initDiagram: function () {
 
-        this.calcViewportBoundaries();
-
-        this.upperCanvasEl.tabIndex = 1;
+        this._initEvents();
 
         fabric._diagram = this;
 
-        this._initEvents();
-
-        this._lP = this.wrapperEl.parentNode.getBoundingClientRect();
+        this.upperCanvasEl.tabIndex = 1;
 
         this._maxPointX = this.getWidth() + (this.getWidth() / 2);
-
         this._maxPointY = this.getHeight() + (this.getHeight() / 2);
 
-        this._addLimitsView();
-        this._addLimitsZoom();
+        this.setBackgroundColor({ source: this._backGroundImageURL, repeat: 'repeat' }, () => {
 
-        this.setBackgroundColor({ source: this._backGroundImageURL, repeat: 'repeat' }, this.requestRenderAll.bind(this), () => this.requestRenderAll());
+            this.calcViewportBoundaries();
+
+            this._addLimitsView();
+            this._addLimitsZoom();
+
+            this.requestRenderAll.bind(this);
+        });
 
     },
 
@@ -664,18 +681,23 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this._lP = this.wrapperEl.parentNode.getBoundingClientRect();
 
+        this._maxPointX = this.getWidth() + (this.getWidth() / 2);
+        this._maxPointY = this.getHeight() + (this.getHeight() / 2);
+
+        this._setLimitsDiagram();
+
     },
 
     _onZoom: function (e) {
 
         let zoom = this.getZoom();
-        
+
         if (Math.abs(e.e.deltaY)) zoom = zoom - e.e.deltaY / Math.abs(e.e.deltaY * 10);
-        
+
         if (zoom > 2) zoom = 2;
         if (zoom < (this.getWidth() / this._maxPointX)) zoom = this.getWidth() / this._maxPointX;
         if (zoom < (this.getHeight() / this._maxPointY)) zoom = this.getHeight() / this._maxPointY;
-        
+
 
         this.zoomToPoint({ x: e.e.offsetX, y: e.e.offsetY }, zoom);
 
@@ -737,29 +759,37 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this.calcViewportBoundaries();
 
-        this._limitView && this._limitView.set({
-            top: this.vptCoords.tl.y,
-            left: this.vptCoords.tl.x,
-            width: this.vptCoords.br.x - this.vptCoords.tl.x - this._limitView.strokeWidth,
-            height: this.vptCoords.br.y - this.vptCoords.tl.y - this._limitView.strokeWidth
-        });
+        if (this._limitView) {
 
-        this._limitView && this._limitView.setCoords();
+            this._limitView.set({
+                top: this.vptCoords.tl.y,
+                left: this.vptCoords.tl.x,
+                width: this.vptCoords.br.x - this.vptCoords.tl.x - this._limitView.strokeWidth,
+                height: this.vptCoords.br.y - this.vptCoords.tl.y - this._limitView.strokeWidth
+            });
 
-        let points = {}, iVpt = fabric.util.invertTransform(this.viewportTransform);
+            this._limitView.setCoords();
+        }
 
-        points.tl = fabric.util.transformPoint({ x: 0, y: 0 }, iVpt);
-        points.br = fabric.util.transformPoint({
-            x: -(this.getWidth() - this._maxPointX * this.getZoom()) + this.getWidth(),
-            y: -(this.getHeight() - this._maxPointY * this.getZoom()) + this.getHeight()
-        }, iVpt);
+        if (this._limitZoom) {
 
-        this._limitZoom.set({
-            top: 0,
-            left: 0,
-            width: points.br.x - points.tl.x - this._limitZoom.strokeWidth,
-            height: points.br.y - points.tl.y - this._limitZoom.strokeWidth
-        });
+            let points = {}, iVpt = fabric.util.invertTransform(this.viewportTransform);
+
+            points.tl = fabric.util.transformPoint({ x: 0, y: 0 }, iVpt);
+            points.br = fabric.util.transformPoint({
+                x: -(this.getWidth() - this._maxPointX * this.getZoom()) + this.getWidth(),
+                y: -(this.getHeight() - this._maxPointY * this.getZoom()) + this.getHeight()
+            }, iVpt);
+
+            this._limitZoom.set({
+                top: 0,
+                left: 0,
+                width: points.br.x - points.tl.x - this._limitZoom.strokeWidth,
+                height: points.br.y - points.tl.y - this._limitZoom.strokeWidth
+            });
+
+        }
+
     },
 
     _fireObjectMenu: function (e) {

@@ -16,18 +16,19 @@ class App extends Component {
     token: null,
     userId: null,
     email: null,
-    webservice: "http://localhost:8000/"
+    webservice: "http://localhost:8000/",
+    isVerify: false,
   };
 
   componentDidMount() {
     this.verifyUser();
   }
 
-  //verificacion inicial del token para decidor que componente mostrar en caso de ser o no valida la session 
-  verifyUser = () => {
+  //verificacion inicial del token para decidir que componente mostrar en caso de ser o no valida la session 
+  verifyUser = async () => {
     const tokenTemp = localStorage.getItem("TOKEN");
     if (tokenTemp) {
-      fetch(this.state.webservice, {
+      await fetch(this.state.webservice, {
         method: 'GET',
         headers: { 'Authorization': 'Bearer ' + tokenTemp }
       }).then(res => {
@@ -35,7 +36,7 @@ class App extends Component {
       }).then(resData => {
         if (resData && resData.token) {
           const data = this.substrapToken(resData.token);
-          this.setState({ token: resData.token, userId: data.userId, email: data.email });
+          this.setState({ token: resData.token, userId: data.userId, email: data.email});
         } else {
           this.logout();
         }
@@ -44,6 +45,7 @@ class App extends Component {
         this.logout();
       });
     }
+    this.setState({ isVerify: true });
   }
 
   substrapToken(token) {
@@ -83,31 +85,31 @@ class App extends Component {
               <MainNavigation />
               <main>
                 <Switch>
-                  {this.state.token &&
+                  {this.state.isVerify && this.state.token &&
                     <Redirect from="/" to="/projects" exact />
                   }
-                  {this.state.token && (
+                  {this.state.isVerify && this.state.token && (
                     <Redirect from="/auth" to="/projects" exact />
                   )}
-                  {this.state.token && (
+                  {this.state.isVerify && this.state.token && (
                     <Redirect from="/createAccount" to="/projects" exact />
                   )}
 
 
-                  {!this.state.token && (
+                  {this.state.isVerify && !this.state.token && (
                     <Route path="/auth" component={AuthPage} />
                   )}
-                  {!this.state.token && (
+                  {this.state.isVerify && !this.state.token && (
                     <Route path="/createAccount" component={CreateAccountPage} />
                   )}
-                  {this.state.token && (
+                  {this.state.isVerify && this.state.token && (
                     <Route path="/projects" component={ProjectsPage} />
                   )}
-                  {this.state.token && (
+                  {this.state.isVerify && this.state.token && (
                     <Route path="/editor" component={EditorPage} />
                   )}
 
-                  {!this.state.token &&
+                  {this.state.isVerify && !this.state.token &&
                     <Redirect to="/auth" exact />
                   }
                 </Switch>
