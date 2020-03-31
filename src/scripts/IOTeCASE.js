@@ -281,13 +281,13 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     _contextMenu: null,
 
     _contextMenuItems: [
-        { type: "Copy", node: null, value: null },
-        { type: "Paste", node: null, value: null },
-        { type: "Delete", node: null, value: null },
-        { type: "Undo", node: null, value: null },
-        { type: "Redo", node: null, value: null },
-        { type: "Clear", node: null, value: null },
-        { type: "More Info", node: null, value: null }
+        { type: "Copy", node: null },
+        { type: "Paste", node: null },
+        { type: "Delete", node: null },
+        { type: "Undo", node: null },
+        { type: "Redo", node: null },
+        { type: "Clear", node: null },
+        { type: "More Info", node: null }
     ],
 
     _backGroundImageURL: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hvdF5VCAUAAADLSURBVFhH7ZnBCoMwEET9/68URBHSNj0UolFoI+aQickKlT05jz0MGQIPkb2kadu3ta42ff/MTtLRazct55bajOMjO0lHr920vnWMMTGV0GuphVALoRaiqNV1dq4TLsdUIrTe+z0fw+ndmEo0w/D61AmXYyqh1179WjGVuNLyl0eohVALuZ8Wtzwgt9zyiNxSC6EWQi1EUYtbHpBbbnlEbqmFUAuhFqKoxS0PyC23PCK31EKohVAL0dXK3vLSOX0TnKZ1z8fw/3uiW37L27QIZwrV4gAAAABJRU5ErkJggg==",
@@ -311,6 +311,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     lastPosY: 0,
 
     objectsRoot: [],
+
+    _objectCopy: null,
 
     add: function () {
 
@@ -490,7 +492,28 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             liItem.innerText = value.type;
 
-            liItem.addEventListener("click", this._onObjectActions.bind(this, value.type));
+            switch (value.type) {
+                case "Copy":
+                    liItem.addEventListener("click", this._onCopy.bind(this));
+                    break;
+                case "Delete":
+                    liItem.addEventListener("click", this._onDelete.bind(this));
+                    break;
+                case "More Info":
+                    liItem.addEventListener("click", this._onMoreInfo.bind(this));
+                    break;
+                case "Undo":
+                    liItem.addEventListener("click", this._onUndo.bind(this));
+                    break;
+                case "Redo":
+                    liItem.addEventListener("click", this._onRedo.bind(this));
+                    break;
+                case "Clear":
+                    liItem.addEventListener("click", this._onClear.bind(this));
+                    break;
+                default:
+                    break;
+            }
 
             ulContextMenu.appendChild(liItem);
 
@@ -582,25 +605,70 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         return false;
     },
 
-    _onObjectActions: function (action, e) {
-        console.log({ action: action, e: e, arg: this });
+    _onClear: function (e) {
 
+        this._toggleMenu("hide");
+
+        this.getObjects().forEach((value) => {
+
+            if (!value.isRoot) this.remove(value);
+
+        });
+
+    },
+
+    _onCopy: function (e) {
+        const target = this._activeObject;
+        if (target) {
+
+        }
+    },
+
+    _onDelete: function (e) {
+        const target = this._activeObject;
+        if (target) {
+
+        }
+    },
+
+    _onPaste: function (e) {
+        const target = this._activeObject;
+        if (target) {
+
+        }
+    },
+
+    _onUndo: function (e) {
+
+    },
+
+    _onRedo: function (e) {
+
+    },
+
+    _onMoreInfo: function (e) {
+        const target = this._activeObject;
+        if (target) {
+
+        }
     },
 
     _onRenderContextMenu: function (e) {
 
+        this._changeContexMenuItems(e.target);
+
+        this._toggleMenu("show");
+
         let _top = e.e.clientY, _left = e.e.clientX;
         const _dimension = this._contextMenu.getBoundingClientRect();
 
-        this._changeContexMenuItems(e.target);
+        if (!this._lP) this._lP = this.wrapperEl.parentNode.getBoundingClientRect();
 
         if ((_dimension.height + _dimension.top) > (this._lP.height + this._lP.top)) _top -= _dimension.height;
         if ((_dimension.width + _dimension.left) > (this._lP.width + this._lP.left)) _left -= _dimension.width;
 
         this._contextMenu.style.left = `${_left}px`;
         this._contextMenu.style.top = `${_top}px`;
-
-        this._toggleMenu("show");
 
     },
 
@@ -716,10 +784,11 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             this._contextMenu.style.display = "block";
             this.isMenuVisible = true;
 
-        } else {
+        } else if (command === "hide") {
 
             this._contextMenu.style.display = "none";
             this.isMenuVisible = false;
+            this.upperCanvasEl.focus();
 
         }
     },
@@ -728,13 +797,81 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this._contextMenuItems.forEach(val => {
 
-            if ((target && val.type === "Paste") || (!target && val.type !== "Paste")) {
+            if (this._contextMenu && target) {
 
-                val.node.style.display = "none";
+                switch (val.type) {
+                    case "Copy":
+                    case "Delete":
+                    case "More Info":
 
+                        if (!val.node) {
+
+                            let liItem = fabric.document.createElement("li");
+
+                            if (val.type === "Copy") liItem.addEventListener("click", this._onCopy.bind(this));
+                            if (val.type === "Delete") liItem.addEventListener("click", this._onDelete.bind(this));
+                            if (val.type === "More Info") liItem.addEventListener("click", this._onMoreInfo.bind(this));
+
+                            liItem.innerText = val.type;
+                            this._contextMenu.firstElementChild.appendChild(liItem);
+                            val.node = liItem;
+                        }
+
+                        break;
+                    case "Undo":
+                    case "Paste":
+                    case "Redo":
+                    case "Clear":
+
+                        if (val.node) {
+
+                            val.node.parentNode.removeChild(val.node);
+                            val.node = null;
+
+                        }
+                        break;
+                    default:
+                        break;
+                }
             } else {
 
-                val.node.style.display = "block";
+                switch (val.type) {
+                    case "Copy":
+                    case "Paste":
+                    case "Delete":
+                    case "More Info":
+
+                        if (val.node) {
+
+                            val.node.parentNode.removeChild(val.node);
+                            val.node = null;
+
+                        }
+
+                        break;
+                    case "Paste":
+                    case "Undo":
+                    case "Redo":
+                    case "Clear":
+
+                        if (!val.node && (!this._objectCopy || (this._objectCopy && val.type === "Paste"))) {
+
+                            let liItem = fabric.document.createElement("li");
+
+                            if (val.type === "Paste") liItem.addEventListener("click", this._onPaste.bind(this));
+                            if (val.type === "Undo") liItem.addEventListener("click", this._onUndo.bind(this));
+                            if (val.type === "Redo") liItem.addEventListener("click", this._onRedo.bind(this));
+                            if (val.type === "Clear") liItem.addEventListener("click", this._onClear.bind(this));
+
+                            liItem.innerText = val.type;
+                            this._contextMenu.firstElementChild.appendChild(liItem);
+                            val.node = liItem;
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
             }
 
         });
@@ -799,14 +936,13 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             if (e.target) {
 
                 this.setActiveObject(e.target, e.e);
-                this.fire("render:contextmenu", e);
 
             } else {
 
                 this.discardActiveObject();
 
             }
-
+            this.fire("render:contextmenu", e);
             this.requestRenderAll();
 
         }
