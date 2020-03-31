@@ -26,20 +26,7 @@ fabric.Canvas.prototype.addToPosition = function (object, position) {
         this.sendBackwards(object);
     }
 };
-fabric.Object.prototype.toObject = (function (toObject) {
-    return function () {
-        return fabric.util.object.extend(toObject.call(this), {
-            id: this.id,
-            uid: this.uid,
-            name: this.name,
-            ports: this.ports,
-            part: this.part,
-            isLimit: this.isLimit,
-            isRoot: this.isRoot,
-            isView: this.isView
-        });
-    };
-})(fabric.Object.prototype.toObject);
+
 
 fabric.Canvas.prototype.add = (function (originalFn) {
     return function (...args) {
@@ -312,7 +299,9 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     objectsRoot: [],
 
-    _objectCopy: null,
+    _clipboard: null,
+
+    _propertiesObject: ['_nodeData', 'hasControls','hoverCursor'],
 
     add: function () {
 
@@ -617,37 +606,98 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     },
 
+    // clone what are you copying since you
+    // may want copy and paste on different moment.
+    // and you do not want the changes happened
+    // later to reflect on the copy.
     _onCopy: function (e) {
+
         const target = this._activeObject;
+
+        this._toggleMenu("hide");
+
         if (target) {
 
+            target.clone((cloned) => {
+
+                this._clipboard = cloned;
+
+            }, this._propertiesObject);
+
         }
+
     },
 
     _onDelete: function (e) {
         const target = this._activeObject;
+
+        this._toggleMenu("hide");
+
         if (target) {
 
         }
     },
 
     _onPaste: function (e) {
-        const target = this._activeObject;
+
+        const target = this._clipboard;
+
+        this._toggleMenu("hide");
+
         if (target) {
+
+            target.clone((clonedObj) => {
+
+                this.discardActiveObject();
+
+                clonedObj.set({
+                    left: this.lastPosX,
+                    top: this.lastPosY
+                });
+
+                if (clonedObj.type === 'activeSelection') {
+
+                    // active selection needs a reference to the canvas.
+                    clonedObj.canvas = this;
+
+                    clonedObj.forEachObject((obj)=> {
+                        this.add(obj);
+                    });
+
+                    // this should solve the unselectability
+                    clonedObj.setCoords();
+
+                } else {
+
+                    this.add(clonedObj);
+
+                }
+
+                this.setActiveObject(clonedObj);
+                this.requestRenderAll();
+
+            }, this._propertiesObject);
 
         }
     },
 
     _onUndo: function (e) {
 
+        this._toggleMenu("hide");
+
     },
 
     _onRedo: function (e) {
 
+        this._toggleMenu("hide");
     },
 
     _onMoreInfo: function (e) {
+
         const target = this._activeObject;
+
+        this._toggleMenu("hide");
+        
         if (target) {
 
         }
@@ -656,16 +706,19 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     _onRenderContextMenu: function (e) {
 
         this._changeContexMenuItems(e.target);
-
         this._toggleMenu("show");
 
         let _top = e.e.clientY, _left = e.e.clientX;
+        
+        this.lastPosX = _left;
+        this.lastPosY = _top;
+
         const _dimension = this._contextMenu.getBoundingClientRect();
 
         if (!this._lP) this._lP = this.wrapperEl.parentNode.getBoundingClientRect();
 
-        if ((_dimension.height + _dimension.top) > (this._lP.height + this._lP.top)) _top -= _dimension.height;
-        if ((_dimension.width + _dimension.left) > (this._lP.width + this._lP.left)) _left -= _dimension.width;
+        if ((_dimension.height + _top) > (this._lP.height + this._lP.top)) _top -= _dimension.height;
+        if ((_dimension.width + _left) > (this._lP.width + this._lP.left)) _left -= _dimension.width;
 
         this._contextMenu.style.left = `${_left}px`;
         this._contextMenu.style.top = `${_top}px`;
@@ -837,7 +890,6 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
                 switch (val.type) {
                     case "Copy":
-                    case "Paste":
                     case "Delete":
                     case "More Info":
 
@@ -850,22 +902,40 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
                         break;
                     case "Paste":
+                        if (val.node && !this._clipboard) {
+
+                            val.node.parentNode.removeChild(val.node);
+                            val.node = null;
+
+                        } else if (!val.node && this._clipboard) {
+
+                            let liItem = fabric.document.createElement("li");
+
+                            liItem.addEventListener("click", this._onPaste.bind(this));
+                            liItem.innerText = val.type;
+
+                            this._contextMenu.firstElementChild.appendChild(liItem);
+                            val.node = liItem;
+
+                        }
+                        break;
                     case "Undo":
                     case "Redo":
                     case "Clear":
 
-                        if (!val.node && (!this._objectCopy || (this._objectCopy && val.type === "Paste"))) {
+                        if (!val.node) {
 
                             let liItem = fabric.document.createElement("li");
 
-                            if (val.type === "Paste") liItem.addEventListener("click", this._onPaste.bind(this));
                             if (val.type === "Undo") liItem.addEventListener("click", this._onUndo.bind(this));
                             if (val.type === "Redo") liItem.addEventListener("click", this._onRedo.bind(this));
                             if (val.type === "Clear") liItem.addEventListener("click", this._onClear.bind(this));
 
                             liItem.innerText = val.type;
+
                             this._contextMenu.firstElementChild.appendChild(liItem);
                             val.node = liItem;
+
                         }
 
                         break;
