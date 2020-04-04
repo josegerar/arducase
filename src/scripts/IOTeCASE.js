@@ -176,7 +176,7 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
     _onRenderObserved: function (e) {
 
         let _toJSON = this._observed.toJSON();
-                
+
         delete _toJSON.background;
 
         this.loadFromJSON(_toJSON, this.requestRenderAll.bind(this), (oJSON, oCanvas) => {
