@@ -176,6 +176,7 @@ fabric.OverView = fabric.util.createClass(fabric.Canvas, {
     _onRenderObserved: function (e) {
 
         let _toJSON = this._observed.toJSON();
+                
         delete _toJSON.background;
 
         this.loadFromJSON(_toJSON, this.requestRenderAll.bind(this), (oJSON, oCanvas) => {
@@ -287,6 +288,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _limitZoom: null,
 
+    _port: null,
+
     isEditing: false,
 
     isDragging: false,
@@ -301,7 +304,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _clipboard: null,
 
-    _propertiesObject: ['_nodeData', 'hasControls','hoverCursor'],
+    _propertiesObject: ['_nodeData', 'hasControls', 'hoverCursor'],
 
     add: function () {
 
@@ -419,6 +422,19 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         this.objectsRoot.push(this._limitZoom);
     },
 
+    _addPort: function () {
+
+        this._port = new fabric.Rect({
+            width: 10, height: 10, top: 0, left: 0,
+            fill: "red", visible: false, hoverCursor: "pointer",
+            isRoot: true
+        });
+
+        this.add(this._port);
+
+        this.objectsRoot.push(this._port);
+    },
+
     _continuePanning: function (e) {
 
         this.viewportTransform[4] = e.panningX + this.viewportTransform[4];
@@ -530,6 +546,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             this._addLimitsView();
             this._addLimitsZoom();
+            this._addPort();
 
             this.requestRenderAll.bind(this);
         });
@@ -544,6 +561,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         fabric.util.addListener(fabric.window, 'resize', this._onResizeCanvas.bind(this));
 
         this.on('mouse:wheel', this._onZoom);
+        this.on('mouse:down:before', this._onSelectPort);
         this.on('mouse:down', this._onMouseDownEvents);
         this.on('mouse:move', this._onMouseMoveEvents);
         this.on('mouse:up', this._onMouseUpEvents);
@@ -556,6 +574,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         this.on("panning:on", this._onPanning);
         this.on("panning:continue", this._continuePanning);
         this.on("panning:off", this._offPanning);
+
+        this.on("node:observed", this._onNodeObserved);
 
     },
 
@@ -638,6 +658,39 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         }
     },
 
+    _onNodeObserved: function (e) {
+
+        const ports = e.target._nodeData.items;
+        const node = e.target;
+        const point = e.absolutePointer;
+
+        for (let i in ports) {
+
+            const location = new fabric.Point(node.left + ports[i].pos.x, node.top + ports[i].pos.y);
+
+            const size = 10;
+
+            if ((point.y >= location.y) && (point.y <= location.y + size) && (point.x >= location.x) && (point.x <= location.x + size)) {
+
+                if (!this._port.visible) this._port.set({ top: location.y, left: location.x, visible: true });
+
+                if (node.hoverCursor !== "pointer") node.set({ hoverCursor: "pointer" });
+
+                break;
+
+            } else {
+
+                if (this._port.visible) this._port.set({ visible: false });
+
+                if (node.hoverCursor !== "default") node.set({ hoverCursor: "default" });
+
+            }
+        }
+
+        this.requestRenderAll();
+
+    },
+
     _onPaste: function (e) {
 
         const target = this._clipboard;
@@ -660,7 +713,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
                     // active selection needs a reference to the canvas.
                     clonedObj.canvas = this;
 
-                    clonedObj.forEachObject((obj)=> {
+                    clonedObj.forEachObject((obj) => {
                         this.add(obj);
                     });
 
@@ -697,7 +750,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         const target = this._activeObject;
 
         this._toggleMenu("hide");
-        
+
         if (target) {
 
         }
@@ -709,9 +762,9 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         this._toggleMenu("show");
 
         let _top = e.e.clientY, _left = e.e.clientX;
-        
-        this.lastPosX = _left;
-        this.lastPosY = _top;
+
+        this.lastPosX = e.e.offsetX;
+        this.lastPosY = e.e.offsetY;
 
         const _dimension = this._contextMenu.getBoundingClientRect();
 
@@ -727,6 +780,20 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _onObjectMoving: function (e) {
 
+        if (e.target) {
+
+            const _width = e.target.scaleX ? (e.target.scaleX * e.target.width) : e.target.width;
+            const _height = e.target.scaleY ? (e.target.scaleY * e.target.height) : e.target.height;
+
+            if (e.target.top < 0) e.target.top = 0;
+            if (e.target.left < 0) e.target.left = 0;
+
+            if (e.target.top + _height > this._limitZoom.height) e.target.top = this._limitZoom.height - _height;
+            if (e.target.left + _width > this._limitZoom.width) e.target.left = this._limitZoom.width - _width;
+
+            e.target.setCoords();
+
+        }
     },
 
     _onObjectSelected: function (e) {
@@ -785,6 +852,10 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             this.lastPosX = e.e.clientX;
             this.lastPosY = e.e.clientY;
 
+        } else if (e.target && e.target._nodeData && !e.target.isMoving) {
+
+            this.fire("node:observed", e);
+
         }
 
     },
@@ -807,6 +878,11 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this._setLimitsDiagram();
 
+    },
+
+    _onSelectPort: function (e) {
+
+        /////////////////////////////////////////////
     },
 
     _onZoom: function (e) {
