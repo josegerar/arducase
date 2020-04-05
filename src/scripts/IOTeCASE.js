@@ -245,8 +245,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             isDrawingMode: false,
             preserveObjectStacking: true,
             selection: false,
-            perPixelTargetFind: true,
             fireRightClick: true,
+            perPixelTargetFind: true,
             stopContextMenu: true
         };
 
@@ -425,8 +425,14 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     _addPort: function () {
 
         this._port = new fabric.Rect({
-            width: 10, height: 10, top: 0, left: 0,
-            fill: "red", visible: false, hoverCursor: "pointer",
+            width: 10,
+            height: 10,
+            top: 0,
+            left: 0,
+            fill: "red",
+            visible: false,
+            hasControls: false,
+            hoverCursor: "pointer",
             isRoot: true
         });
 
@@ -660,34 +666,52 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _onNodeObserved: function (e) {
 
-        const ports = e.target._nodeData.items;
-        const node = e.target;
-        const point = e.absolutePointer;
+        const ports = e.target._nodeData.items,
+            node = e.target,
+            point = e.absolutePointer,
+            size = 10;
+        let isPort = false,
+            _portData = null,
+            location;
 
         for (let i in ports) {
 
-            const location = new fabric.Point(node.left + ports[i].pos.x, node.top + ports[i].pos.y);
-
-            const size = 10;
+            location = new fabric.Point(node.left + ports[i].pos.x, node.top + ports[i].pos.y);
 
             if ((point.y >= location.y) && (point.y <= location.y + size) && (point.x >= location.x) && (point.x <= location.x + size)) {
 
-                if (!this._port.visible) this._port.set({ top: location.y, left: location.x, visible: true });
+                isPort = true;
 
-                if (node.hoverCursor !== "pointer") node.set({ hoverCursor: "pointer" });
+                _portData = ports[i];
 
                 break;
 
-            } else {
-
-                if (this._port.visible) this._port.set({ visible: false });
-
-                if (node.hoverCursor !== "default") node.set({ hoverCursor: "default" });
-
             }
         }
+        console.log(_portData);
+        if (isPort && !this._port.visible) {
 
-        this.requestRenderAll();
+            this._port.set({ top: location.y, left: location.x, visible: true });
+            this._port._portData = _portData;
+
+
+            this._port.setCoords();
+
+            if (this._activeObject !== this._port) this.setActiveObject(this._port);
+
+            this.requestRenderAll();
+
+        } else if (!isPort && this._port.visible) {
+
+            this._port.set({ visible: false });
+
+            if (this._activeObject === this._port) this.discardActiveObject();
+
+            this._port._portData = null;
+
+            this.requestRenderAll();
+
+        }
 
     },
 
@@ -797,7 +821,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     },
 
     _onObjectSelected: function (e) {
-        console.log(e);
+
 
     },
 
@@ -881,7 +905,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     },
 
     _onSelectPort: function (e) {
-
+        console.log(e.target._portData);
         /////////////////////////////////////////////
     },
 
@@ -1198,14 +1222,16 @@ fabric.Palette = fabric.util.createClass(fabric.Canvas, {
 
     _mouseUpEvent: function (e) {
         if (e.target) {
+
             e.target._posYDefault && e.target._posXDefault && e.target.set({
                 top: e.target._posYDefault,
                 left: e.target._posXDefault
             });
-            this.calcOffset();
-            this.forEachObject(o => {
-                o.setCoords();
-            });
+
+            e.target.setCoords();
+
+            this.discardActiveObject();
+
         }
     },
 
