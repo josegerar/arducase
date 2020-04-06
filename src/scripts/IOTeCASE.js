@@ -296,6 +296,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     isMenuVisible: false,
 
+    isRelating: false,
+
     lastPosX: 0,
 
     lastPosY: 0,
@@ -452,6 +454,10 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     },
 
+    _continueRelating: function (e) {
+
+    },
+
     _getEl: function (elContainer) {
 
         const rootDomNode = document.getElementById(elContainer);
@@ -567,7 +573,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         fabric.util.addListener(fabric.window, 'resize', this._onResizeCanvas.bind(this));
 
         this.on('mouse:wheel', this._onZoom);
-        this.on('mouse:down:before', this._onSelectPort);
+        this.on('mouse:down:before', this._onMouseDownBeforeEvents);
         this.on('mouse:down', this._onMouseDownEvents);
         this.on('mouse:move', this._onMouseMoveEvents);
         this.on('mouse:up', this._onMouseUpEvents);
@@ -575,13 +581,18 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         this.on('object:moving', this._onObjectMoving);
         this.on("object:selected", this._onObjectSelected);
 
-        this.on("render:contextmenu", this._onRenderContextMenu);
+        this.on("contextmenu:off", this._offContextMenu);
+        this.on("contextmenu:on", this._onContextMenu);
 
         this.on("panning:on", this._onPanning);
         this.on("panning:continue", this._continuePanning);
         this.on("panning:off", this._offPanning);
 
         this.on("node:observed", this._onNodeObserved);
+
+        this.on("relating:on", this._onRelating);
+        this.on("relating:continue", this._continueRelating);
+        this.on("relating:off", this._offRelating);
 
     },
 
@@ -609,6 +620,16 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
                 o.setCoords();
             });
         }
+    },
+
+    _offRelating: function (e) {
+
+        if (this.isRelating) {
+
+            this.isRelating = false;
+
+        }
+
     },
 
     _disableContextMenu: function (e) {
@@ -670,6 +691,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             node = e.target,
             point = e.absolutePointer,
             size = 10;
+
         let isPort = false,
             _portData = null,
             location;
@@ -688,7 +710,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             }
         }
-        console.log(_portData);
+
         if (isPort && !this._port.visible) {
 
             this._port.set({ top: location.y, left: location.x, visible: true });
@@ -780,7 +802,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         }
     },
 
-    _onRenderContextMenu: function (e) {
+    _onContextMenu: function (e) {
 
         this._changeContexMenuItems(e.target);
         this._toggleMenu("show");
@@ -847,20 +869,49 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         console.log(this, e);
     },
 
-    _onMouseDownEvents: function (e) {
+    _onMouseDownBeforeEvents: function (e) {
 
-        if (!e.target && e.button === 1) {
+        if (e.target && e.target === this._port && this._port._portData) {
 
-            e.panningX = e.e.clientX;
-            e.panningY = e.e.clientY;
+            this.isRelating = true;
 
-            this.fire("panning:on", e);
+            this.fire("relating:on", e);
 
         }
 
-        this._offContextMenu(e);
+    },
 
-        this._fireObjectMenu(e);
+    _onMouseDownEvents: function (e) {
+
+        if (e.button === 1) {
+
+            if (!e.target) {
+
+                e.panningX = e.e.clientX;
+                e.panningY = e.e.clientY;
+
+                this.fire("panning:on", e);
+
+            }
+
+            this.fire("contextmenu:off", e);
+
+        } else if (e.button === 3) {
+
+            if (e.target) {
+
+                this.setActiveObject(e.target, e.e);
+
+            } else {
+
+                this.discardActiveObject();
+
+            }
+            this.fire("contextmenu:on", e);
+
+            this.requestRenderAll();
+
+        }
 
     },
 
@@ -876,6 +927,10 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             this.lastPosX = e.e.clientX;
             this.lastPosY = e.e.clientY;
 
+        } else if (this.isRelating) {
+
+            this.fire("relating:continue", e);
+
         } else if (e.target && e.target._nodeData && !e.target.isMoving) {
 
             this.fire("node:observed", e);
@@ -887,6 +942,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     _onMouseUpEvents: function (e) {
 
         this.fire("panning:off", e);
+
+        this.fire("relating:off", e);
 
     },
 
@@ -904,8 +961,11 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     },
 
-    _onSelectPort: function (e) {
-        console.log(e.target._portData);
+    _onRelating: function (e) {
+        if (e.target._portData) {
+            console.log(e.target._portData);
+        }
+
         /////////////////////////////////////////////
     },
 
@@ -1099,25 +1159,6 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     },
 
-    _fireObjectMenu: function (e) {
-
-        if (e.button === 3) {
-
-            if (e.target) {
-
-                this.setActiveObject(e.target, e.e);
-
-            } else {
-
-                this.discardActiveObject();
-
-            }
-            this.fire("render:contextmenu", e);
-            this.requestRenderAll();
-
-        }
-
-    }
 });
 
 fabric.Palette = fabric.util.createClass(fabric.Canvas, {
