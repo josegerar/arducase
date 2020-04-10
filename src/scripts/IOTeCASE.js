@@ -491,7 +491,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         let rootDomNode = document.getElementById(elContainer);
 
         if (!rootDomNode) {
-            throw new Error("Element cont ainer is not defined");
+            throw new Error("Element container is not defined");
         }
 
         this._contextMenu = document.createElement("div");
@@ -582,7 +582,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         this.on("object:selected", this._onObjectSelected);
 
         this.on("contextmenu:off", this._offContextMenu);
-        this.on("contextmenu:on", this._onContextMenu);
+        this.on("contextmenu:on", this._onContextmenuEvent);
 
         this.on("panning:on", this._onPanning);
         this.on("panning:continue", this._continuePanning);
@@ -635,10 +635,10 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     _disableContextMenu: function (e) {
 
         e.preventDefault();
-
         e.stopPropagation();
 
         return false;
+
     },
 
     _onClear: function (e) {
@@ -705,6 +705,8 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
                 isPort = true;
 
                 _portData = ports[i];
+                _portData.location = location;
+                _portData.size = size;
 
                 break;
 
@@ -802,7 +804,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         }
     },
 
-    _onContextMenu: function (e) {
+    _onContextmenuEvent: function (e) {
 
         this._changeContexMenuItems(e.target);
         this._toggleMenu("show");
@@ -871,11 +873,15 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _onMouseDownBeforeEvents: function (e) {
 
-        if (e.target && e.target === this._port && this._port._portData) {
+        if (e.button === 1) {
 
-            this.isRelating = true;
+            if (e.target && e.target === this._port && this._port._portData) {
 
-            this.fire("relating:on", e);
+                this.isRelating = true;
+
+                this.fire("relating:on", e);
+
+            }
 
         }
 
@@ -907,6 +913,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
                 this.discardActiveObject();
 
             }
+
             this.fire("contextmenu:on", e);
 
             this.requestRenderAll();
@@ -962,6 +969,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     },
 
     _onRelating: function (e) {
+
         if (e.target._portData) {
             console.log(e.target._portData);
         }
