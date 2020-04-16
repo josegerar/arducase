@@ -39,6 +39,7 @@ fabric.Canvas.prototype.add = (function (originalFn) {
     };
 })(fabric.Canvas.prototype.add);
 
+
 fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     initialize: function (elContainer, properties) {
@@ -308,6 +309,14 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _propertiesObject: ['_nodeData', 'hasControls', 'hoverCursor'],
 
+    _activateContextMenu: function (target, e) {
+
+        if(target) this.setActiveObject(target, e.e);
+
+        this.fire("contextmenu:on", e);
+
+    },
+
     add: function () {
 
         for (let i = 0; i < arguments.length; i++) {
@@ -439,6 +448,23 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         });
 
         this.add(this._port);
+
+        this._port.on("mousedown:before", (e) => {
+            this.discardActiveObject();
+            if (e.button === 1) {
+
+                if (e.target._portData) {
+
+                    this.isRelating = true;
+
+                    this.fire("relating:on", e);
+
+                }
+
+            }
+            this.requestRenderAll();
+
+        });
 
         this.objectsRoot.push(this._port);
     },
@@ -717,7 +743,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             this._port.set({ top: location.y, left: location.x, visible: true });
             this._port._portData = _portData;
-
+            this._port._target = node;
 
             this._port.setCoords();
 
@@ -732,6 +758,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             if (this._activeObject === this._port) this.discardActiveObject();
 
             this._port._portData = null;
+            this._port._target = null;
 
             this.requestRenderAll();
 
@@ -879,11 +906,15 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
                 this.isRelating = true;
 
-                this.fire("relating:on", e);
+
 
             }
 
         }
+        console.log("f");
+        
+        this.discardActiveObject(e.e);
+        this.renderAll();
 
     },
 
@@ -906,15 +937,23 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             if (e.target) {
 
-                this.setActiveObject(e.target, e.e);
+                if (e.target._target) {
+
+                    this._activateContextMenu(e.target._target, e);
+
+                } else if (e.target._nodeData) {
+
+                    this._activateContextMenu(e.target, e);
+
+                }
 
             } else {
 
                 this.discardActiveObject();
 
-            }
+                this._activateContextMenu(null, e);
 
-            this.fire("contextmenu:on", e);
+            }
 
             this.requestRenderAll();
 
@@ -972,6 +1011,11 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         if (e.target._portData) {
             console.log(e.target._portData);
+
+            e.target._portData.isUsed = true;
+
+            
+
         }
 
         /////////////////////////////////////////////
