@@ -449,22 +449,22 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this.add(this._port);
 
-        this._port.on("mousedown:before", (e) => {
-            this.discardActiveObject();
-            if (e.button === 1) {
+        // this._port.on("mousedown:before", (e) => {
+        //     this.discardActiveObject();
+        //     if (e.button === 1) {
 
-                if (e.target._portData) {
+        //         if (e.target._portData) {
 
-                    this.isRelating = true;
+        //             this.isRelating = true;
 
-                    this.fire("relating:on", e);
+        //             this.fire("relating:on", e);
 
-                }
+        //         }
 
-            }
-            this.requestRenderAll();
+        //     }
+        //     this.requestRenderAll();
 
-        });
+        // });
 
         this.objectsRoot.push(this._port);
     },
