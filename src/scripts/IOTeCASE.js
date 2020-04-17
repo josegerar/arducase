@@ -449,22 +449,32 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this.add(this._port);
 
-        // this._port.on("mousedown:before", (e) => {
-        //     this.discardActiveObject();
-        //     if (e.button === 1) {
+        this._port.on("mousedown:before", (e) => {
 
-        //         if (e.target._portData) {
+            if (e.button === 1) {
 
-        //             this.isRelating = true;
+                if (e.target._portData) {
 
-        //             this.fire("relating:on", e);
+                    this.isRelating = true;
 
-        //         }
+                    this.fire("relating:on", e);
+                    
+                    e.target.selectable = false;
+                    e.target.evented = false;
 
-        //     }
-        //     this.requestRenderAll();
+                    this.discardActiveObject();
+                    this.requestRenderAll();
+                }
 
-        // });
+            }
+            this.requestRenderAll();
+
+        });
+
+        this._port.on("mouseup", (e)=>{
+            console.log("s");
+            
+        });
 
         this.objectsRoot.push(this._port);
     },
@@ -654,6 +664,9 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             this.isRelating = false;
 
+            this._port.evented = true;
+            this._port.selectable = true;
+
         }
 
     },
@@ -744,6 +757,9 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             this._port.set({ top: location.y, left: location.x, visible: true });
             this._port._portData = _portData;
             this._port._target = node;
+
+            if (!this._port.evented) this._port.evented = true;
+            if (!this._port.selectable) this._port.selectable = true;
 
             this._port.setCoords();
 
@@ -904,18 +920,13 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             if (e.target && e.target === this._port && this._port._portData) {
 
-                this.isRelating = true;
+                
 
 
 
             }
 
         }
-        console.log("f");
-        
-        this.discardActiveObject(e.e);
-        this.renderAll();
-
     },
 
     _onMouseDownEvents: function (e) {
@@ -973,11 +984,15 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             this.lastPosX = e.e.clientX;
             this.lastPosY = e.e.clientY;
 
-        } else if (this.isRelating) {
+        } 
+
+        if (this.isRelating) {
 
             this.fire("relating:continue", e);
 
-        } else if (e.target && e.target._nodeData && !e.target.isMoving) {
+        }
+        
+        if (e.target && e.target._nodeData && !e.target.isMoving) {
 
             this.fire("node:observed", e);
 
@@ -1014,7 +1029,13 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             e.target._portData.isUsed = true;
 
-            
+            const _line = new fabric.Line(coords, {
+                strokeWidth: 4, stroke: "#000000",
+                fill: "#000000", hasControls: false, hasBorders: false,
+                originX: 'center', originY: 'center',
+                lockMovementX: true, lockMovementY: true,
+                hoverCursor: "pointer", selectable: true
+            });
 
         }
 
