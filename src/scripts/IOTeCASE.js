@@ -311,7 +311,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _activateContextMenu: function (target, e) {
 
-        if(target) this.setActiveObject(target, e.e);
+        if (target) this.setActiveObject(target, e.e);
 
         this.fire("contextmenu:on", e);
 
@@ -383,6 +383,22 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     },
 
+    _addLine: function (points) {
+
+        const _line = new fabric.Line(points, {
+            strokeWidth: 4, stroke: "#000000", fill: "#000000",
+            hasControls: false, hasBorders: false,
+            originX: 'center', originY: 'center',
+            lockMovementX: true, lockMovementY: true,
+            hoverCursor: "pointer", selectable: true
+        });
+
+        this.add(_line);
+
+        return _line;
+
+    },
+
     _addLimit: function () {
 
         return new fabric.Rect({
@@ -449,31 +465,14 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this.add(this._port);
 
-        this._port.on("mousedown:before", (e) => {
+        this._port.on("mousedown:before", (e) => this.fire("relating:on", e));
 
-            if (e.button === 1) {
+        this._port.on("mouseup", (e) => {
 
-                if (e.target._portData) {
+            e.isPort = true;
 
-                    this.isRelating = true;
+            this.fire("relating:off", e);
 
-                    this.fire("relating:on", e);
-                    
-                    e.target.selectable = false;
-                    e.target.evented = false;
-
-                    this.discardActiveObject();
-                    this.requestRenderAll();
-                }
-
-            }
-            this.requestRenderAll();
-
-        });
-
-        this._port.on("mouseup", (e)=>{
-            console.log("s");
-            
         });
 
         this.objectsRoot.push(this._port);
@@ -491,6 +490,103 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     },
 
     _continueRelating: function (e) {
+
+        const _data = this._port._cachePortData;
+        const _line = _data._out;
+
+        if (_line) {
+
+            const _points = [_line.x1, _line.y1, e.absolutePointer.x, e.absolutePointer.y];
+
+            _line.set({ 'x2': _points[2], 'y2': _points[3] });
+            _line.setCoords();
+
+            const _triangle = _line._triangle;
+
+            if (_triangle) {
+
+                const _angle = this._getAngle(_points);
+
+                _triangle.set({ angle: _angle, top: _points[3], left: _points[2] });
+                _triangle.setCoords();
+
+            }
+
+            this.requestRenderAll();
+
+        }
+
+    },
+
+    _divideRelation: function (options) {
+
+        const _line1 = options.out._out,
+            _width = Math.abs(_line1.x2 - _line1.x1),
+            _height = Math.abs(_line1.y2 - _line1.y1);
+
+        let _points1 = [_line1.x1, _line1.y1, 0, 0],
+            _points2 = [0, 0, 0, 0],
+            _points3 = [0, 0, 0, 0];
+
+        if (_line1.x1 < _line1.x2 && _line1.y1 < _line1.y2) {
+
+            if (_width < _height) {
+
+                _points1[2] = _points1[0] + (_width / 2);
+                _points1[3] = _points1[1];
+
+                _points2[2] = _points1[2];
+                _points2[3] = _line1.y2;
+
+            } else {
+
+                _points1[2] = _points1[0];
+                _points1[3] = _points1[1] + (_height / 2);
+
+                _points2[2] = _line1.x2;
+                _points2[3] = _points1[3];
+
+            }
+
+            _points2[0] = _points1[2];
+            _points2[1] = _points1[3];
+
+            _points3[0] = _points2[2];
+            _points3[1] = _points2[3];
+            _points3[2] = _line1.x2;
+            _points3[3] = _line1.y2;
+
+        }
+
+        if (_line1.x1 < _line1.x2 && _line1.y1 > _line1.y2) {
+
+            if (_width < _height) {
+
+                _points1[2] = _points1[0];
+                _points1[3] = _points1[1] + (_height / 2);
+
+                _points2[2] = _line1.x2;
+                _points2[3] = _points1[3];
+
+            } else {
+
+                _points1[2] = _points1[0] - (_width / 2);
+                _points1[3] = _points1[1];
+
+                _points2[2] = _points1[2];
+                _points2[3] = _line1.y2;
+
+            }
+
+            _points2[0] = _points1[2];
+            _points2[1] = _points1[3];
+
+            _points3[0] = _points2[2];
+            _points3[1] = _points2[3];
+            _points3[2] = _line1.x2;
+            _points3[3] = _line1.y2;
+            
+        }
 
     },
 
@@ -521,6 +617,24 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         rootDomNode.appendChild(canvas);
 
         return el;
+    },
+
+    _getAngle: function (points) {
+
+        const x1 = points[0],
+            y1 = points[1],
+            x2 = points[2],
+            y2 = points[3],
+            dx = x2 - x1,
+            dy = y2 - y1;
+
+        let angle = Math.atan2(dy, dx);
+
+        angle *= 180 / Math.PI;
+        angle += 90;
+
+        return angle;
+
     },
 
     _initContextMenu: function (elContainer) {
@@ -649,7 +763,6 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         if (this.isDragging) {
 
             this.isDragging = false;
-            this.selection = true;
 
             this.calcOffset();
             this.forEachObject(o => {
@@ -660,15 +773,47 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _offRelating: function (e) {
 
-        if (this.isRelating) {
+        const _out = this._port._cachePortData;
+        const _port = this._port;
+        const _data = e.target._portData;
 
-            this.isRelating = false;
+        if (_out) {
 
-            this._port.evented = true;
-            this._port.selectable = true;
+            if (e.isPort) {
+
+                _data.isUsed = true;
+                _data._in = _out._out;
+
+                _port._in = _data;
+
+                const _options = { in: _data, out: _out };
+
+                this._divideRelation(_options);
+
+            } else {
+
+                const _line = _out._out;
+                const _triangle = _line._triangle;
+
+                this.remove(_triangle);
+                this.remove(_line);
+
+                _out.isUsed = false;
+                _out._out = null;
+
+                _port._in = null;
+                _port._out = null;
+
+                this.requestRenderAll();
+
+            }
 
         }
 
+        this.isRelating = false;
+
+        this._port.evented = true;
+        this._port.selectable = true;
     },
 
     _disableContextMenu: function (e) {
@@ -752,7 +897,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             }
         }
 
-        if (isPort && !this._port.visible) {
+        if (isPort && !this._port.visible && !_portData.isUsed) {
 
             this._port.set({ top: location.y, left: location.x, visible: true });
             this._port._portData = _portData;
@@ -897,7 +1042,6 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
         if (!e.target && e.button === 1) {
 
             this.isDragging = true;
-            this.selection = false;
 
             this.lastPosX = e.panningX;
             this.lastPosY = e.panningY;
@@ -920,7 +1064,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             if (e.target && e.target === this._port && this._port._portData) {
 
-                
+
 
 
 
@@ -984,14 +1128,14 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             this.lastPosX = e.e.clientX;
             this.lastPosY = e.e.clientY;
 
-        } 
+        }
 
         if (this.isRelating) {
 
             this.fire("relating:continue", e);
 
         }
-        
+
         if (e.target && e.target._nodeData && !e.target.isMoving) {
 
             this.fire("node:observed", e);
@@ -1004,7 +1148,15 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         this.fire("panning:off", e);
 
-        this.fire("relating:off", e);
+        if (this.isRelating) {
+
+            if (e.target && e.target !== this._port) {
+
+                this.fire("relating:off", e);
+
+            }
+
+        }
 
     },
 
@@ -1024,22 +1176,41 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
     _onRelating: function (e) {
 
-        if (e.target._portData) {
-            console.log(e.target._portData);
+        if (e.target._portData && e.button === 1) {
 
-            e.target._portData.isUsed = true;
+            const _data = e.target._portData;
+            const x1 = _data.location.x + (_data.size / 2);
+            const y1 = _data.location.y + (_data.size / 2);
+            const _points = [x1, y1, x1, y1];
 
-            const _line = new fabric.Line(coords, {
-                strokeWidth: 4, stroke: "#000000",
-                fill: "#000000", hasControls: false, hasBorders: false,
+            const _angle = this._getAngle(_points);
+            const _line = this._addLine(_points);
+
+            const _triangle = new fabric.Triangle({
+                angle: _angle, strokeDashArray: [20, 0, 15],
+                fill: 'rgba(0,0,0,0)', stroke: '#000000', strokeWidth: 3,
+                top: _points[3], left: _points[2],
+                height: 15, width: 15, hoverCursor: "default",
                 originX: 'center', originY: 'center',
-                lockMovementX: true, lockMovementY: true,
-                hoverCursor: "pointer", selectable: true
+                selectable: false, hasControls: false, hasBorders: false
             });
+
+            this.add(_triangle);
+
+            this.isRelating = true;
+
+            _data.isUsed = true;
+            _data._out = _line;
+            _data._out._triangle = _triangle;
+
+            e.target.selectable = false;
+            e.target.evented = false;
+            e.target._cachePortData = _data;
+
+            this.requestRenderAll();
 
         }
 
-        /////////////////////////////////////////////
     },
 
     _onZoom: function (e) {
@@ -1230,7 +1401,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
         }
 
-    },
+    }
 
 });
 
