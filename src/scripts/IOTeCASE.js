@@ -39,7 +39,6 @@ fabric.Canvas.prototype.add = (function (originalFn) {
     };
 })(fabric.Canvas.prototype.add);
 
-
 fabric.OverView = fabric.util.createClass(fabric.Canvas, {
 
     initialize: function (elContainer, properties) {
@@ -521,6 +520,7 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     _divideRelation: function (options) {
 
         const _line1 = options.out._out,
+            _triangle = _line1._triangle,
             _width = Math.abs(_line1.x2 - _line1.x1),
             _height = Math.abs(_line1.y2 - _line1.y1);
 
@@ -528,9 +528,9 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
             _points2 = [0, 0, 0, 0],
             _points3 = [0, 0, 0, 0];
 
-        if (_line1.x1 < _line1.x2 && _line1.y1 < _line1.y2) {
+        if (_line1.x1 <= _line1.x2 && _line1.y1 <= _line1.y2) {//  +x   -y
 
-            if (_width < _height) {
+            if (_width <= _height) {
 
                 _points1[2] = _points1[0] + (_width / 2);
                 _points1[3] = _points1[1];
@@ -548,19 +548,54 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             }
 
-            _points2[0] = _points1[2];
-            _points2[1] = _points1[3];
+        }
 
-            _points3[0] = _points2[2];
-            _points3[1] = _points2[3];
-            _points3[2] = _line1.x2;
-            _points3[3] = _line1.y2;
+        if (_line1.x1 <= _line1.x2 && _line1.y1 >= _line1.y2) {// +x   +y
+
+            if (_width <= _height) {
+
+                _points1[2] = _points1[0];
+                _points1[3] = _points1[1] - (_height / 2);
+
+                _points2[2] = _line1.x2;
+                _points2[3] = _points1[3];
+
+            } else {
+
+                _points1[2] = _points1[0] + (_width / 2);
+                _points1[3] = _points1[1];
+
+                _points2[2] = _points1[2];
+                _points2[3] = _line1.y2;
+
+            }
 
         }
 
-        if (_line1.x1 < _line1.x2 && _line1.y1 > _line1.y2) {
+        if (_line1.x1 >= _line1.x2 && _line1.y1 >= _line1.y2) {//  -x  +y
 
-            if (_width < _height) {
+            if (_width <= _height) {
+
+                _points1[2] = _points1[0];
+                _points1[3] = _points1[1] - (_height / 2);
+
+                _points2[2] = _line1.x2;
+                _points2[3] = _points1[3];
+
+            } else {
+
+                _points1[2] = _points1[0] - (_width / 2);
+                _points1[3] = _points1[1];
+
+                _points2[2] = _points1[2];
+                _points2[3] = _line1.y2;
+
+            }
+        }
+
+        if (_line1.x1 >= _line1.x2 && _line1.y1 <= _line1.y2) {//  -x  -y
+
+            if (_width <= _height) {
 
                 _points1[2] = _points1[0];
                 _points1[3] = _points1[1] + (_height / 2);
@@ -578,15 +613,65 @@ fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
 
             }
 
-            _points2[0] = _points1[2];
-            _points2[1] = _points1[3];
-
-            _points3[0] = _points2[2];
-            _points3[1] = _points2[3];
-            _points3[2] = _line1.x2;
-            _points3[3] = _line1.y2;
-            
         }
+
+        _points2[0] = _points1[2];
+        _points2[1] = _points1[3];
+
+        _points3[0] = _points2[2];
+        _points3[1] = _points2[3];
+        _points3[2] = _line1.x2;
+        _points3[3] = _line1.y2;
+
+        [_points1, _points2, _points3].forEach((point, i, arr) => {
+
+            if (point[0] === point[2]) {
+
+                if (point[1] <= point[3]) {
+
+                    point[1] -= _line1.strokeWidth / 2;
+                    point[3] += _line1.strokeWidth / 2;
+
+                } else {
+
+                    point[1] += _line1.strokeWidth / 2;
+                    point[3] -= _line1.strokeWidth / 2;
+
+                }
+
+            } else if (point[1] === point[3]) {
+
+                if (point[0] <= point[2]) {
+
+                    point[0] -= _line1.strokeWidth / 2;
+                    point[2] += _line1.strokeWidth / 2;
+
+                } else {
+
+                    point[0] += _line1.strokeWidth / 2;
+                    point[2] -= _line1.strokeWidth / 2;
+
+                }
+
+            }
+
+        });
+
+
+
+        _line1.set({ 'x1': _points1[0], 'y1': _points1[1], 'x2': _points1[2], 'y2': _points1[3] });
+        _line1._triangle = null;
+
+        let _line2 = this._addLine(_points2);
+        let _line3 = this._addLine(_points3);
+
+        const _angle = this._getAngle(_points3);
+
+        _line3._triangle = _triangle;
+        _triangle.set({ 'angle': _angle });
+
+        //console.log([_points1, _points2, _points3, _line1]);
+
 
     },
 
